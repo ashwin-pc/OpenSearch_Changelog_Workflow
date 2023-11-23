@@ -1,19 +1,13 @@
-name: Hello, World!
-description: Greet someone and record the time
-author: GitHub Actions
-
-# Define your inputs here.
+name: "Update Changelog"
+description: "Update changelog file when a pull request is raised"
 inputs:
-  who-to-greet:
-    description: Who to greet
+  token:
+    description: "GitHub token for authentication"
     required: true
-    default: World
-
-# Define your outputs here.
-outputs:
-  time:
-    description: The time we greeted you
-
+  changeset_path:
+    description: "Path where the changeset files will be added"
+    # required: true
+    default: "changeset/fragments"
 runs:
-  using: node20
-  main: dist/index.js
+  using: "node16"
+  main: "src/index.js"
