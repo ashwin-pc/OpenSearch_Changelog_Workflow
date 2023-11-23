@@ -148,7 +148,7 @@ async function run() {
       console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
     }
 
-    const changesetFileName = `changeset-${pullRequestNumber}.yml`;
+    const changesetFileName = `${pullRequestNumber}.yml`;
 
     await createOrUpdateFile(
       octokit,
