@@ -3,39 +3,50 @@ const github = require("@actions/github");
 
 // Define the prefixes that can be used in the changelog entries
 const PREFIXES = [
+  "breaking",
+  "deprecate",
   "feat",
   "fix",
-  "perf",
+  "infra",
   "doc",
+  "chore",
   "refactor",
   "test",
-  "build",
-  "unknown",
 ];
 
 // Function to extract changelog entries from the PR description
 function extractChangelogEntries(prDescription) {
-  const changelogSection = prDescription.match(
-    /## Changelog\s*([\s\S]*?)(?:\n##|$)/
-  );
+  const regexPatternChangelogSection = /## Changelog\s*([\s\S]*?)(?:\n##|$)/;
+  // Regex explanation:
+  // /## Changelog\s*   // Matches the '## Changelog' heading in markdown. '\s*' matches any whitespace (spaces, tabs) following 'Changelog'.
+  // ([\s\S]*?)         // Non-greedy match for any character set. Captures the content after '## Changelog' heading.
+  // (?:\n##|$)/;       // Non-capturing group. Matches a newline followed by '##' (next markdown heading) or the end of the text ('$').
+
+  const changelogSection = prDescription.match(regexPatternChangelogSection);
+  // Output -> Array of length 2:
+  // changelogSection[0]: Full regex match including '## Changelog' and following content.
+  // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
+
   if (changelogSection) {
-    let inComment = false;
+    let state = { inComment: false };
     const entries = changelogSection[0]
       .replace(/## Changelog\s*/, "")
       .split("\n")
-      .filter((line) => {
-        // Check to exclude lines part of a comment block
-        if (line.includes("<!--")) inComment = true;
-        if (line.includes("-->")) {
-          inComment = false;
-          return false;
-        }
-        return !inComment && line.trim().startsWith("-");
-      })
+      .filter((line) => isEntryLine(line, state))
       .map((entry) => entry.trim());
     return entries;
   }
   return [];
+}
+
+function isEntryLine(line, state) {
+  // Check to exclude lines part of a comment block (i.e. lines between <!-- and -->)
+  if (line.includes("<!--")) state.inComment = true;
+  if (line.includes("-->")) {
+      state.inComment = false;
+      return false;
+  }
+  return !state.inComment && line.trim().startsWith("-");
 }
 
 function convertString(str, id, link) {
