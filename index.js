@@ -19,10 +19,19 @@ function extractChangelogEntries(prDescription) {
     /## Changelog\s*([\s\S]*?)(?:\n##|$)/
   );
   if (changelogSection) {
+    let inComment = false;
     const entries = changelogSection[0]
       .replace(/## Changelog\s*/, "")
       .split("\n")
-      .filter((line) => line.trim().startsWith("-"))
+      .filter((line) => {
+        // Check to exclude lines part of a comment block
+        if (line.includes("<!--")) inComment = true;
+        if (line.includes("-->")) {
+          inComment = false;
+          return false;
+        }
+        return !inComment && line.trim().startsWith("-");
+      })
       .map((entry) => entry.trim());
     return entries;
   }
