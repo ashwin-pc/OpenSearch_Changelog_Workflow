@@ -3,15 +3,16 @@ const github = require("@actions/github");
 
 // Define the prefixes that can be used in the changelog entries
 const PREFIXES = [
+  "breaking",
+  "deprecate",
   "feat",
   "fix",
-  "perf",
+  "infra",
   "doc",
+  "chore",
   "refactor",
   "test",
-  "build",
-  "unknown",
-];
+]
 
 // Function to extract changelog entries from the PR description
 function extractChangelogEntries(prDescription) {
