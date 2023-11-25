@@ -1,5 +1,5 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github'
+import * as core from "@actions/core";
+import * as github from "@actions/github";
 
 import { extractChangelogEntries } from "./utils/changelogParser.js";
 import { prepareChangesetEntry } from "./utils/formattingUtils.js";
@@ -30,7 +30,16 @@ async function run() {
 
     // Extract the changelog entries from the PR description
     const prDescription = pullRequest.body || "";
-    const entries = extractChangelogEntries(prDescription);
+
+    // Define a empty array to store the changelog entries
+    const entries = []
+
+    // Extract the changelog entries from the PR description
+    try {
+      entries = extractChangelogEntries(prDescription);
+    } catch (error) {
+      console.error("An unexpected error occurred:", error.message);
+    }
 
     console.log(`Found ${entries.length} changelog entries.`);
 

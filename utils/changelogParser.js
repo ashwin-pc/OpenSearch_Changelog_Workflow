@@ -1,6 +1,13 @@
 import {
   CHANGELOG_SECTION_REGEX,
 } from "../config/constants.js";
+import {
+  InvalidPRChangelogDescriptionError,
+  EntryTooLongError,
+  CategoryNotFoundError,
+  CategoryWithSkipOptionError,
+} from "./changelogErrors.js";
+
 
 // **************************************************************
 // I) EXPORTED FUNCTIONS
@@ -13,7 +20,7 @@ import {
 export const extractChangelogEntries = (prDescription) => {
   // Validate input to ensure it's a non-empty string
   if (typeof prDescription !== "string" || !prDescription.trim()) {
-    throw new Error("Invalid PR description");
+    throw new InvalidPRChangelogDescriptionError();
   }
 
   // Match the changelog section using the defined regex
