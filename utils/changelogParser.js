@@ -33,5 +33,5 @@ const isEntryLine = (line, state) => {
       state.inComment = false;
       return false;
   }
-  return !state.inComment && line.trim().startsWith("-");
+  return !state.inComment && line.trim().length > 0; // Returns true for lines with text, whether or not they begin with a hyphen
 }
