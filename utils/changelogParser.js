@@ -18,10 +18,6 @@ import {
  * @return {string[]} An array of changelog entry strings.
  */
 export const extractChangelogEntries = (prDescription) => {
-  // Validate input to ensure it's a non-empty string
-  if (typeof prDescription !== "string" || !prDescription.trim()) {
-    throw new InvalidPRChangelogDescriptionError();
-  }
 
   // Match the changelog section using the defined regex
   const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
@@ -29,8 +25,11 @@ export const extractChangelogEntries = (prDescription) => {
   // changelogSection[0]: Full regex match including '## Changelog' and following content.
   // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
 
-  // Return an empty array if no changelog section is found
-  if (!changelogSection) return [];
+  // Throw error if no changelog section is found
+  if (!changelogSection){
+    throw new InvalidPRChangelogDescriptionError();
+  }
+;
 
   // Initial accumulator for reduce: empty array for lines and initial state
   const initialAcc = { entries: [], state: { inComment: false } };
