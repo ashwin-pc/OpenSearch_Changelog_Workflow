@@ -1,5 +1,5 @@
 
-import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
+import { CHANGELOG_HEADING, CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 
 
 // **************************************************************

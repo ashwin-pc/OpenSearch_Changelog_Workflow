@@ -12,7 +12,7 @@ export const PREFIXES = [
 ];
 
 // Define the regex pattern for changelog entries
-const CHANGELOG_HEADING = "## Changelog";
+export const CHANGELOG_HEADING = "## Changelog";
 export const CHANGELOG_SECTION_REGEX = new RegExp(
   `${CHANGELOG_HEADING}\\s*([\\s\\S]*?)(?:\\n##|$)`
 );
