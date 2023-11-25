@@ -38,7 +38,7 @@ async function run() {
     try {
       entries = extractChangelogEntries(prDescription);
     } catch (error) {
-      console.trace(`Error with PR chanelog description: ${error}`);
+      console.trace(`${error}`);
       process.exit(1);
     }
 
