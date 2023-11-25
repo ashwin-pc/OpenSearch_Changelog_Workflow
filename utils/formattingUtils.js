@@ -1,4 +1,4 @@
-import { PREFIXES } from "../config/constants";
+import { PREFIXES } from "../config/constants.js";
 
 // Function for formatting changelog entry, PR number and PR prLink
 // that returns a list of [formattedChangelogEntry, prefix]
