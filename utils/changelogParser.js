@@ -1,37 +1,62 @@
 
-// Function to extract changelog entries from the PR description
-export const extractChangelogEntries = (prDescription) => {
-  const regexPatternChangelogSection = /## Changelog\s*([\s\S]*?)(?:\n##|$)/;
-  // Regex explanation:
-  // /## Changelog\s*   // Matches the '## Changelog' heading in markdown. '\s*' matches any whitespace (spaces, tabs) following 'Changelog'.
-  // ([\s\S]*?)         // Non-greedy match for any character set. Captures the content after '## Changelog' heading.
-  // (?:\n##|$)/;       // Non-capturing group. Matches a newline followed by '##' (next markdown heading) or the end of the text ('$').
+import { CHANGELOG_HEADING } from "../config/constants";
 
-  const changelogSection = prDescription.match(regexPatternChangelogSection);
+
+// **************************************************************
+// I) EXPORTED FUNCTIONS
+// **************************************************************
+/**
+ * Extracts changelog entries from a PR description.
+ * @param {string} prDescription - The PR description text in markdown format.
+ * @return {string[]} An array of changelog entry strings.
+ */
+export const extractChangelogEntries = (prDescription) => {
+  // Validate input to ensure it's a non-empty string
+  if (typeof prDescription !== 'string' || !prDescription.trim()) {
+    throw new Error('Invalid PR description');
+  }
+
+  // Match the changelog section using the defined regex
+  const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
   // Output -> Array of length 2:
   // changelogSection[0]: Full regex match including '## Changelog' and following content.
   // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
 
-  if (changelogSection) {
-    let state = { inComment: false };
-    const entries = changelogSection[0]
-      .replace(/## Changelog\s*/, "")
-      .split("\n")
-      .filter((line) => isEntryLine(line, state))
-      .map((entry) => entry.trim());
-    return entries;
-  }
-  return [];
-}
+  // Return an empty array if no changelog section is found
+  if (!changelogSection) return [];
 
+  // Initialize state for tracking comment blocks
+  let state = { inComment: false };
 
-// Function to check if a line is a changelog entry (Internal use only)
-const isEntryLine = (line, state) => {
-  // Check to exclude lines part of a comment block (i.e. lines between <!-- and -->)
-  if (line.includes("<!--")) state.inComment = true;
-  if (line.includes("-->")) {
-      state.inComment = false;
-      return false;
-  }
-  return !state.inComment && line.trim().length > 0; // Returns true for lines with text, whether or not they begin with a hyphen
-}
+  // Process each line and filter out valid changelog entries
+  return changelogSection[0]
+    .replace(`${CHANGELOG_HEADING}\\s*`, "")
+    .split("\n")
+    .map((line) => processLine(line, state))
+    .filter(entry => entry !== null)
+    .map(entry => entry.trim());
+};
+
+// **************************************************************
+// II) INTERNAL FUNCTIONS
+// **************************************************************
+/**
+ * Processes a line of text to determine if it's a valid changelog entry.
+ * Handles comment blocks and trims lines that are part of the changelog.
+ * @param {string} line - A line of text.
+ * @param {Object} state - An object maintaining the state of comment parsing.
+ * @return {Object} An object containing the updated state and the processed line.
+ */
+const processLine = (line, state) => {
+  // Check for the start of a comment block
+  if (line.includes("<!--")) return { ...state, inComment: true, line: null };
+
+  // Check for the end of a comment block
+  if (line.includes("-->")) return { ...state, inComment: false, line: null };
+
+  // If the line is not in a comment and contains text, consider it as part of the changelog
+  if (!state.inComment && line.trim().length > 0) return { ...state, line };
+
+  // For lines within comments or empty lines, return null
+  return { ...state, line: null };
+};
