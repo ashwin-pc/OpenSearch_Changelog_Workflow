@@ -1,4 +1,4 @@
-import { MAX_ENTRY_LENGTH } from "../config/constants";
+import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 
 /**
  * Represents an error for an invalid PR changelog description input.
