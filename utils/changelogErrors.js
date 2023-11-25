@@ -1,6 +1,21 @@
 import { MAX_ENTRY_LENGTH } from "../config/constants";
 
 /**
+ * Represents an error for an invalid PR changelog description input.
+ */
+export class InvalidPRChangelogDescriptionError extends Error {
+  /**
+   * Constructs the InvalidPRChangelogDescriptionError instance.
+   * @param {string} [message="Invalid PR changelog description"] - Custom error message.
+   */
+  constructor(message = "Invalid PR changelog description") {
+    super(message);
+    this.name = "InvalidPRChangelogDescriptionError";
+  }
+}
+
+
+/**
  * Represents an error when a changelog entry exceeds the maximum allowed length.
  */
 export class EntryTooLongError extends Error {
@@ -55,4 +70,3 @@ export class EntryFormatError extends Error {
     this.name = "EntryFormatError";
   }
 }
-
