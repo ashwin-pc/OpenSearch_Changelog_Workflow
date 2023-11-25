@@ -1,8 +1,8 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
-import { extractChangelogEntries } from "./utils/changelogParser";
-import { prepareChangesetEntry } from "./utils/formattingUtils";
+import { extractChangelogEntries } from "./utils/changelogParser.js";
+import { prepareChangesetEntry } from "./utils/formattingUtils.js";
 
 async function run() {
   try {
