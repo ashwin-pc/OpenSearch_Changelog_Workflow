@@ -32,13 +32,14 @@ async function run() {
     const prDescription = pullRequest.body || "";
 
     // Define a empty array to store the changelog entries
-    const entries = []
+    const entries = [];
 
     // Extract the changelog entries from the PR description
     try {
       entries = extractChangelogEntries(prDescription);
     } catch (error) {
-      console.error("An unexpected error occurred:", error.message);
+      console.trace(`Error with PR chanelog description: ${error}`);
+      process.exit(1);
     }
 
     console.log(`Found ${entries.length} changelog entries.`);
