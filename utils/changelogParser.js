@@ -1,5 +1,5 @@
 
-import { CHANGELOG_HEADING } from "../config/constants";
+import { CHANGELOG_HEADING } from "../config/constants.js";
 
 
 // **************************************************************
