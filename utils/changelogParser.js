@@ -1,6 +1,6 @@
-
-import { CHANGELOG_HEADING, CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-
+import {
+  CHANGELOG_SECTION_REGEX,
+} from "../config/constants.js";
 
 // **************************************************************
 // I) EXPORTED FUNCTIONS
@@ -12,8 +12,8 @@ import { CHANGELOG_HEADING, CHANGELOG_SECTION_REGEX } from "../config/constants.
  */
 export const extractChangelogEntries = (prDescription) => {
   // Validate input to ensure it's a non-empty string
-  if (typeof prDescription !== 'string' || !prDescription.trim()) {
-    throw new Error('Invalid PR description');
+  if (typeof prDescription !== "string" || !prDescription.trim()) {
+    throw new Error("Invalid PR description");
   }
 
   // Match the changelog section using the defined regex
@@ -25,16 +25,20 @@ export const extractChangelogEntries = (prDescription) => {
   // Return an empty array if no changelog section is found
   if (!changelogSection) return [];
 
-  // Initialize state for tracking comment blocks
-  let state = { inComment: false };
+  // Initial accumulator for reduce: empty array for lines and initial state
+  const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
-  return changelogSection[0]
-    .replace(`${CHANGELOG_HEADING}\\s*`, "")
+  return changelogSection[1]
     .split("\n")
-    .map((line) => processLine(line, state))
-    .filter(entry => entry !== null)
-    .map(entry => entry.trim());
+    .reduce((acc, line) => {
+      const { entries, state } = acc;
+      const processed = processLine(line, state);
+      if (processed.line)
+        entries.push(processed.line);
+      return { entries, state: processed.state };
+    }, initialAcc)
+    .entries;
 };
 
 // **************************************************************
@@ -49,14 +53,22 @@ export const extractChangelogEntries = (prDescription) => {
  */
 const processLine = (line, state) => {
   // Check for the start of a comment block
-  if (line.includes("<!--")) return { ...state, inComment: true, line: null };
+  if (line.includes("<!--"))
+    return {
+      state: { ...state, inComment: true },
+      line: null,
+    };
 
   // Check for the end of a comment block
-  if (line.includes("-->")) return { ...state, inComment: false, line: null };
+  if (line.includes("-->"))
+    return {
+      state: { ...state, inComment: false },
+      line: null,
+    };
 
   // If the line is not in a comment and contains text, consider it as part of the changelog
-  if (!state.inComment && line.trim().length > 0) return { ...state, line };
+  if (!state.inComment && line.trim().length > 0) return { state, line };
 
   // For lines within comments or empty lines, return null
-  return { ...state, line: null };
+  return { state, line: null };
 };
