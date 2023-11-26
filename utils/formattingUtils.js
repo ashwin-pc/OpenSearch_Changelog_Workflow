@@ -1,4 +1,5 @@
-import { ENTRY_FORMATTING_PATTERN_REGEX } from "../config/constants.js";
+import { ENTRY_FORMATTING_PATTERN_REGEX, PREFIXES } from "../config/constants.js";
+import { InvalidPrefixError } from "./changelogErrors.js";
 
 /**
  * Prepares a formatted changelog entry using the provided changelog entry, PR number, and PR link.
@@ -13,6 +14,7 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
+    if (!PREFIXES.includes(prefix.toLowerCase())) throw new InvalidPrefixError(prefix);
     const formattedChangelogEntry = `- ${text.trim()} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   }
