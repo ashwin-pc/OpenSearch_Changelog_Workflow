@@ -4,7 +4,6 @@ import {
 import {
   InvalidPRChangelogDescriptionError,
   EntryTooLongError,
-  CategoryNotFoundError,
   CategoryWithSkipOptionError,
 } from "./changelogErrors.js";
 
