@@ -32,14 +32,15 @@ export class EntryTooLongError extends Error {
 /**
  * Represents an error when a specified category does not exist.
  */
-export class CategoryNotFoundError extends Error {
+export class InvalidPrefixError extends Error {
   /**
-   * Constructs the CategoryNotFoundError instance.
-   * @param {string} [message="Category does not exist"] - Custom error message.
+   * Constructs the InvalidPrefixError instance.
+   * @param {string} [foundPrefix] - The prefix provided by the user.
    */
-  constructor(message = "Category does not exist") {
+  constructor(foundPrefix) {
+    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", or "test".`
     super(message);
-    this.name = "CategoryNotFoundError";
+    this.name = "InvalidPrefixError";
   }
 }
 
