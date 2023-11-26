@@ -33,7 +33,7 @@ export const CHANGELOG_SECTION_REGEX = new RegExp(
 
 // ii) Define regex pattern for specific formatting of changelog entries
 export const ENTRY_FORMATTING_PATTERN_REGEX = new RegExp(
-  `[^a-zA-Z0-9]*-?\\s*(${PREFIXES.join("|")}):(.*)`
+  `[^a-zA-Z0-9]*-?\\s*([a-zA-Z0-9]+):(.*)`
 );
 /* Regex allows for the following scenarios:
   1. Lines that do not begin with a hyphen (e.g., "feat: new feature")
