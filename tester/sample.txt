@@ -33,9 +33,7 @@ Valid prefixes: breaking, deprecate, feat, fix, infra, doc, chore, refactor, tes
 - fix: Updates the graph
 - feat: Adds a new feature
 - test: test test test test
-test: test test test5
-!doc: newish documentation
-
+- skip
 
 ### Check List
 
