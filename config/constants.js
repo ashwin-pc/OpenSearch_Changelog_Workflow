@@ -12,7 +12,7 @@ export const PREFIXES = [
   "doc",
   "chore",
   "refactor",
-
+  "security",
   "test",
 ];
 
