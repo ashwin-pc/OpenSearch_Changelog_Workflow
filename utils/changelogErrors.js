@@ -14,8 +14,6 @@ export class NoChangelogSectionFoundError extends Error {
   }
 }
 
-
-
 /**
  * Represents an error when a changelog entry exceeds the maximum allowed length.
  */
@@ -62,13 +60,14 @@ export class CategoryWithSkipOptionError extends Error {
 /**
  * Represents an error when a changelog entry does not start with a '-' character.
  */
-export class EntryFormatError extends Error {
+export class InvalidEntryFormatError extends Error {
   /**
-   * Constructs the EntryFormatError instance.
+   * Constructs the InvalidEntryFormatError instance.
    * @param {string} [message="Entry needs to start with a '-'"] - Custom error message.
    */
   constructor(message = "Entry needs to start with a '-'") {
     super(message);
-    this.name = "EntryFormatError";
+    this.name = "InvalidEntryFormatError";
   }
 }
+
