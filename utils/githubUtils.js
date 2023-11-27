@@ -1,44 +1,43 @@
 import github from "@actions/github";
 import { PullRequestDataExtractionError } from "./customErrors";
+import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants";
 /**
  * Extracts relevant data from a GitHub Pull Request.
  * @returns {Promise<Object>} An object containing the pull request data and other relevant information.
  */
 export const extractPullRequestData = async () => {
   try {
-    // Read input parameters
-    const token = process.env.INPUT_TOKEN;
-    const changesetPath = process.env.INPUT_CHANGESET_PATH;
 
     // Set up Octokit with the provided token
-    const octokit = github.getOctokit(token);
+    const octokit = github.getOctokit(GITHUB_TOKEN);
 
     // Get GitHub context data
     const context = github.context;
     const { owner, repo } = context.repo;
-    const pullRequestNumber = context.payload.pull_request.number;
+    const prNumber = context.payload.pull_request.number;
 
     console.log(
-      `Extracting data for PR #${pullRequestNumber}... by ${owner} in ${repo}`
+      `Extracting data for PR #${prNumber}... by ${owner} in ${repo}`
     );
 
     // Get the pull request details
     const { data: pullRequest } = await octokit.rest.pulls.get({
       owner,
       repo,
-      pull_number: pullRequestNumber,
+      pull_number: prNumber,
     });
 
-    // Extract the changelog entries from the PR description
+    // Extract PR description and link
     const prDescription = pullRequest.body || "";
+    const prLink = pullRequest.html_url || "";
 
     // Return the extracted data
     return {
       owner,
       repo,
-      pullRequestNumber,
+      prNumber,
       prDescription,
-      changesetPath,
+      prLink
     };
   } catch (error) {
     throw new PullRequestDataExtractionError(); // Rethrow the error for further handling if necessary
@@ -49,18 +48,17 @@ export const createOrUpdateFile = async (
   octokit,
   owner,
   repo,
-  path,
   content,
   message,
   branch
-  // pullRequestNumber
+  // prNumber
 ) => {
   let sha;
   try {
     const response = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path,
+      CHANGESET_PATH,
       ref: branch,
     });
     sha = response.data.sha;
@@ -77,11 +75,11 @@ export const createOrUpdateFile = async (
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
-    path,
+    CHANGESET_PATH,
     message: message,
     content: content,
     sha, // This will be undefined if the file doesn't exist
     branch,
   });
-  console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
+  console.log(`File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`);
 };
