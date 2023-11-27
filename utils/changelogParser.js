@@ -1,7 +1,5 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-import {
-  NoChangelogSectionFoundError
-} from "./customErrors.js";
+import { NoChangelogSectionFoundError } from "./customErrors.js";
 
 // **************************************************************
 // I) EXPORTED FUNCTIONS
@@ -26,12 +24,18 @@ export const extractChangelogEntries = (prDescription) => {
   const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
-  return changelogSection[1].split("\n").reduce((acc, line) => {
-    const { entries, state } = acc;
-    const processed = processLine(line, state);
-    if (processed.line) entries.push(processed.line);
-    return { entries, state: processed.state };
-  }, initialAcc).entries;
+  const changelogEntries = changelogSection[1]
+    .split("\n")
+    .reduce((acc, line) => {
+      const { entries, state } = acc;
+      const processed = processLine(line, state);
+      if (processed.line) entries.push(processed.line);
+      return { entries, state: processed.state };
+    }, initialAcc).entries;
+
+  console.log(`Found ${changelogEntries.length} changelog entries.`);
+
+  return changelogEntries;
 };
 
 // **************************************************************
