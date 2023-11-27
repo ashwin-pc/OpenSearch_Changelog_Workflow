@@ -5,6 +5,7 @@ import {
   prepareChangesetEntryMap,
   prepareChangesetEntriesContent,
 } from "./utils/formattingUtils.js";
+import { CategoryWithSkipOptionError } from "./utils/customErrors.js";
 import {
   extractPullRequestData,
   createOrUpdateFile,
@@ -21,13 +22,21 @@ async function run() {
   // Create a map of changeset entries
   const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
 
-  // Prepare the content for the changeset file
+  if (entryMap["skip"]) {
+    if (Object.keys(entryMap).length > 1) {
+      throw new CategoryWithSkipOptionError();
+    } else {
+      console.log("No changeset file created or updated.");
+      return;
+    }
+  }
+
+  // Prepare some parameters for creating or updating the changeset file
   const changesetEntriesContent = Buffer.from(
     prepareChangesetEntriesContent(entryMap)
   ).toString("base64");
   const changesetFileName = `${prNumber}.yml`;
   const changesetFilPath = `${CHANGESET_PATH}/${changesetFileName}`;
-
   const message = `Add changeset for PR #${prNumber}`;
 
   // Create or update the changeset file using Github API
@@ -39,8 +48,6 @@ async function run() {
     message,
     branchRef
   );
-
-  console.log("Changeset file added successfully.");
 }
 
 run();
