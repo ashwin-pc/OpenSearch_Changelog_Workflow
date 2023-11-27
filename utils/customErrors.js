@@ -82,9 +82,9 @@ export class InvalidPrefixError extends Error {
 export class CategoryWithSkipOptionError extends Error {
   /**
    * Constructs the CategoryWithSkipError instance.
-   * @param {string} [message="Cannot include a category with 'skip' option"] - Custom error message.
+   * @param {string} [message="Cannot include a category entry with 'skip' option"] - Custom error message.
    */
-  constructor(message = "Cannot include a category with 'skip' option") {
+  constructor(message = "Cannot include a category entry with 'skip' option") {
     super(message);
     this.name = "CategoryWithSkipOptionError";
   }
