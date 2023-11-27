@@ -15,6 +15,23 @@ export class PullRequestDataExtractionError extends Error {
   }
 }
 
+/**
+ * Represents an error during file access operations related to changesets in a GitHub repository.
+ */
+export class ChangesetFileAccessError extends Error {
+  /**
+   * Constructs the ChangesetFileAccessError instance.
+   * @param {string} message - Custom error message.
+   * @param {number} statusCode - HTTP status code associated with the error.
+   */
+  constructor(message, statusCode) {
+    super(message);
+    this.name = "ChangesetFileAccessError";
+    this.statusCode = statusCode;
+  }
+}
+
+
 
 /**
  * Represents an error for a missing changelog section in a PR description.
