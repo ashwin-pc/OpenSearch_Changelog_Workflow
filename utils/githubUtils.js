@@ -62,34 +62,34 @@ export const createOrUpdateFile = async (
     ref: branch,
   });
   console.log(response.data);
-  try {
-    const response = await octokit.rest.repos.getContent({
-      owner,
-      repo,
-      CHANGESET_PATH,
-      ref: branch,
-    });
-    sha = response.data.sha;
-  } catch (error) {
-    if (error.status === 404) {
-      // File does not exist
-      console.log("changeset for this PR not found, will create a new one.");
-    } else {
-      // Other errors
-      console.log("other error:", error);
-      throw error;
-    }
-  }
-  await octokit.rest.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    CHANGESET_PATH,
-    message: message,
-    content: content,
-    sha, // This will be undefined if the file doesn't exist
-    branch,
-  });
-  console.log(
-    `File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`
-  );
+  // try {
+  //   const response = await octokit.rest.repos.getContent({
+  //     owner,
+  //     repo,
+  //     CHANGESET_PATH,
+  //     ref: branch,
+  //   });
+  //   sha = response.data.sha;
+  // } catch (error) {
+  //   if (error.status === 404) {
+  //     // File does not exist
+  //     console.log("changeset for this PR not found, will create a new one.");
+  //   } else {
+  //     // Other errors
+  //     console.log("other error:", error);
+  //     throw error;
+  //   }
+  // }
+  // await octokit.rest.repos.createOrUpdateFileContents({
+  //   owner,
+  //   repo,
+  //   CHANGESET_PATH,
+  //   message: message,
+  //   content: content,
+  //   sha, // This will be undefined if the file doesn't exist
+  //   branch,
+  // });
+  // console.log(
+  //   `File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`
+  // );
 };
