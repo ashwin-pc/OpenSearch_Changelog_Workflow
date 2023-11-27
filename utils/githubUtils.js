@@ -38,7 +38,7 @@ export const extractPullRequestData = async () => {
       prNumber,
       prDescription,
       prLink,
-      prBrach,
+      branchRef,
     };
   } catch (error) {
     throw new PullRequestDataExtractionError(); // Rethrow the error for further handling if necessary

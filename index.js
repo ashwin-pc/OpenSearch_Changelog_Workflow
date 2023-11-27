@@ -47,7 +47,7 @@ async function run() {
       branchRef
     );
 
-    // console.log("Changeset file added successfully.");
+    console.log("Changeset file added successfully.");
 
 }
 
