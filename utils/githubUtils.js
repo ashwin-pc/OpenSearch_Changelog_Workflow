@@ -94,7 +94,7 @@ export const createOrUpdateFile = async (
     message,
     content,
     sha, // If file exists, sha is used to update; otherwise, file is created
-    branchRef,
+    branch: branchRef,
   });
 
   console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
