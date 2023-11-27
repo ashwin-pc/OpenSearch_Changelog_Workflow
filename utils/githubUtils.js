@@ -7,7 +7,6 @@ import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants";
  */
 export const extractPullRequestData = async () => {
   try {
-
     // Set up Octokit with the provided token
     const octokit = github.getOctokit(GITHUB_TOKEN);
 
@@ -30,6 +29,7 @@ export const extractPullRequestData = async () => {
     // Extract PR description and link
     const prDescription = pullRequest.body || "";
     const prLink = pullRequest.html_url || "";
+    const prBrach = pullRequest.head.ref || "";
 
     // Return the extracted data
     return {
@@ -37,7 +37,8 @@ export const extractPullRequestData = async () => {
       repo,
       prNumber,
       prDescription,
-      prLink
+      prLink,
+      prBrach,
     };
   } catch (error) {
     throw new PullRequestDataExtractionError(); // Rethrow the error for further handling if necessary
@@ -45,15 +46,15 @@ export const extractPullRequestData = async () => {
 };
 
 export const createOrUpdateFile = async (
-  octokit,
   owner,
   repo,
   content,
   message,
   branch
-  // prNumber
 ) => {
   let sha;
+  // Set up Octokit with the provided token
+  const octokit = github.getOctokit(GITHUB_TOKEN);
   try {
     const response = await octokit.rest.repos.getContent({
       owner,
@@ -81,5 +82,7 @@ export const createOrUpdateFile = async (
     sha, // This will be undefined if the file doesn't exist
     branch,
   });
-  console.log(`File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`);
+  console.log(
+    `File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`
+  );
 };
