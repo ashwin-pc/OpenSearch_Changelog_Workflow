@@ -5,6 +5,10 @@ import {
   prepareChangesetEntryMap,
   prepareChangesetEntriesContent,
 } from "./utils/formattingUtils.js";
+import {
+  extractPullRequestData,
+  createOrUpdateFile,
+} from "./utils/githubUtils.js";
 
 async function run() {
   try {
@@ -27,8 +31,10 @@ async function run() {
 
     // Prepara some variables for the GitHub API
     const changesetFileName = `${prNumber}.yml`;
-    const changesetFile = `${CHANGESET_PATH}/${changesetFileName}`
-    const changesetEntriesContentBuffer = Buffer.from(changesetEntriesContent).toString("base64");
+    const changesetFile = `${CHANGESET_PATH}/${changesetFileName}`;
+    const changesetEntriesContentBuffer = Buffer.from(
+      changesetEntriesContent
+    ).toString("base64");
     const message = `Add changeset for PR #${prNumber}`;
 
     // Create or update the changeset file using Github API
