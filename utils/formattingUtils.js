@@ -7,7 +7,7 @@ import {
   InvalidPrefixError,
   EntryTooLongError,
   InvalidEntryFormatError,
-} from "./changelogErrors.js";
+} from "./customErrors.js";
 
 /**
  * Prepares a formatted changelog entry using the provided changelog entry, PR number, and PR link.
