@@ -63,8 +63,6 @@ export const createOrUpdateFile = async (
 ) => {
   // Initialize Octokit client
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  // File's SHA to check if file exists
-  let sha;
 
   // Attempt to retrieve the file's SHA to check if it exists
   try {
@@ -74,7 +72,8 @@ export const createOrUpdateFile = async (
       path,
       ref: branchRef,
     });
-    sha = response.data.sha;
+    // File's SHA to check if file exists
+    let sha = response.data.sha;
   } catch (error) {
     if (error.status === 404) {
       console.log("Changeset file not found, will create a new one.");
