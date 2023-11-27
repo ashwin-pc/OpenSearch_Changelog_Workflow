@@ -55,13 +55,16 @@ export const createOrUpdateFile = async (
   let sha;
   // Set up Octokit with the provided token
   const octokit = github.getOctokit(GITHUB_TOKEN);
+  console.log(owner);
+  console.log(repo);
+  console.log(CHANGESET_PATH);
+  console.log(branch);
   const response = await octokit.rest.repos.getContent({
     owner,
     repo,
     CHANGESET_PATH,
     ref: branch,
   });
-  console.log(response.data);
   // try {
   //   const response = await octokit.rest.repos.getContent({
   //     owner,
