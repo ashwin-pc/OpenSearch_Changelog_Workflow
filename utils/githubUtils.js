@@ -1,6 +1,6 @@
 import github from "@actions/github";
-import { PullRequestDataExtractionError } from "./customErrors";
-import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants";
+import { PullRequestDataExtractionError } from "./utils/customErrors.js";
+import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants.js";
 /**
  * Extracts relevant data from a GitHub Pull Request.
  * @returns {Promise<Object>} An object containing the pull request data and other relevant information.
