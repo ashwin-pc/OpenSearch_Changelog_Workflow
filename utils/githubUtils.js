@@ -6,7 +6,6 @@ import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants.js";
  * @returns {Promise<Object>} An object containing the pull request data and other relevant information.
  */
 export const extractPullRequestData = async () => {
-  console.log(GITHUB_TOKEN)
   try {
     // Set up Octokit with the provided token
     const octokit = github.getOctokit(GITHUB_TOKEN);

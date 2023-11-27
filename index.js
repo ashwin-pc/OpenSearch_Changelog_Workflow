@@ -11,7 +11,7 @@ import {
 } from "./utils/githubUtils.js";
 
 async function run() {
-  try {
+
     // Get Pull Rerquest data
     const { owner, repo, prNumber, prDescription, prLink, prBranch } =
       await extractPullRequestData();
@@ -48,10 +48,7 @@ async function run() {
     );
 
     // console.log("Changeset file added successfully.");
-  } catch (error) {
-    console.trace(`Error adding changeset: ${error}`);
-    process.exit(1);
-  }
+  
 }
 
 run();
