@@ -1,5 +1,8 @@
 import github from "@actions/github";
-import { PullRequestDataExtractionError } from "./customErrors.js";
+import {
+  PullRequestDataExtractionError,
+  ChangesetFileAccessError,
+} from "./customErrors.js";
 import { GITHUB_TOKEN } from "../config/constants.js";
 
 /**
@@ -26,7 +29,7 @@ export const extractPullRequestData = async () => {
       pull_number: prNumber,
     });
 
-    // Extract and return relevant PR data
+    // Return relevant PR data
     return {
       owner,
       repo,
@@ -37,7 +40,7 @@ export const extractPullRequestData = async () => {
     };
   } catch (error) {
     // Throw a custom error for issues during data extraction
-    throw new PullRequestDataExtractionError(`Error extracting PR data: ${error.message}`);
+    throw new PullRequestDataExtractionError();
   }
 };
 
@@ -60,22 +63,26 @@ export const createOrUpdateFile = async (
 ) => {
   // Initialize Octokit client
   const octokit = github.getOctokit(GITHUB_TOKEN);
+  // File's SHA to check if file exists
+  let sha;
 
+  // Attempt to retrieve the file's SHA to check if it exists
   try {
-    // Attempt to retrieve the file's SHA to check if it exists
     const response = await octokit.rest.repos.getContent({
       owner,
       repo,
       path,
       ref: branchRef,
     });
-    var sha = response.data.sha;
+    sha = response.data.sha;
   } catch (error) {
     if (error.status === 404) {
-      console.log("File not found, will create a new one.");
+      console.log("Changeset file not found, will create a new one.");
     } else {
-      console.error("Error accessing file:", error);
-      throw error;
+      throw new ChangesetFileAccessError(
+        `Failed to access changeset file at ${path}: ${error.message}`,
+        error.status
+      );
     }
   }
 
