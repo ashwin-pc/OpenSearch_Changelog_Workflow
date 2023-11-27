@@ -13,7 +13,7 @@ import {
 async function run() {
 
     // Get Pull Rerquest data
-    const { owner, repo, prNumber, prDescription, prLink, prBranch } =
+    const { owner, repo, prNumber, prDescription, prLink, branchRef } =
       await extractPullRequestData();
 
     // Extract the changelog entries from the PR description
@@ -44,7 +44,7 @@ async function run() {
       changesetFile,
       changesetEntriesContentBuffer,
       message,
-      prBranch
+      branchRef
     );
 
     // console.log("Changeset file added successfully.");
