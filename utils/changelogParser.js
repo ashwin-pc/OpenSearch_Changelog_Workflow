@@ -1,11 +1,7 @@
+import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 import {
-  CHANGELOG_SECTION_REGEX,
-} from "../config/constants.js";
-import {
-  NoChangelogSectionFoundError,
-  CategoryWithSkipOptionError,
-} from "./changelogErrors.js";
-
+  NoChangelogSectionFoundError
+} from "./customErrors.js";
 
 // **************************************************************
 // I) EXPORTED FUNCTIONS
@@ -16,7 +12,6 @@ import {
  * @return {string[]} An array of changelog entry strings.
  */
 export const extractChangelogEntries = (prDescription) => {
-
   // Match the changelog section using the defined regex
   const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
   // Output -> Array of length 2:
@@ -24,25 +19,19 @@ export const extractChangelogEntries = (prDescription) => {
   // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
 
   // Throw error if no changelog section is found
-  if (!changelogSection){
+  if (!changelogSection) {
     throw new NoChangelogSectionFoundError();
   }
-;
-
   // Initial accumulator for reduce: empty array for lines and initial state
   const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
-  return changelogSection[1]
-    .split("\n")
-    .reduce((acc, line) => {
-      const { entries, state } = acc;
-      const processed = processLine(line, state);
-      if (processed.line)
-        entries.push(processed.line);
-      return { entries, state: processed.state };
-    }, initialAcc)
-    .entries;
+  return changelogSection[1].split("\n").reduce((acc, line) => {
+    const { entries, state } = acc;
+    const processed = processLine(line, state);
+    if (processed.line) entries.push(processed.line);
+    return { entries, state: processed.state };
+  }, initialAcc).entries;
 };
 
 // **************************************************************
