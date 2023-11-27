@@ -1,18 +1,19 @@
 import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 
 /**
- * Represents an error for an invalid PR changelog description input.
+ * Represents an error for a missing changelog section in a PR description.
  */
-export class InvalidPRChangelogDescriptionError extends Error {
+export class NoChangelogSectionFoundError extends Error {
   /**
-   * Constructs the InvalidPRChangelogDescriptionError instance.
-   * @param {string} [message="Invalid PR changelog description"] - Custom error message.
+   * Constructs the NoChangelogSectionFoundError instance.
+   * @param {string} [message="No changelog section found in PR description"] - Custom error message.
    */
-  constructor(message = "Invalid PR changelog description") {
+  constructor(message = "No changelog section found in PR description") {
     super(message);
-    this.name = "InvalidPRChangelogDescriptionError";
+    this.name = "NoChangelogSectionFoundError";
   }
 }
+
 
 
 /**

@@ -2,7 +2,7 @@ import {
   CHANGELOG_SECTION_REGEX,
 } from "../config/constants.js";
 import {
-  InvalidPRChangelogDescriptionError,
+  NoChangelogSectionFoundError,
   CategoryWithSkipOptionError,
 } from "./changelogErrors.js";
 
@@ -25,7 +25,7 @@ export const extractChangelogEntries = (prDescription) => {
 
   // Throw error if no changelog section is found
   if (!changelogSection){
-    throw new InvalidPRChangelogDescriptionError();
+    throw new NoChangelogSectionFoundError();
   }
 ;
 
