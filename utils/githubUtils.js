@@ -1,5 +1,5 @@
 import github from "@actions/github";
-import { PullRequestDataExtractionError } from "./utils/customErrors.js";
+import { PullRequestDataExtractionError } from "./customErrors.js";
 import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants.js";
 /**
  * Extracts relevant data from a GitHub Pull Request.
