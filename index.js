@@ -23,7 +23,7 @@ async function run() {
     const entryMap = prepareChangesetEntryMap(
       changesetEntries,
       prNumber,
-      pullRequest.html_url
+      prLink
     );
 
     // Prepare the content for the changeset file
@@ -48,7 +48,7 @@ async function run() {
     );
 
     // console.log("Changeset file added successfully.");
-  
+
 }
 
 run();
