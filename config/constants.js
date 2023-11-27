@@ -1,3 +1,4 @@
+
 /**
  * ****************************************************
  * I) ENTRY PREFIXES
@@ -71,3 +72,5 @@ export const ENTRY_FORMATTING_PATTERN_REGEX = new RegExp(
  * @type {number}
  */
 export const MAX_ENTRY_LENGTH = 50;
+export const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+export const CHANGESET_PATH = process.env.CHANGESET_PATH;
