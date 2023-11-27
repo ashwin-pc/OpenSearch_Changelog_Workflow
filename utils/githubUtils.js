@@ -29,8 +29,8 @@ export const extractPullRequestData = async () => {
     // Extract PR description and link
     const prDescription = pullRequest.body || "";
     const prLink = pullRequest.html_url || "";
-    const branchRef = context.payload.pull_request.head.ref || "";
-
+    const branchRef = context.payload.pull_request.head.ref;
+    console.log(branchRef)
     // Return the extracted data
     return {
       owner,
