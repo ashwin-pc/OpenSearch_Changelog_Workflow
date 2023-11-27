@@ -30,7 +30,7 @@ export const extractPullRequestData = async () => {
     const prDescription = pullRequest.body || "";
     const prLink = pullRequest.html_url || "";
     const branchRef = context.payload.pull_request.head.ref;
-    console.log(branchRef)
+
     // Return the extracted data
     return {
       owner,
@@ -48,20 +48,21 @@ export const extractPullRequestData = async () => {
 export const createOrUpdateFile = async (
   owner,
   repo,
+  path,
   content,
   message,
-  branch
+  branchRef
 ) => {
   let sha;
   // Set up Octokit with the provided token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  
+
   try {
     const response = await octokit.rest.repos.getContent({
       owner,
       repo,
-      CHANGESET_PATH,
-      ref: branch,
+      path,
+      ref: branchRef,
     });
     sha = response.data.sha;
   } catch (error) {
@@ -77,11 +78,11 @@ export const createOrUpdateFile = async (
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
-    CHANGESET_PATH,
-    message: message,
-    content: content,
+    path,
+    message,
+    content,
     sha, // This will be undefined if the file doesn't exist
-    branch,
+    branchRef,
   });
   console.log(
     `File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`
