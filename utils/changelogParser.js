@@ -3,7 +3,6 @@ import {
 } from "../config/constants.js";
 import {
   InvalidPRChangelogDescriptionError,
-  EntryTooLongError,
   CategoryWithSkipOptionError,
 } from "./changelogErrors.js";
 
