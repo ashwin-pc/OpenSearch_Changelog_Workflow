@@ -1,50 +1,55 @@
 import github from "@actions/github";
 import { PullRequestDataExtractionError } from "./customErrors.js";
-import { GITHUB_TOKEN, CHANGESET_PATH } from "../config/constants.js";
+import { GITHUB_TOKEN } from "../config/constants.js";
+
 /**
  * Extracts relevant data from a GitHub Pull Request.
- * @returns {Promise<Object>} An object containing the pull request data and other relevant information.
+ * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
+ * @throws {PullRequestDataExtractionError} Throws a custom error if data extraction fails.
  */
 export const extractPullRequestData = async () => {
   try {
-    // Set up Octokit with the provided token
+    // Initialize Octokit client with the GitHub token
     const octokit = github.getOctokit(GITHUB_TOKEN);
 
-    // Get GitHub context data
+    // Retrieve context data from the GitHub action environment
     const context = github.context;
     const { owner, repo } = context.repo;
     const prNumber = context.payload.pull_request.number;
 
-    console.log(
-      `Extracting data for PR #${prNumber}... by ${owner} in ${repo}`
-    );
+    console.log(`Extracting data for PR #${prNumber} in ${owner}/${repo}`);
 
-    // Get the pull request details
+    // Fetch pull request details using Octokit
     const { data: pullRequest } = await octokit.rest.pulls.get({
       owner,
       repo,
       pull_number: prNumber,
     });
 
-    // Extract PR description and link
-    const prDescription = pullRequest.body || "";
-    const prLink = pullRequest.html_url || "";
-    const branchRef = context.payload.pull_request.head.ref;
-
-    // Return the extracted data
+    // Extract and return relevant PR data
     return {
       owner,
       repo,
       prNumber,
-      prDescription,
-      prLink,
-      branchRef,
+      prDescription: pullRequest.body || "",
+      prLink: pullRequest.html_url || "",
+      branchRef: context.payload.pull_request.head.ref,
     };
   } catch (error) {
-    throw new PullRequestDataExtractionError(); // Rethrow the error for further handling if necessary
+    // Throw a custom error for issues during data extraction
+    throw new PullRequestDataExtractionError(`Error extracting PR data: ${error.message}`);
   }
 };
 
+/**
+ * Creates or updates a file in a GitHub repository.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {string} path - File path within the repository.
+ * @param {string} content - Content to be written to the file.
+ * @param {string} message - Commit message.
+ * @param {string} branchRef - Branch reference for the commit.
+ */
 export const createOrUpdateFile = async (
   owner,
   repo,
@@ -53,38 +58,37 @@ export const createOrUpdateFile = async (
   message,
   branchRef
 ) => {
-  let sha;
-  // Set up Octokit with the provided token
+  // Initialize Octokit client
   const octokit = github.getOctokit(GITHUB_TOKEN);
 
   try {
+    // Attempt to retrieve the file's SHA to check if it exists
     const response = await octokit.rest.repos.getContent({
       owner,
       repo,
       path,
       ref: branchRef,
     });
-    sha = response.data.sha;
+    var sha = response.data.sha;
   } catch (error) {
     if (error.status === 404) {
-      // File does not exist
-      console.log("changeset for this PR not found, will create a new one.");
+      console.log("File not found, will create a new one.");
     } else {
-      // Other errors
-      console.log("other error:", error);
+      console.error("Error accessing file:", error);
       throw error;
     }
   }
+
+  // Create or update the file content
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
     path,
     message,
     content,
-    sha, // This will be undefined if the file doesn't exist
+    sha, // If file exists, sha is used to update; otherwise, file is created
     branchRef,
   });
-  console.log(
-    `File: ${CHANGESET_PATH} ${sha ? "updated" : "created"} successfully.`
-  );
+
+  console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
 };
