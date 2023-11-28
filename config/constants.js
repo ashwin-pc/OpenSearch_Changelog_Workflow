@@ -53,7 +53,7 @@ export const CHANGELOG_SECTION_REGEX = new RegExp(
  * @type {RegExp}
  */
 export const ENTRY_FORMATTING_PATTERN_REGEX = new RegExp(
-  `-\\s*([a-zA-Z0-9]+)(?::(.*))?`
+  `-\\s*([a-zA-Z0-9]+):?(.*)?`
 );
 // Explanation:
 // - '-\\s*' matches a hyphen followed by any number of whitespace characters.
