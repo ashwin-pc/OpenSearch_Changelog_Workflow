@@ -70,7 +70,7 @@ export class InvalidPrefixError extends Error {
    * @param {string} [foundPrefix] - The prefix provided by the user.
    */
   constructor(foundPrefix) {
-    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", or "test".`
+    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "skip", or "test".`
     super(message);
     this.name = "InvalidPrefixError";
   }
