@@ -7,6 +7,7 @@ import {
   InvalidPrefixError,
   EntryTooLongError,
   InvalidEntryFormatError,
+  EmptyEntryDescriptionError,
 } from "./customErrors.js";
 
 /**
@@ -22,10 +23,16 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
-    if (!PREFIXES.includes(prefix.toLowerCase()))
-      throw new InvalidPrefixError(prefix);
-    if (prefix === "skip") return ["", "skip"];
-    if (text.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError();
+    if (prefix === "skip") {
+      return ["", "skip"];
+    } else {
+      if (!PREFIXES.includes(prefix.toLowerCase()))
+        throw new InvalidPrefixError(prefix);
+      else if (!text)
+        throw new EmptyEntryDescriptionError(prefix);
+      else if (text.length > MAX_ENTRY_LENGTH)
+        throw new EntryTooLongError();
+    }
     const formattedChangelogEntry = `- ${text.trim()} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   } else {
