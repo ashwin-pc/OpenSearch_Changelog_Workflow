@@ -36,14 +36,14 @@ async function run() {
     prepareChangesetEntriesContent(entryMap)
   ).toString("base64");
   const changesetFileName = `${prNumber}.yml`;
-  const changesetFilPath = `${CHANGESET_PATH}/${changesetFileName}`;
+  const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
   const message = `Add changeset for PR #${prNumber}`;
 
   // Create or update the changeset file using Github API
   await createOrUpdateFile(
     owner,
     repo,
-    changesetFilPath,
+    changesetFilePath,
     changesetEntriesContent,
     message,
     branchRef
