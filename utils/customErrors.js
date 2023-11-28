@@ -103,3 +103,18 @@ export class InvalidEntryFormatError extends Error {
     this.name = "InvalidEntryFormatError";
   }
 }
+
+/**
+ * Represents an error when a description is empty.
+ */
+export class EmptyEntryDescriptionError extends Error {
+  /**
+   * Constructs the EmptyDescriptionError instance.
+   * @param {string} [foundPrefix] - The prefix provided by the user.
+   */
+  constructor(foundPrefix) {
+    const message = `Description for "${foundPrefix}" entry cannot be empty.`;
+    super(message);
+    this.name = "EmptyDescriptionError";
+  }
+}
