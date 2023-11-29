@@ -112,8 +112,9 @@ feat: Adds a new feature
 Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 
 ```mermaid
+%%{init: {'themeVariables': { 'fontSize': '17px' }}}%%
   flowchart TD;
-    A(Changelog Workflow Starts) --> B[Extract metadata from PR]
+    A(Changelog \nWorkflow Starts) --> B[Extract metadata from PR]
     B --> C{Extraction \nsuccessful?}
     C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
     C --> |No| D[PullRequestDataExtractionError]
@@ -136,13 +137,9 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
     O --> P
     N --> P(Workflow ends successfully)
 
-    classDef largeFont font-size:24px;
-
     style A fill:#0e7490,color:white
     style E fill:#b91c1c,color:white
     style F fill:#4338ca,color:white
     style P fill:#15803d,color:white
 
-    class A,E,F,P largeFont;
-    class B,C,D,G,H,I,J,J1,K,L,M,N,O,Q mediumFont;
 ```
