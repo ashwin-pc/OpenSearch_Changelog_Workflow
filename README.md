@@ -46,7 +46,7 @@ feat:
 
 This changeset file will become part of the code that is merged when the PR is approved.
 
-If the workflow encounters an error, it will fail, abd a custom error message will be printed to the workflow logs explaining the reason for the failure.
+If the workflow encounters an error, it will fail, and a custom error message will be printed to the workflow logs explaining the reason for the failure.
 
 Contributors can then address the error and update their PR, which will trigger the workflow to run again.
 
@@ -101,19 +101,19 @@ feat: Adds a new feature
 ```
 
 ## Workflow Flowchart
-Below is a flowchart built with `Mermaid.js` demonstrating the logic this workflow follows:
+Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 
 ```mermaid
   flowchart TD;
     A(Changelog Workflow Starts) --> B[Extract metadata from PR]
-    style A fill:#38bdf8
+    style A fill:#0e7490,color:white
     B --> C{Extraction successful?}
     C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
     C --> |No| D[PullRequestDataExtractionError]
     D --> E(Workflow fails)
-    style E fill:#f87171
+    style E fill:#b91c1c,color:white
     E --> F[Contributor edits PR]
-    style F fill:#facc15
+    style F fill:#4338ca,color:white
     F --> A
     G --> H{Changelog section present?}
     H --> |Yes| J[Prepare changeset entry map]
@@ -129,5 +129,5 @@ Below is a flowchart built with `Mermaid.js` demonstrating the logic this workfl
     M --> |No| Q[CategoryWithSkipOptionError]
     Q --> E
     O --> P
-    style P fill:#4ade80
+    style P fill:#15803d,color:white
     N --> P(Workflow ends successfully)
