@@ -11,13 +11,25 @@ import {
 } from "./customErrors.js";
 
 /**
- * Prepares a formatted changelog entry using the provided changelog entry, PR number, and PR link.
- * It formats the changelog entry by adding a prefix and linking the PR number.
+ * Prepares and formats a changelog entry based on the provided inputs.
+ * The function processes a changelog entry text, associates it with a PR number, and creates a link to the PR.
+ * It handles various checks such as entry format validation, prefix recognition, and text length constraints.
+ * If the entry meets the criteria, it is formatted with a prefix, capitalized, and linked to the PR.
+ * In case of errors like invalid prefix, empty description, entry too long, or invalid entry format,
+ * appropriate exceptions are thrown.
  *
- * @param {string} changelogEntry - The changelog entry text.
+ * The function uses constants and patterns (like ENTRY_FORMATTING_PATTERN_REGEX and PREFIXES)
+ * defined elsewhere in the code to perform validations and formatting.
+ *
+ * @param {string} changelogEntry - The changelog entry text to be formatted.
  * @param {string} prNumber - The PR number associated with the changelog entry.
  * @param {string} prLink - The URL link to the PR.
- * @returns {[string, string]} A tuple containing the formatted changelog entry and the identified prefix. If no prefix is identified, "unknown" is used.
+ * @returns {[string, string]} A tuple containing the formatted changelog entry and the identified prefix.
+ * If the prefix is "skip", an empty string and the "skip" prefix are returned.
+ * @throws {InvalidPrefixError} When the prefix is not included in the predefined list of valid prefixes.
+ * @throws {EmptyEntryDescriptionError} When the changelog entry description is empty.
+ * @throws {EntryTooLongError} When the changelog entry exceeds the maximum allowed length.
+ * @throws {InvalidEntryFormatError} When the changelog entry does not match the expected format.
  */
 export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
