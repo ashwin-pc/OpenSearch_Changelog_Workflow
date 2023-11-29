@@ -112,8 +112,9 @@ feat: Adds a new feature
 Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 
 ```mermaid
-%%{init: {'themeVariables': { 'fontSize': '100px' }}}%%
+%%{init: {'themeVariables': { 'fontSize': '56px' }}}%%
 flowchart TD;
+  classDef largeFont font-size:32px;
   A(Changelog Workflow Starts) --> B[Extract metadata from PR]
   B --> C{Extraction successful?}
   C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
@@ -123,9 +124,9 @@ flowchart TD;
   F --> A
   G --> H{Changelog section present?}
   H --> |Yes| J[Prepare changeset entry map]
+  J --> J1{Entries in PR formatted correctly?}
   H --> |No| I[NoChangelogSectionFoundError]
   I --> E
-  J --> J1{Entries in PR formatted correctly?}
   J1 --> |Yes| K{'skip' in changeset entry map?}
   J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
   L --> E
@@ -141,5 +142,7 @@ flowchart TD;
   style E fill:#b91c1c,color:white
   style F fill:#4338ca,color:white
   style P fill:#15803d,color:white
+
+  class A,B,C,D,E,F,G,H,I,J,J1,K,L,M,N,O,P,Q largeFont;
 
 ```
