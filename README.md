@@ -16,7 +16,7 @@ on:
   pull_request:
     types: [synchronize, opened, edited]
     paths-ignore:
-      - "changelogs/fragments/**/*"
+      - 'changelogs/fragments/**/*'
 
 jobs:
   update-changelog:
@@ -30,9 +30,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           changeset_path: changelogs/fragments
 ```
-
 ## Workflow Details
-
 Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
 
 The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
@@ -43,7 +41,7 @@ This changeset file will include changelog descriptions under their proper categ
 
 ```yaml
 feat:
-  - Adds a new feature ([#532](https://github.com/.../pull/532))
+- Adds a new feature ([#532](https://github.com/.../pull/532))
 ```
 
 This changeset file will become part of the code that is merged when the PR is approved.
@@ -86,63 +84,52 @@ Below are examples of invalid entries:
 - skip
 - feat: Adds a new feature
 ```
-
 ```
 // Missing a hyphen
 feat: Adds a new feature
 ```
-
 ```
 // Invalid category prefix
 - new: Adds something new
 ```
-
 ```
 // Missing description
 - feat
 ```
-
 ```
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
 
 ## Workflow Flowchart
-
 Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 
 ```mermaid
-%%{init: {'themeVariables': { 'fontSize': '32px' }}}%%
-flowchart TD;
-  classDef largeFont font-size:18px;
-  A(Changelog Workflow Starts) --> B[Extract metadata from PR]
-  B --> C{Extraction successful?}
-  C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
-  C --> |No| D[PullRequestDataExtractionError]
-  D --> E(Workflow fails)
-  E --> F[Contributor edits PR]
-  F --> A
-  G --> H{Changelog section present?}
-  H --> |Yes| J[Prepare changeset entry map]
-  J --> J1{Entries in PR formatted correctly?}
-  H --> |No| I[NoChangelogSectionFoundError]
-  I --> E
-  J1 --> |Yes| K{'skip' in changeset entry map?}
-  J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
-  L --> E
-  K --> |Yes| M{Is 'skip' the only entry?}
-  K --> |No| N[Changset file created / updated]
-  M --> |Yes| O[No changeset file created / updated]
-  M --> |No| Q[CategoryWithSkipOptionError]
-  Q --> E
-  O --> P
-  N --> P(Workflow ends successfully)
-
-  style A fill:#0e7490,color:white
-  style E fill:#b91c1c,color:white
-  style F fill:#4338ca,color:white
-  style P fill:#15803d,color:white
-
-  class A,B,C,D,E,F,G,H,I,J,J1,K,L,M,N,O,P,Q largeFont;
-
-```
+  flowchart TD;
+    A(Changelog Workflow Starts) --> B[Extract metadata from PR]
+    style A fill:#0e7490,color:white
+    B --> C{Extraction successful?}
+    C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
+    C --> |No| D[PullRequestDataExtractionError]
+    D --> E(Workflow fails)
+    style E fill:#b91c1c,color:white
+    E --> F[Contributor edits PR]
+    style F fill:#4338ca,color:white
+    F --> A
+    G --> H{Changelog section present?}
+    H --> |Yes| J[Prepare changeset entry map]
+    J --> J1{Entries in PR formatted correctly?}
+    H --> |No| I[NoChangelogSectionFoundError]
+    I --> E
+    J1 --> |Yes| K{'skip' in changeset entry map?}
+    J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
+    L --> E
+    K --> |Yes| M{Is 'skip' the only entry?}
+    K --> |No| N[Changset file created / updated]
+    M --> |Yes| O[No changeset file created / updated]
+    M --> |No| Q[CategoryWithSkipOptionError]
+    Q --> E
+    O --> P
+    style P fill:#15803d,color:white
+    N --> P(Workflow ends successfully)
+``
