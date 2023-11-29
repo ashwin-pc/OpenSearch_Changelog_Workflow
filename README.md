@@ -112,9 +112,9 @@ feat: Adds a new feature
 Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 
 ```mermaid
-%%{init: {'themeVariables': { 'fontSize': '56px' }}}%%
+%%{init: {'themeVariables': { 'fontSize': '32px' }}}%%
 flowchart TD;
-  classDef largeFont font-size:32px;
+  classDef largeFont font-size:18px;
   A(Changelog Workflow Starts) --> B[Extract metadata from PR]
   B --> C{Extraction successful?}
   C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
