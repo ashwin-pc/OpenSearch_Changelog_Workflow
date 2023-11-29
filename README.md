@@ -114,22 +114,22 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
 ```mermaid
 %%{init: {'themeVariables': { 'fontSize': '17px' }}}%%
   flowchart TD;
-    A(Changelog \n Workflow Starts) --> B[Extract metadata from PR]
-    B --> C{Extraction \n successful?}
+    A(Changelog \nWorkflow Starts) --> B[Extract metadata from PR]
+    B --> C{Extraction \nsuccessful?}
     C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
     C --> |No| D[PullRequestDataExtractionError]
     D --> E(Workflow fails)
     E --> F[Contributor edits PR]
     F --> A
-    G --> H{Changelog \n section present?}
+    G --> H{Changelog \nsection present?}
     H --> |Yes| J[Prepare changeset entry map]
-    J --> J1{Entries in PR \n formatted correctly?}
+    J --> J1{Entries in PR \nformatted correctly?}
     H --> |No| I[NoChangelogSectionFoundError]
     I --> E
     J1 --> |Yes| K{'skip' in changeset \n entry map?}
     J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
     L --> E
-    K --> |Yes| M{Is 'skip' the \n only entry?}
+    K --> |Yes| M{Is 'skip' the \nonly entry?}
     K --> |No| N[Changset file created / updated]
     M --> |Yes| O[No changeset file created / updated]
     M --> |No| Q[CategoryWithSkipOptionError]
