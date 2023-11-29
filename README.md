@@ -33,7 +33,7 @@ jobs:
 ## Workflow Details
 Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
 
-The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description. 
+The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
 
 If a contributor has entered valid changelog entries (see formatting requirements below), the workflow will categorize these entries and either create or update a `.yml` changeset file in the `changelogs/fragments` directory of the repository.
 
@@ -65,6 +65,7 @@ In order for the workflow to successfully create or update a changeset file from
   - `infra`
   - `refactor`
   - `test`
+  - `security`
 - If the changes in a PR are minor (e.g., fixing a typo), contributors can enter `- skip` in the "Changelog" section to instruct the workflow not to generate a changeset file.
   - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
 - After the colon, contributors should provide a concise description of their changes. Descriptions must be 50 characters or less.
