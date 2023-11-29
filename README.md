@@ -137,7 +137,7 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
     O --> P
     N --> P(Workflow ends successfully)
 
-    classDef largeFont font-size:24px;
+    classDef largeFont font-size:22px;
     classDef mediumFont font-size:18px;
 
     style A fill:#0e7490,color:white
