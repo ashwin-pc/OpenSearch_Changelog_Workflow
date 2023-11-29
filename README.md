@@ -44,8 +44,10 @@ This changeset file will include changelog descriptions under their proper categ
 ```yaml
 feat:
   - Adds a new feature ([#532](https://github.com/.../pull/532))
+
 refactor:
   - Improves an existing feature ([#532](https://github.com/.../pull/532))
+  
 test:
   - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
   - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
