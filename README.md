@@ -113,7 +113,7 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
 
 ```mermaid
   flowchart TD;
-    A(Changelog \nWorkflow Starts) --> B[Extract metadata from PR]
+    A(Changelog Workflow Starts) --> B[Extract metadata from PR]
     B --> C{Extraction \nsuccessful?}
     C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
     C --> |No| D[PullRequestDataExtractionError]
