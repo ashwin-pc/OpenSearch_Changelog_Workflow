@@ -46,6 +46,20 @@ export class InvalidChangelogHeadingError extends Error {
 }
 
 /**
+ * Represents an error for an empty changelog section in a PR description.
+ */
+export class EmptyChangelogSectionError extends Error {
+  /**
+   * Constructs the EmptyChangelogSectionError instance.
+   * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries."] - Custom error message.
+   */
+  constructor(message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries.") {
+    super(message);
+    this.name = "EmptyChangelogSectionError"
+  }
+}
+
+/**
  * Represents an error when a changelog entry exceeds the maximum allowed length.
  */
 export class EntryTooLongError extends Error {

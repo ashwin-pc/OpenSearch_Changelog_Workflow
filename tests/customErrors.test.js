@@ -6,7 +6,8 @@ import {
   InvalidPrefixError,
   CategoryWithSkipOptionError,
   InvalidEntryFormatError,
-  EmptyEntryDescriptionError
+  EmptyEntryDescriptionError,
+  EmptyChangelogSectionError
 } from '../utils/index.js';
 
 import { MAX_ENTRY_LENGTH } from '../config/constants.js';
@@ -30,6 +31,12 @@ describe('Custom Errors', () => {
     expect(error.message).toBe("The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax.");
     expect(error.name).toBe('InvalidChangelogHeadingError');
   });
+
+  test('EmptyChangelogSectionError default message', () => {
+    const error = new EmptyChangelogSectionError();
+    expect(error.message).toBe("The Changelog section in your PR description is empty. Please add a valid changelog entry or entries.");
+    expect(error.name).toBe('EmptyChangelogSectionError');
+  })
 
   test('EntryTooLongError default message', () => {
     const error = new EntryTooLongError();
