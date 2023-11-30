@@ -7,7 +7,9 @@ import {
   CategoryWithSkipOptionError,
   InvalidEntryFormatError,
   EmptyEntryDescriptionError
-} from '../utils/index.js'; // Update with the actual path
+} from '../utils/index.js';
+
+import { MAX_ENTRY_LENGTH } from '../config/constants.js';
 
 describe('Custom Errors', () => {
   test('PullRequestDataExtractionError defaults', () => {
