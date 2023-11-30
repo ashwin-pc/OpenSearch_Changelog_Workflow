@@ -1,5 +1,5 @@
-import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-import { InvalidChangelogHeadingError } from "./customErrors.js";
+import { CHANGELOG_SECTION_REGEX, EMPTY_CHANGELOG_SECTION_REGEX } from "../config/constants.js";
+import { InvalidChangelogHeadingError, EmptyChangelogSectionError } from "./customErrors.js";
 
 // **************************************************************
 // I) INTERNAL FUNCTIONS
@@ -47,11 +47,17 @@ export const extractChangelogEntries = (prDescription) => {
   // Output -> Array of length 2:
   // changelogSection[0]: Full regex match including '## Changelog' and following content.
   // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
-  console.log(changelogSection);
   // Throw error if '## Changelog' header is missing or malformed
   if (!changelogSection) {
     throw new InvalidChangelogHeadingError();
   }
+
+  // Throw error if Changelog section is empty
+  const isChangelogSectionEmpty = EMPTY_CHANGELOG_SECTION_REGEX.test(changelogSection[1]);
+  if (isChangelogSectionEmpty || changelogSection[1].length === 0) {
+    throw new EmptyChangelogSectionError();
+  }
+
   // Initial accumulator for reduce: empty array for lines and initial state
   const initialAcc = { entries: [], state: { inComment: false } };
 
