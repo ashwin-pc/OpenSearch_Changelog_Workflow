@@ -31,19 +31,17 @@ export class ChangesetFileAccessError extends Error {
   }
 }
 
-
-
 /**
- * Represents an error for a missing changelog section in a PR description.
+ * Represents an error for a missing or malformed changelog heading in a PR description.
  */
-export class NoChangelogSectionFoundError extends Error {
+export class InvalidChangelogHeadingError extends Error {
   /**
-   * Constructs the NoChangelogSectionFoundError instance.
-   * @param {string} [message="No changelog section found in PR description"] - Custom error message.
+   * Constructs the InvalidChangelogHeadingError instance.
+   * @param {string} [message="The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."] - Custom error message.
    */
-  constructor(message = "No changelog section found in PR description") {
+  constructor(message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax.") {
     super(message);
-    this.name = "NoChangelogSectionFoundError";
+    this.name = "InvalidChangelogHeadingError";
   }
 }
 
