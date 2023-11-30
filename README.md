@@ -131,7 +131,7 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
     G --> H{Changelog \nsection present?}
     H --> |Yes| J[Prepare changeset entry map]
     J --> J1{Entries in PR \nformatted correctly?}
-    H --> |No| I[NoChangelogSectionFoundError]
+    H --> |No| I[InvalidChangelogHeadingError]
     I --> E
     J1 --> |Yes| K{'skip' in changeset \n entry map?}
     J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
