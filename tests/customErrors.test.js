@@ -7,7 +7,7 @@ import {
   CategoryWithSkipOptionError,
   InvalidEntryFormatError,
   EmptyEntryDescriptionError
-} from '../utils'; // Update with the actual path
+} from '../utils/index.js'; // Update with the actual path
 
 describe('Custom Errors', () => {
   test('PullRequestDataExtractionError defaults', () => {
