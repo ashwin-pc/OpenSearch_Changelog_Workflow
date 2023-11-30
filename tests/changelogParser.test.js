@@ -1,5 +1,5 @@
-import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 import { 
+    EmptyChangelogSectionError,
     InvalidChangelogHeadingError,
     extractChangelogEntries,
 } from "../utils/index.js";
@@ -22,12 +22,16 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(misspelledChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    test.todo('should throw InvalidChangelogHeadingError if `## Changelog` section is empty', () => {
-        const emptyChangelogPRSection = `
+    test('should throw EmptyChangelogSectionError if `## Changelog` section is empty', () => {
+        const emptyChangelogSectionFollowedByHeading = `
         ## Changelog
 
         ## Next Heading
         `;
-        expect(() => extractChangelogEntries(emptyChangelogPRSection)).toThrow(InvalidChangelogHeadingError);
+        const emptyChangelogSectionFollowedByNoHeading = `
+        ## Changelog
+        `;
+        expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByHeading)).toThrow(EmptyChangelogSectionError);
+        expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByNoHeading)).toThrow(EmptyChangelogSectionError);
     })
 })
