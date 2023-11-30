@@ -1,33 +1,33 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 import { 
-    NoChangelogSectionFoundError,
+    InvalidChangelogHeadingError,
     extractChangelogEntries,
 } from "../utils/index.js";
 
 describe('extractChangelogEntries', () => {
-    test('should throw NoChangelogSectionFoundError if `## Changelog` header is missing', () => {
+    test('should throw InvalidChangelogHeadingError if `## Changelog` header is missing', () => {
         const noChangelogPRHeader = `
         - feat: Adds new feature
 
         ## Next Heading
         `;
-        expect(() => extractChangelogEntries(noChangelogPRHeader)).toThrow(NoChangelogSectionFoundError);
+        expect(() => extractChangelogEntries(noChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    test('should throw NoChangelogSectionFoundError if `## Changelog` header is misspelled', () => {
+    test('should throw InvalidChangelogHeadingError if `## Changelog` header is malformed', () => {
         const misspelledChangelogPRHeader = `
         ## Change log
         - feat: Adds new feature
 
         ## Next Heading
         `;
-        expect(() => extractChangelogEntries(misspelledChangelogPRHeader)).toThrow(NoChangelogSectionFoundError);
+        expect(() => extractChangelogEntries(misspelledChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    test.todo('should throw NoChangelogSectionFoundError if `## Changelog` section is empty', () => {
+    test.todo('should throw InvalidChangelogHeadingError if `## Changelog` section is empty', () => {
         const emptyChangelogPRSection = `
         ## Changelog
 
         ## Next Heading
         `;
-        expect(() => extractChangelogEntries(emptyChangelogPRSection)).toThrow(NoChangelogSectionFoundError);
+        expect(() => extractChangelogEntries(emptyChangelogPRSection)).toThrow(InvalidChangelogHeadingError);
     })
 })
