@@ -134,7 +134,7 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
     H --> |No| I[InvalidChangelogHeadingError]
     I --> E
     J1 --> |Yes| K{'skip' in changeset \n entry map?}
-    J1 --> |No| L[InvalidEntryFormatError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
+    J1 --> |No| L[ChangelogEntryMissingHyphenError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
     L --> E
     K --> |Yes| M{Is 'skip' the \nonly entry?}
     K --> |No| N[Changset file created / updated]
