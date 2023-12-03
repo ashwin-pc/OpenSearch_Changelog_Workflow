@@ -12,7 +12,7 @@ import {
 } from "./utils/githubUtils.js";
 
 async function run() {
-  // Get Pull Rerquest data
+  // Get Pull Request data
   const { owner, repo, prNumber, prDescription, prLink, branchRef } =
     await extractPullRequestData();
 

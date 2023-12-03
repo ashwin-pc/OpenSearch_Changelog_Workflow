@@ -29,6 +29,7 @@ export const extractPullRequestData = async () => {
       pull_number: prNumber,
     });
 
+    console.log({owner, repo, prNumber, prDescription: pullRequest.body || "", prLink: pullRequest.html_url || "", branchRef: context.payload.pull_request.head.ref});
     // Return relevant PR data
     return {
       owner,
