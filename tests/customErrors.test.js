@@ -5,7 +5,7 @@ import {
   EntryTooLongError,
   InvalidPrefixError,
   CategoryWithSkipOptionError,
-  InvalidEntryFormatError,
+  ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
   EmptyChangelogSectionError
 } from '../utils/index.js';
@@ -59,10 +59,10 @@ describe('Custom Errors', () => {
     expect(error.name).toBe('CategoryWithSkipOptionError');
   });
 
-  test('InvalidEntryFormatError default message', () => {
-    const error = new InvalidEntryFormatError();
-    expect(error.message).toBe("Entry needs to start with a '-'");
-    expect(error.name).toBe('InvalidEntryFormatError');
+  test('ChangelogEntryMissingHyphenError default message', () => {
+    const error = new ChangelogEntryMissingHyphenError();
+    expect(error.message).toBe("Changelog entries must begin with a hyphen (-).");
+    expect(error.name).toBe('ChangelogEntryMissingHyphenError');
   });
 
   test('EmptyEntryDescriptionError with foundPrefix', () => {
