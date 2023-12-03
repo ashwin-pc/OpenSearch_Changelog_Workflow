@@ -6,7 +6,7 @@ import {
 import {
   InvalidPrefixError,
   EntryTooLongError,
-  InvalidEntryFormatError,
+  ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
 } from "./customErrors.js";
 
@@ -29,7 +29,7 @@ import {
  * @throws {InvalidPrefixError} When the prefix is not included in the predefined list of valid prefixes.
  * @throws {EmptyEntryDescriptionError} When the changelog entry description is empty.
  * @throws {EntryTooLongError} When the changelog entry exceeds the maximum allowed length.
- * @throws {InvalidEntryFormatError} When the changelog entry does not match the expected format.
+ * @throws {ChangelogEntryMissingHyphenError} When the changelog entry does not match the expected format.
  */
 export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
@@ -51,7 +51,7 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
     const formattedChangelogEntry = `- ${capitalizedText} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   } else {
-    throw new InvalidEntryFormatError();
+    throw new ChangelogEntryMissingHyphenError();
   }
 };
 
