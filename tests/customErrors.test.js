@@ -39,15 +39,17 @@ describe('Custom Errors', () => {
   })
 
   test('EntryTooLongError default message', () => {
-    const error = new EntryTooLongError();
-    expect(error.message).toBe(`Entry is longer than ${MAX_ENTRY_LENGTH} characters`);
+    const entryLength = MAX_ENTRY_LENGTH + 1;
+    const characterOverage = entryLength - MAX_ENTRY_LENGTH;
+    const error = new EntryTooLongError(entryLength);
+    expect(error.message).toBe(`Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters.`);
     expect(error.name).toBe('EntryTooLongError');
   });
 
   test('InvalidPrefixError with foundPrefix', () => {
     const foundPrefix = 'invalid';
     const error = new InvalidPrefixError(foundPrefix);
-    expect(error.message).toBe(`Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "skip", or "test".`);
+    expect(error.message).toBe(`Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`);
     expect(error.name).toBe('InvalidPrefixError');
   });
 

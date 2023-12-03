@@ -65,9 +65,11 @@ export class EmptyChangelogSectionError extends Error {
 export class EntryTooLongError extends Error {
   /**
    * Constructs the EntryTooLongError instance.
-   * @param {string} [message=`Entry is longer than ${MAX_ENTRY_LENGTH} characters`] - Custom error message.
+   * @param {string} [entryLength] - The length of the entry provided by the user.
    */
-  constructor(message = `Entry is longer than ${MAX_ENTRY_LENGTH} characters`) {
+  constructor(entryLength) {
+    const characterOverage = entryLength - MAX_ENTRY_LENGTH;
+    const message = `Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters.`
     super(message);
     this.name = "EntryTooLongError";
   }
@@ -82,7 +84,7 @@ export class InvalidPrefixError extends Error {
    * @param {string} [foundPrefix] - The prefix provided by the user.
    */
   constructor(foundPrefix) {
-    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "skip", or "test".`
+    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`
     super(message);
     this.name = "InvalidPrefixError";
   }
