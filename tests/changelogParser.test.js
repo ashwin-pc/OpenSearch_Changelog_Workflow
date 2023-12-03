@@ -36,7 +36,7 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByHeading)).toThrow(EmptyChangelogSectionError);
         expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByNoHeading)).toThrow(EmptyChangelogSectionError);
-    })
+    });
 
     test('should convert a valid changelog section into an array of changelog entries', () => {
         const validChangelogSection = `
@@ -51,4 +51,21 @@ describe('extractChangelogEntries', () => {
         const actualChangelogEntryArray = extractChangelogEntries(validChangelogSection);
         expect(actualChangelogEntryArray).toEqual(expectedChangelogEntryArray);
     })
+
+    test('should ignore text within a comment block in the changelog section', () => {
+        const validChangelogSectionWithComment = `
+        ## Changelog
+        <!-- This is a comment 
+        feat: Adds new feature
+        -->
+
+        - fix: Fixes bug
+
+        ## Next Heading
+        `;
+        const expectedChangelogEntryArray = ['- fix: Fixes bug'];
+        const actualChangelogEntryArray = extractChangelogEntries(validChangelogSectionWithComment);
+        expect(actualChangelogEntryArray).toEqual(expectedChangelogEntryArray);
+    });
+
 })

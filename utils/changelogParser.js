@@ -70,5 +70,7 @@ export const extractChangelogEntries = (prDescription) => {
     throw new EmptyChangelogSectionError();
   }
 
+  console.log(`Found ${changelogEntries.length} changelog ${changelogEntries.length === 1 ? 'entry' : 'entries'}.`);
+
   return changelogEntries;
 };
