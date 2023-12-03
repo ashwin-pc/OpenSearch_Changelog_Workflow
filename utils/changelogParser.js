@@ -1,4 +1,4 @@
-import { CHANGELOG_SECTION_REGEX, EMPTY_CHANGELOG_SECTION_REGEX } from "../config/constants.js";
+import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 import { InvalidChangelogHeadingError, EmptyChangelogSectionError } from "./customErrors.js";
 
 // **************************************************************
@@ -25,9 +25,10 @@ const processLine = (line, state) => {
       state: { ...state, inComment: false },
       line: null,
     };
-
-  // If the line is not in a comment and contains text, consider it as part of the changelog
-  if (!state.inComment && line.trim().length > 0) return { state, line };
+  
+  const trimmedLine = line.trim();
+  // If the line is not in a comment, contains text, and does not begin with "#" (which would indicate a section heading), consider it as part of the changelog
+  if (!state.inComment && trimmedLine.length > 0 && !trimmedLine.startsWith("#")) return { state, line: trimmedLine };
 
   // For lines within comments or empty lines, return null
   return { state, line: null };
@@ -52,26 +53,22 @@ export const extractChangelogEntries = (prDescription) => {
     throw new InvalidChangelogHeadingError();
   }
 
-  // Throw error if Changelog section is empty
-  const isChangelogSectionEmpty = EMPTY_CHANGELOG_SECTION_REGEX.test(changelogSection[1]);
-  if (isChangelogSectionEmpty || changelogSection[1].length === 0) {
-    throw new EmptyChangelogSectionError();
-  }
-
   // Initial accumulator for reduce: empty array for lines and initial state
   const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
-  const changelogEntries = changelogSection[1]
+  const changelogEntries = changelogSection[0]
     .split("\n")
     .reduce((acc, line) => {
       const { entries, state } = acc;
       const processed = processLine(line, state);
-      if (processed.line) entries.push(processed.line);
+      if (processed.line) entries.push(processed.line.trim());
       return { entries, state: processed.state };
     }, initialAcc).entries;
 
-  console.log(`Found ${changelogEntries.length} changelog entries.`);
+  if (changelogEntries.length === 0) {
+    throw new EmptyChangelogSectionError();
+  }
 
   return changelogEntries;
 };
