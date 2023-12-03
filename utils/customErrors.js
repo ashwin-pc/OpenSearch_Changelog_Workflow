@@ -107,14 +107,14 @@ export class CategoryWithSkipOptionError extends Error {
 /**
  * Represents an error when a changelog entry does not start with a '-' character.
  */
-export class InvalidEntryFormatError extends Error {
+export class ChangelogEntryMissingHyphenError extends Error {
   /**
-   * Constructs the InvalidEntryFormatError instance.
-   * @param {string} [message="Entry needs to start with a '-'"] - Custom error message.
+   * Constructs the ChangelogEntryMissingHyphenError instance.
+   * @param {string} [message="Changelog entries must begin with a hyphen (-)."] - Custom error message.
    */
-  constructor(message = "Entry needs to start with a '-'") {
+  constructor(message = "Changelog entries must begin with a hyphen (-).") {
     super(message);
-    this.name = "InvalidEntryFormatError";
+    this.name = "ChangelogEntryMissingHyphenError";
   }
 }
 
