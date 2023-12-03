@@ -48,12 +48,6 @@ export const CHANGELOG_SECTION_REGEX = new RegExp(
 // - '([\s\S]*?)' is a non-greedy capturing group that matches all characters, either whitespace or non-whitespace, up until the next section heading.
 // - '(?:\n##|$)' is a non-capturing group that matches either a section heading or the end of the string.
 
-export const EMPTY_CHANGELOG_SECTION_REGEX = new RegExp(`^\s*(##|###)`)
-// Explanation:
-// - '^\s*' matches zero or more whitespace characters at the beginning of a line
-// - '(##|###)' is a capture group that matches either '##' or '###'
-// This pattern is useful because, if a contributor does not enter text in the Changelog section of the PR, the pattern that is matched by CHANGELOG_SECTION_REGEX will be the next section heading in the PR template. Additional logic in changelogParser.js will handle cases where no section headings follow the Changelog section
-
 /**
  * Regex pattern to match individual changelog entries in the changelog section.
  * @type {RegExp}
