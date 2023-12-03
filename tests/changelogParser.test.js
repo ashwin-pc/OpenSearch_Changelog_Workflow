@@ -5,6 +5,7 @@ import {
 } from "../utils/index.js";
 
 describe('extractChangelogEntries', () => {
+    
     test('should throw InvalidChangelogHeadingError if `## Changelog` header is missing', () => {
         const noChangelogPRHeader = `
         - feat: Adds new feature
@@ -13,16 +14,18 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(noChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
+    
     test('should throw InvalidChangelogHeadingError if `## Changelog` header is malformed', () => {
-        const misspelledChangelogPRHeader = `
+        const malformedChangelogPRHeader = `
         ## Change log
         - feat: Adds new feature
 
         ## Next Heading
         `;
-        expect(() => extractChangelogEntries(misspelledChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
+        expect(() => extractChangelogEntries(malformedChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    test('should throw EmptyChangelogSectionError if `## Changelog` section is empty', () => {
+    
+    test('should throw EmptyChangelogSectionError if `## Changelog` section is missing changelog entries', () => {
         const emptyChangelogSectionFollowedByHeading = `
         ## Changelog
 
@@ -33,5 +36,19 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByHeading)).toThrow(EmptyChangelogSectionError);
         expect(() => extractChangelogEntries(emptyChangelogSectionFollowedByNoHeading)).toThrow(EmptyChangelogSectionError);
+    })
+
+    test('should convert a valid changelog section into an array of changelog entries', () => {
+        const validChangelogSection = `
+        ## Changelog
+
+        - feat: Adds new feature
+        - fix: Fixes bug
+
+        ## Next Heading
+        `;
+        const expectedChangelogEntryArray = ['- feat: Adds new feature', '- fix: Fixes bug'];
+        const actualChangelogEntryArray = extractChangelogEntries(validChangelogSection);
+        expect(actualChangelogEntryArray).toEqual(expectedChangelogEntryArray);
     })
 })
