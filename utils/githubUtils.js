@@ -64,14 +64,27 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
       });
       console.log(`Label "${label}" added to PR #${prNumber}`);
     } else {
-      // Remove the label from the pull request
-      await octokit.rest.issues.removeLabel({
+      
+      // Get the current labels on the pull request
+      const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue({
         owner,
         repo,
-        issue_number: prNumber,
-        name: label
-      });
-      console.log(`Label "${label}" removed from PR #${prNumber}`);
+        issue_number: prNumber
+      })
+      
+      // Check to see if the label is already on the pull request
+      if(currentLabels.some((element) => element.name === label)) {
+        // Remove the label from the pull request
+        await octokit.rest.issues.removeLabel({
+          owner,
+          repo,
+          issue_number: prNumber,
+          name: label
+        });
+        console.log(`Label "${label}" removed from PR #${prNumber}`);
+      } else {
+        console.log(`Label "${label}" not present on PR #${prNumber}. No action taken.`);
+      }
     }
   } catch(error) {
     console.error(`Error updating label "${label}" for PR #${prNumber}: ${error.message}`);
