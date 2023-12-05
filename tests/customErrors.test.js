@@ -12,7 +12,7 @@ import {
 
 import { MAX_ENTRY_LENGTH } from '../config/constants.js';
 
-describe('Custom Errors', () => {
+describe('Custom Errors Tests', () => {
   test('PullRequestDataExtractionError defaults', () => {
     const error = new PullRequestDataExtractionError();
     expect(error.message).toBe('Error extracting data from Pull Request');
