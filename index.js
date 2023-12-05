@@ -9,6 +9,7 @@ import { CategoryWithSkipOptionError } from "./utils/customErrors.js";
 import {
   extractPullRequestData,
   createOrUpdateFile,
+  updatePRLabel,
 } from "./utils/githubUtils.js";
 
 async function run() {
