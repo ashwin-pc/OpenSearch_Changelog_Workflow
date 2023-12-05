@@ -5,6 +5,9 @@ import {
 } from "./customErrors.js";
 import { GITHUB_TOKEN } from "../config/constants.js";
 
+// Initialize Octokit client with the GitHub token
+const octokit = github.getOctokit(GITHUB_TOKEN);
+
 /**
  * Extracts relevant data from a GitHub Pull Request.
  * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
@@ -12,9 +15,6 @@ import { GITHUB_TOKEN } from "../config/constants.js";
  */
 export const extractPullRequestData = async () => {
   try {
-    // Initialize Octokit client with the GitHub token
-    const octokit = github.getOctokit(GITHUB_TOKEN);
-
     // Retrieve context data from the GitHub action environment
     const context = github.context;
     const { owner, repo } = context.repo;
@@ -43,6 +43,41 @@ export const extractPullRequestData = async () => {
     throw new PullRequestDataExtractionError();
   }
 };
+
+/**
+ * Adds or removes a label from a GitHub pull request.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {number} prNumber - Pull request number.
+ * @param {string} label - Label to be added or removed.
+ * @param {boolean} addLabel - Flag to add or remove the label.
+ */
+export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
+  try {
+    if(addLabel) {
+      // Add the label to the pull request
+      await octokit.rest.issues.addLabels({
+        owner,
+        repo,
+        issue_number: prNumber,
+        labels: [label]
+      });
+      console.log(`Label "${label}" added to PR #${prNumber}`);
+    } else {
+      // Remove the label from the pull request
+      await octokit.rest.issues.removeLabel({
+        owner,
+        repo,
+        issue_number: prNumber,
+        name: label
+      });
+      console.log(`Label "${label}" removed from PR #${prNumber}`);
+    }
+  } catch(error) {
+    console.error(`Error updating label "${label}" for PR #${prNumber}: ${error.message}`);
+    throw error;
+  }
+}
 
 /**
  * Creates or updates a file in a GitHub repository.
