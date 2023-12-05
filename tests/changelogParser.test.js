@@ -1,11 +1,11 @@
-import { 
+import {
     EmptyChangelogSectionError,
     InvalidChangelogHeadingError,
     extractChangelogEntries,
-} from "../utils/index.js";
+} from "../utils";
 
 describe('extractChangelogEntries', () => {
-    
+
     test('should throw InvalidChangelogHeadingError if `## Changelog` header is missing', () => {
         const noChangelogPRHeader = `
         - feat: Adds new feature
@@ -14,7 +14,7 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(noChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    
+
     test('should throw InvalidChangelogHeadingError if `## Changelog` header is malformed', () => {
         const malformedChangelogPRHeader = `
         ## Change log
@@ -24,7 +24,7 @@ describe('extractChangelogEntries', () => {
         `;
         expect(() => extractChangelogEntries(malformedChangelogPRHeader)).toThrow(InvalidChangelogHeadingError);
     });
-    
+
     test('should throw EmptyChangelogSectionError if `## Changelog` section is missing changelog entries', () => {
         const emptyChangelogSectionFollowedByHeading = `
         ## Changelog
@@ -55,7 +55,7 @@ describe('extractChangelogEntries', () => {
     test('should ignore text within a comment block in the changelog section', () => {
         const validChangelogSectionWithComment = `
         ## Changelog
-        <!-- This is a comment 
+        <!-- This is a comment
         feat: Adds new feature
         -->
 

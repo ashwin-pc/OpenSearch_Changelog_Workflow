@@ -8,7 +8,7 @@ import {
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
   EmptyChangelogSectionError
-} from '../utils/index.js';
+} from '../utils';
 
 import { MAX_ENTRY_LENGTH } from '../config/constants.js';
 
