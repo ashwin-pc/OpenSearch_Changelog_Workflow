@@ -40,14 +40,13 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
     } else {
       if (!PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
-      else if (!text)
-        throw new EmptyEntryDescriptionError(prefix);
-      else if (text.length > MAX_ENTRY_LENGTH)
-        throw new EntryTooLongError();
+      else if (!text) throw new EmptyEntryDescriptionError(prefix);
+      else if (text.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError();
     }
     const trimmedText = text.trim();
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
-    const capitalizedText = trimmedText.charAt(0).toUpperCase() + trimmedText.slice(1);
+    const capitalizedText =
+      trimmedText.charAt(0).toUpperCase() + trimmedText.slice(1);
     const formattedChangelogEntry = `- ${capitalizedText} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   } else {
