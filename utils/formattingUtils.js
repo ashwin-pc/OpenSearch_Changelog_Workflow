@@ -41,7 +41,7 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
       if (!PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
       else if (!text) throw new EmptyEntryDescriptionError(prefix);
-      else if (text.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError();
+      else if (text.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError(text.length);
     }
     const trimmedText = text.trim();
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
