@@ -105,7 +105,9 @@ describe("Formatting Utils Tests", () => {
     });
 
     test("with entry too long, should throw EntryTooLongError", () => {
-      const longEntry = `- feat: ${"a".repeat(MAX_ENTRY_LENGTH + 1)}`;
+      const longEntryText =
+        " a very long entry with too much text that exceeds the maximum allowed length";
+      const longEntry = `- feat:${longEntryText}`;
       expect(() => {
         prepareChangesetEntry(longEntry, prNumber, prLink);
       }).toThrow(EntryTooLongError);
@@ -113,7 +115,7 @@ describe("Formatting Utils Tests", () => {
 
     test("with entry too long, should throw an error with the correct message", () => {
       const longEntryText =
-        "a very long entry with too much text that exceeds the maximum allowed length of ${MAX_ENTRY_LENGTH} characters";
+        "a very long entry with too much text that exceeds the maximum allowed length";
       const longEntry = `- feat:${longEntryText}`;
       const characterOverage = longEntryText.length - MAX_ENTRY_LENGTH;
       const expectedErrorMessage = `Entry is ${
