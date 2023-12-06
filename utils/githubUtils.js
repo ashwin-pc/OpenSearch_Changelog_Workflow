@@ -2,8 +2,16 @@ import github from "@actions/github";
 import {
   PullRequestDataExtractionError,
   ChangesetFileAccessError,
+  InvalidChangelogHeadingError,
+  EmptyChangelogSectionError,
+  EntryTooLongError,
+  InvalidPrefixError,
+  CategoryWithSkipOptionError,
+  ChangelogEntryMissingHyphenError,
+  EmptyEntryDescriptionError
 } from "./customErrors.js";
 import { GITHUB_TOKEN } from "../config/constants.js";
+import { error } from "@actions/core";
 
 // Initialize Octokit client with the GitHub token
 const octokit = github.getOctokit(GITHUB_TOKEN);
@@ -88,6 +96,49 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
     }
   } catch(error) {
     console.error(`Error updating label "${label}" for PR #${prNumber}: ${error.message}`);
+    throw error;
+  }
+}
+
+/**
+ * Maps error constructors to their corresponding error messages.
+ */
+const errorCommentMap = {
+  [PullRequestDataExtractionError]: error => error.message,
+  [ChangesetFileAccessError]: error => error.message,
+  [InvalidChangelogHeadingError]: error => `Error: ${error.message}`,
+  [EmptyChangelogSectionError]: error => `Error: ${error.message}`,
+  [EntryTooLongError]: error => `Error: ${error.message}`,
+  [InvalidPrefixError]: error => `Error: ${error.message}`,
+  [CategoryWithSkipOptionError]: error => `Error: ${error.message}`,
+  [ChangelogEntryMissingHyphenError]: error => `Error: ${error.message}`,
+  [EmptyEntryDescriptionError]: error => `Error: ${error.message}`,
+}
+
+/**
+ * Posts a comment to a GitHub pull request based on the error type.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {number} prNumber - Pull request number.
+ * @param {Error} error - Error object that determines the comment to be posted.
+ */
+export const postPRComment = async (owner, repo, prNumber, error) => {
+  // Find a matching comment generator function for the error type or use a default one
+  const commentGenerator = errorCommentMap[error.constructor] || (error => `An unexpected error occured: ${error.message}`);
+
+  const comment = commentGenerator(error);
+
+  try {
+    // Post a comment to the pull request
+    await octokit.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: prNumber,
+      body: comment
+    });
+    console.log(`Comment posted to PR #${prNumber}`);
+  } catch(error) {
+    console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
     throw error;
   }
 }
