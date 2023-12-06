@@ -35,15 +35,15 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
+    const trimmedText = text ? text.trim() : "";
     if (prefix === "skip") {
       return ["", "skip"];
     } else {
       if (!PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
       else if (!text) throw new EmptyEntryDescriptionError(prefix);
-      else if (text.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError(text.length);
+      else if (trimmedText.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError(text.length);
     }
-    const trimmedText = text.trim();
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
     const capitalizedText =
       trimmedText.charAt(0).toUpperCase() + trimmedText.slice(1);
