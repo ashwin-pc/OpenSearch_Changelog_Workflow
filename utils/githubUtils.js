@@ -13,15 +13,14 @@ import {
 import { GITHUB_TOKEN } from "../config/constants.js";
 import { error } from "@actions/core";
 
-// Initialize Octokit client with the GitHub token
-const octokit = github.getOctokit(GITHUB_TOKEN);
-
 /**
  * Extracts relevant data from a GitHub Pull Request.
  * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
  * @throws {PullRequestDataExtractionError} Throws a custom error if data extraction fails.
  */
 export const extractPullRequestData = async () => {
+  // Initialize Octokit client with the GitHub token
+  const octokit = github.getOctokit(GITHUB_TOKEN);
   try {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
@@ -61,44 +60,50 @@ export const extractPullRequestData = async () => {
  * @param {boolean} addLabel - Flag to add or remove the label.
  */
 export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
+  // Initialize Octokit client with the GitHub token
+  const octokit = github.getOctokit(GITHUB_TOKEN);
   try {
-    if(addLabel) {
+    if (addLabel) {
       // Add the label to the pull request
       await octokit.rest.issues.addLabels({
         owner,
         repo,
         issue_number: prNumber,
-        labels: [label]
+        labels: [label],
       });
       console.log(`Label "${label}" added to PR #${prNumber}`);
     } else {
-      
       // Get the current labels on the pull request
-      const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue({
-        owner,
-        repo,
-        issue_number: prNumber
-      })
-      
+      const { data: currentLabels } =
+        await octokit.rest.issues.listLabelsOnIssue({
+          owner,
+          repo,
+          issue_number: prNumber,
+        });
+
       // Check to see if the label is already on the pull request
-      if(currentLabels.some((element) => element.name === label)) {
+      if (currentLabels.some((element) => element.name === label)) {
         // Remove the label from the pull request
         await octokit.rest.issues.removeLabel({
           owner,
           repo,
           issue_number: prNumber,
-          name: label
+          name: label,
         });
         console.log(`Label "${label}" removed from PR #${prNumber}`);
       } else {
-        console.log(`Label "${label}" not present on PR #${prNumber}. No action taken.`);
+        console.log(
+          `Label "${label}" not present on PR #${prNumber}. No action taken.`
+        );
       }
     }
-  } catch(error) {
-    console.error(`Error updating label "${label}" for PR #${prNumber}: ${error.message}`);
+  } catch (error) {
+    console.error(
+      `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
+    );
     throw error;
   }
-}
+};
 
 /**
  * Maps error constructors to their corresponding error messages.
