@@ -121,32 +121,36 @@ Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, dem
 ```mermaid
 %%{init: {'themeVariables': { 'fontSize': '24px' }}}%%
   flowchart TD;
-    A(Changelog \nWorkflow Starts) --> B[Extract metadata from PR]
-    B --> C{Extraction \nsuccessful?}
-    C --> |Yes| G[Extract changelog entries from\n'Changelog' section of PR]
-    C --> |No| D[PullRequestDataExtractionError]
-    D --> E(Workflow fails)
-    E --> F[Contributor edits PR]
-    F --> A
-    G --> H{Changelog \nsection present?}
-    H --> |Yes| J[Prepare changeset entry map]
-    J --> J1{Entries in PR \nformatted correctly?}
-    H --> |No| I[InvalidChangelogHeadingError]
-    I --> E
-    J1 --> |Yes| K{'skip' in changeset \n entry map?}
-    J1 --> |No| L[ChangelogEntryMissingHyphenError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
-    L --> E
-    K --> |Yes| M{Is 'skip' the \nonly entry?}
-    K --> |No| N[Changset file created / updated]
-    M --> |Yes| O[No changeset file created / updated]
-    M --> |No| Q[CategoryWithSkipOptionError]
+    A(Changelog \nWorkflow Starts) --> B{Changelog section\n present in PR?}
+    B --> |Yes| C[Extract changelog entries from\n'Changelog' section of PR]
+    B --> |No| D[InvalidChangelogHeadingError \nEmptyChangelogSectionError]
+    D --> E[Error messsage added as comment to PR]
+    E --> F(Workflow fails)
+    F --> G[Contributor edits PR]
+    G --> A
+    C --> H[Prepare changeset entry map]
+    H --> I{Entries in PR \nformatted correctly?}
+    I --> |Yes| J{'skip' in changeset \n entry map?}
+    I --> |No| K[ChangelogEntryMissingHyphenError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
+    K --> E
+    J --> |Yes| L{Is 'skip' the \nonly entry?}
+    J --> |No| M[Changset file created / updated]
+    M --> N(Workflow ends successfully)
+    L --> |Yes| O['skip-changelog' label added to PR]
+    O --> P[No changeset file created / updated]
+    P --> N
+    L --> |No| Q[CategoryWithSkipOptionError]
     Q --> E
-    O --> P
-    N --> P(Workflow ends successfully)
 
-    style A fill:#0e7490,color:white
-    style E fill:#b91c1c,color:white
-    style F fill:#4338ca,color:white
-    style P fill:#15803d,color:white
-
+    style A fill:#38bdf8,color:#0f172a
+    style B fill:#fbbf24,color:#0f172a
+    style D fill:#fb923c,color:#0f172a
+    style F fill:#ef4444,color:#f8fafc
+    style G fill:#c084fc,color:#0f172a
+    style I fill:#fbbf24,color:#0f172a
+    style J fill:#fbbf24,color:#0f172a
+    style K fill:#fb923c,color:#0f172a
+    style L fill:#fbbf24,color:#0f172a
+    style Q fill:#fb923c,color:#0f172a
+    style N fill:#4ade80,color:#0f172a
 ```
