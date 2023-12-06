@@ -1,3 +1,6 @@
+// import github from "@actions/github"; // importing mock object (not real module)
+import { extractPullRequestData, createOrUpdateFile } from "../utils";
+
 // Mock the @actions/github module
 jest.mock("@actions/github", () => ({
   getOctokit: jest.fn().mockImplementation(() => ({
@@ -38,15 +41,15 @@ jest.mock("@actions/github", () => ({
   },
 }));
 
-const github = require("@actions/github"); // importing mock object (not real module)
-import { extractPullRequestData, createOrUpdateFile } from "../utils";
+
 
 describe("extractPullRequestData", () => {
   beforeEach(() => {
-    github.getOctokit.mockClear();
+    // github.getOctokit.mockClear();
   });
 
   test("successfully extracts pull request data", async () => {
+
     const expectedData = {
       owner: "testOwner",
       repo: "testRepo",
@@ -60,9 +63,10 @@ describe("extractPullRequestData", () => {
   });
 
   test("throws PullRequestDataExtractionError on failure", async () => {
+    const github = require("@actions/github");
     github
       .getOctokit()
-      .rest.pulls.get.mockRejectedValue(new Error("API Failure"));
+      .rest.pulls.get.mockRejectedValueOnce(new Error("API Failure"));
     await expect(extractPullRequestData()).rejects.toThrow(
       "PullRequestDataExtractionError"
     );
@@ -103,11 +107,9 @@ describe("createOrUpdateFile", () => {
   });
 
   test("updates an existing file", async () => {
-    github
-      .getOctokit()
-      .rest.repos.getContent.mockResolvedValueOnce({
-        data: { sha: "existingSha" },
-      });
+    github.getOctokit().rest.repos.getContent.mockResolvedValueOnce({
+      data: { sha: "existingSha" },
+    });
 
     await createOrUpdateFile(
       "testOwner",
