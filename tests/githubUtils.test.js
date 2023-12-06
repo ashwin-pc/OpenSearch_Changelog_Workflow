@@ -45,7 +45,7 @@ jest.mock("@actions/github", () => ({
 
 describe("extractPullRequestData", () => {
   beforeEach(() => {
-    // github.getOctokit.mockClear();
+    github.getOctokit.mockClear();
   });
 
   test("successfully extracts pull request data", async () => {
