@@ -57,6 +57,7 @@ async function run() {
     );
   } catch(error) {
     await postPRComment(owner, repo, prNumber, error);
+    throw error;
   }
 }
 
