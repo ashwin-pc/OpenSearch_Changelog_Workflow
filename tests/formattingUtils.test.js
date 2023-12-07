@@ -11,18 +11,14 @@ import {
 } from "../utils";
 
 describe("Formatting Utils Tests", () => {
-  let prNumber, prLink, changesetEntries;
-
-  beforeAll(() => {
-    prNumber = 123;
-    prLink = "https://github.com/TestUser/OpenSearch-Dashboards/pull/123";
-    // This array of strings is returned by the extractChangelogEntries function in the workflow, provided the "Changelog" section of the PR description is valid.
-    changesetEntries = [
-      "- feat: Adds one feature",
-      "- fix: Fixes a bug",
-      "- feat: Adds a second feature",
-    ];
-  });
+  const prNumber = 123;
+  const prLink = "https://github.com/TestUser/OpenSearch-Dashboards/pull/123";
+  // This array of strings is returned by the extractChangelogEntries function in the workflow, provided the "Changelog" section of the PR description is valid.
+  const changesetEntries = [
+    "- feat: Adds one feature",
+    "- fix: Fixes a bug",
+    "- feat: Adds a second feature",
+  ];
 
   describe("prepareChangesetEntryMap", () => {
     test("should return an object with changeset entries categorized by their prefixes", () => {

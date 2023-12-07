@@ -41,8 +41,8 @@ export const extractPullRequestData = async () => {
       owner,
       repo,
       prNumber,
-      prDescription: pullRequest.body || "",
-      prLink: pullRequest.html_url || "",
+      prDescription: pullRequest.body,
+      prLink: pullRequest.html_url,
       branchRef: context.payload.pull_request.head.ref,
     };
   } catch (error) {
