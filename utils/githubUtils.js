@@ -2,8 +2,16 @@ import github from "@actions/github";
 import {
   PullRequestDataExtractionError,
   ChangesetFileAccessError,
+  InvalidChangelogHeadingError,
+  EmptyChangelogSectionError,
+  EntryTooLongError,
+  InvalidPrefixError,
+  CategoryWithSkipOptionError,
+  ChangelogEntryMissingHyphenError,
+  EmptyEntryDescriptionError
 } from "./customErrors.js";
 import { GITHUB_TOKEN } from "../config/constants.js";
+import { error } from "@actions/core";
 
 /**
  * Extracts relevant data from a GitHub Pull Request.
@@ -93,9 +101,56 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
-    throw error;
   }
 };
+
+/**
+ * Maps error constructors to their corresponding error messages. Returns null if the error type does not require a comment in the PR.
+ */
+const errorCommentMap = {
+  [PullRequestDataExtractionError]: () => null,
+  [ChangesetFileAccessError]: () => null,
+  [InvalidChangelogHeadingError]: error => `Error: ${error.message}`,
+  [EmptyChangelogSectionError]: error => `Error: ${error.message}`,
+  [EntryTooLongError]: error => `Error: ${error.message}`,
+  [InvalidPrefixError]: error => `Error: ${error.message}`,
+  [CategoryWithSkipOptionError]: error => `Error: ${error.message}`,
+  [ChangelogEntryMissingHyphenError]: error => `Error: ${error.message}`,
+  [EmptyEntryDescriptionError]: error => `Error: ${error.message}`,
+}
+
+/**
+ * Posts a comment to a GitHub pull request based on the error type.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {number} prNumber - Pull request number.
+ * @param {Error} error - Error object that determines the comment to be posted.
+ */
+export const postPRComment = async (owner, repo, prNumber, error) => {
+  // If the error type is not one that merits a PR comment (either not listed in the 
+  // error comment map or explicitly mapped to null), the function will return null, 
+  // indicating that no comment should be posted.
+  const commentGenerator = errorCommentMap[error.constructor] || (error => null);
+
+  const comment = commentGenerator(error);
+
+  if (comment) {
+    try {
+      // Post a comment to the pull request
+      await octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: prNumber,
+        body: comment
+      });
+      console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
+    } catch(error) {
+      console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
+    }
+  } else {
+    console.log(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
+  }
+}
 
 /**
  * Creates or updates a file in a GitHub repository.

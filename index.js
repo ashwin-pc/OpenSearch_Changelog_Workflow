@@ -1,5 +1,4 @@
 import { CHANGESET_PATH } from "./config/constants.js";
-
 import { extractChangelogEntries } from "./utils/changelogParser.js";
 import {
   prepareChangesetEntryMap,
@@ -10,6 +9,7 @@ import {
   extractPullRequestData,
   createOrUpdateFile,
   updatePRLabel,
+  postPRComment,
 } from "./utils/githubUtils.js";
 
 async function run() {
@@ -17,34 +17,29 @@ async function run() {
   const { owner, repo, prNumber, prDescription, prLink, branchRef } =
     await extractPullRequestData();
 
-  // Extract the changelog entries from the PR description
-  const changesetEntries = extractChangelogEntries(prDescription);
-
-  // Create a map of changeset entries
-  const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
-
-  // Check if the "skip" option is present in the changeset entries
-  const skipLabel = "skip-changelog";
-  if (entryMap["skip"]) {
-    if (Object.keys(entryMap).length > 1) {
-      throw new CategoryWithSkipOptionError();
-    } else {
-      console.log("No changeset file created or updated.");
-      try {
+  try {
+    // Extract the changelog entries from the PR description
+    const changesetEntries = extractChangelogEntries(prDescription);
+    // Create a map of changeset entries
+    const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
+  
+    // Check if the "skip" option is present in the changeset entries
+    const skipLabel = "skip-changelog";
+    if (entryMap["skip"]) {
+      if (Object.keys(entryMap).length > 1) {
+        throw new CategoryWithSkipOptionError();
+      } else {
+        console.log("No changeset file created or updated.");
         // Add the "skip-changelog" label to the PR
         await updatePRLabel(owner, repo, prNumber, skipLabel, true);
         return;
-      } catch (error) {
-        console.error(`Error updating label "${skipLabel}" for PR #${prNumber}: ${error.message}`);
       }
-    }
-  } else {
-    try {
+    } else {
       // Check if the "skip-changelog" label is present on the PR and remove it
       await updatePRLabel(owner, repo, prNumber, skipLabel, false);
-    } catch (error) {
-      console.error(`Error updating label "${skipLabel}" for PR #${prNumber}: ${error.message}`);
-    }
+    } 
+  } catch(error) {
+    await postPRComment(owner, repo, prNumber, error);
   }
 
   // Prepare some parameters for creating or updating the changeset file
