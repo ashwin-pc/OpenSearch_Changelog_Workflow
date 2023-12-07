@@ -2,6 +2,7 @@
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
+![Coverage Badge](https://github.com/BigSamu/OpenSearch_Change_Set_Create_Action/badges/coverage.svg)
 
 This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories.
 
@@ -47,7 +48,7 @@ feat:
 
 refactor:
   - Improves an existing feature ([#532](https://github.com/.../pull/532))
-  
+
 test:
   - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
   - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
