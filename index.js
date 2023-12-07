@@ -30,26 +30,17 @@ async function run() {
         throw new CategoryWithSkipOptionError();
       } else {
         console.log("No changeset file created or updated.");
-        try {
-          // Add the "skip-changelog" label to the PR
-          await updatePRLabel(owner, repo, prNumber, skipLabel, true);
-          return;
-        } catch (error) {
-          console.error(`Error updating label "${skipLabel}" for PR #${prNumber}: ${error.message}`);
-        }
+        // Add the "skip-changelog" label to the PR
+        await updatePRLabel(owner, repo, prNumber, skipLabel, true);
+        return;
       }
     } else {
-      try {
-        // Check if the "skip-changelog" label is present on the PR and remove it
-        await updatePRLabel(owner, repo, prNumber, skipLabel, false);
-      } catch (error) {
-        console.error(`Error updating label "${skipLabel}" for PR #${prNumber}: ${error.message}`);
-      }
-    }
+      // Check if the "skip-changelog" label is present on the PR and remove it
+      await updatePRLabel(owner, repo, prNumber, skipLabel, false);
+    } 
   } catch(error) {
     await postPRComment(owner, repo, prNumber, error);
   }
-
 
   // Prepare some parameters for creating or updating the changeset file
   const changesetEntriesContent = Buffer.from(

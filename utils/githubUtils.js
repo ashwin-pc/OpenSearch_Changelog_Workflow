@@ -101,16 +101,15 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
-    throw error;
   }
 };
 
 /**
- * Maps error constructors to their corresponding error messages.
+ * Maps error constructors to their corresponding error messages. Returns null if the error type does not require a comment in the PR.
  */
 const errorCommentMap = {
-  [PullRequestDataExtractionError]: error => error.message,
-  [ChangesetFileAccessError]: error => error.message,
+  [PullRequestDataExtractionError]: () => null,
+  [ChangesetFileAccessError]: () => null,
   [InvalidChangelogHeadingError]: error => `Error: ${error.message}`,
   [EmptyChangelogSectionError]: error => `Error: ${error.message}`,
   [EntryTooLongError]: error => `Error: ${error.message}`,
@@ -128,23 +127,28 @@ const errorCommentMap = {
  * @param {Error} error - Error object that determines the comment to be posted.
  */
 export const postPRComment = async (owner, repo, prNumber, error) => {
-  // Find a matching comment generator function for the error type or use a default one
-  const commentGenerator = errorCommentMap[error.constructor] || (error => `An unexpected error occured: ${error.message}`);
+  // If the error type is not one that merits a PR comment (either not listed in the 
+  // error comment map or explicitly mapped to null), the function will return null, 
+  // indicating that no comment should be posted.
+  const commentGenerator = errorCommentMap[error.constructor] || (error => null);
 
   const comment = commentGenerator(error);
 
-  try {
-    // Post a comment to the pull request
-    await octokit.rest.issues.createComment({
-      owner,
-      repo,
-      issue_number: prNumber,
-      body: comment
-    });
-    console.log(`Comment posted to PR #${prNumber}`);
-  } catch(error) {
-    console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
-    throw error;
+  if (comment) {
+    try {
+      // Post a comment to the pull request
+      await octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: prNumber,
+        body: comment
+      });
+      console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
+    } catch(error) {
+      console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
+    }
+  } else {
+    console.log(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
   }
 }
 
