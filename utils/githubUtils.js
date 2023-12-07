@@ -127,6 +127,9 @@ const errorCommentMap = {
  * @param {Error} error - Error object that determines the comment to be posted.
  */
 export const postPRComment = async (owner, repo, prNumber, error) => {
+  // Initialize Octokit client with the GitHub token
+  const octokit = github.getOctokit(GITHUB_TOKEN);
+  
   // If the error type is not one that merits a PR comment (either not listed in the 
   // error comment map or explicitly mapped to null), the function will return null, 
   // indicating that no comment should be posted.

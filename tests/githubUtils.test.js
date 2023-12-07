@@ -4,7 +4,8 @@ import {
   updatePRLabel,
   createOrUpdateFile,
   PullRequestDataExtractionError,
-  ChangesetFileAccessError
+  ChangesetFileAccessError,
+  postPRComment,
 } from "../utils";
 
 // Mock the @actions/github module
