@@ -13,11 +13,11 @@ import {
 } from "./utils/githubUtils.js";
 
 async function run() {
-  // Get Pull Request data
-  const { owner, repo, prNumber, prDescription, prLink, branchRef } =
-    await extractPullRequestData();
-
+  
   try {
+    // Get Pull Request data
+    const { owner, repo, prNumber, prDescription, prLink, branchRef } =
+      await extractPullRequestData();
     // Extract the changelog entries from the PR description
     const changesetEntries = extractChangelogEntries(prDescription);
     // Create a map of changeset entries
@@ -38,27 +38,26 @@ async function run() {
       // Check if the "skip-changelog" label is present on the PR and remove it
       await updatePRLabel(owner, repo, prNumber, skipLabel, false);
     } 
+    // Prepare some parameters for creating or updating the changeset file
+    const changesetEntriesContent = Buffer.from(
+      prepareChangesetEntriesContent(entryMap)
+    ).toString("base64");
+    const changesetFileName = `${prNumber}.yml`;
+    const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
+    const message = `Add changeset for PR #${prNumber}`;
+  
+    // Create or update the changeset file using Github API
+    await createOrUpdateFile(
+      owner,
+      repo,
+      changesetFilePath,
+      changesetEntriesContent,
+      message,
+      branchRef
+    );
   } catch(error) {
     await postPRComment(owner, repo, prNumber, error);
   }
-
-  // Prepare some parameters for creating or updating the changeset file
-  const changesetEntriesContent = Buffer.from(
-    prepareChangesetEntriesContent(entryMap)
-  ).toString("base64");
-  const changesetFileName = `${prNumber}.yml`;
-  const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
-  const message = `Add changeset for PR #${prNumber}`;
-
-  // Create or update the changeset file using Github API
-  await createOrUpdateFile(
-    owner,
-    repo,
-    changesetFilePath,
-    changesetEntriesContent,
-    message,
-    branchRef
-  );
 }
 
 run();
