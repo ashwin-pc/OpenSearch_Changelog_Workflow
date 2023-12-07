@@ -13,11 +13,11 @@ import {
 } from "./utils/githubUtils.js";
 
 async function run() {
+  // Get Pull Request data
+  const { owner, repo, prNumber, prDescription, prLink, branchRef } =
+    await extractPullRequestData();
   
   try {
-    // Get Pull Request data
-    const { owner, repo, prNumber, prDescription, prLink, branchRef } =
-      await extractPullRequestData();
     // Extract the changelog entries from the PR description
     const changesetEntries = extractChangelogEntries(prDescription);
     // Create a map of changeset entries
