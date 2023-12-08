@@ -10,8 +10,7 @@ import {
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError
 } from "./customErrors.js";
-import { GITHUB_TOKEN } from "../config/constants.js";
-import { error } from "@actions/core";
+import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
 
 /**
  * Extracts relevant data from a GitHub Pull Request.
@@ -58,6 +57,10 @@ export const extractPullRequestData = async () => {
  * @param {number} prNumber - Pull request number.
  * @param {string} label - Label to be added or removed.
  * @param {boolean} addLabel - Flag to add or remove the label.
+ * 
+ * @returns {Promise<void>} A promise that resolves when the label is added or removed.
+ * 
+ * @throws {Error} Throws an error if the label cannot be added or removed.
  */
 export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
   // Initialize Octokit client with the GitHub token
@@ -101,8 +104,33 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
+    throw error;
   }
 };
+
+/**
+ * Handles a changeset entry map that contains the "skip" option.
+ * @param {Object} entryMap - Map of changeset entries.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {number} prNumber - Pull request number.
+ */
+export const handleSkipOption = async (entryMap, owner, repo, prNumber) => {
+  if (entryMap["skip"]) {
+    // Check if "skip" is the only prefix in the changeset entries
+    if (Object.keys(entryMap).length > 1) {
+      throw new CategoryWithSkipOptionError();
+    } else {
+      console.log("No changeset file created or updated.");
+      // Add the "skip-changelog" label to the PR
+      await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, true);
+      return;
+    }
+  } else {
+    // Check if the "skip-changelog" label is present on the PR and remove it
+    await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, false);
+  }
+}
 
 /**
  * Maps error constructors to their corresponding error messages. Returns null if the error type does not require a comment in the PR.
@@ -154,6 +182,7 @@ export const postPRComment = async (owner, repo, prNumber, error) => {
     console.log(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
   }
 }
+
 
 /**
  * Creates or updates a file in a GitHub repository.
