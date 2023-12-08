@@ -4,40 +4,30 @@ import {
   prepareChangesetEntryMap,
   prepareChangesetEntriesContent,
 } from "./utils/formattingUtils.js";
-import { CategoryWithSkipOptionError } from "./utils/customErrors.js";
 import {
   extractPullRequestData,
   createOrUpdateFile,
-  updatePRLabel,
+  handleSkipOption,
   postPRComment,
 } from "./utils/githubUtils.js";
 
+/**
+ * Main function for the GitHub Actions workflow. Extracts relevant data from a pull request, parses changelog entries, handles "skip" entries, and creates or updates a changeset file in the repository. 
+*/
 async function run() {
-  // Get Pull Request data
-  const { owner, repo, prNumber, prDescription, prLink, branchRef } =
-    await extractPullRequestData();
+  // Initial variables for storing extracted PR data
+  let owner, repo, prNumber, prDescription, prLink, branchRef;
   
   try {
-    // Extract the changelog entries from the PR description
+    // Extract pull request data using the GitHub API
+    ({ owner, repo, prNumber, prDescription, prLink, branchRef }) =
+      await extractPullRequestData();
+    // Create an array of changelog entry strings from the PR description
     const changesetEntries = extractChangelogEntries(prDescription);
-    // Create a map of changeset entries
+    // Create a map of changeset entries organized by category
     const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
-  
-    // Check if the "skip" option is present in the changeset entries
-    const skipLabel = "skip-changelog";
-    if (entryMap["skip"]) {
-      if (Object.keys(entryMap).length > 1) {
-        throw new CategoryWithSkipOptionError();
-      } else {
-        console.log("No changeset file created or updated.");
-        // Add the "skip-changelog" label to the PR
-        await updatePRLabel(owner, repo, prNumber, skipLabel, true);
-        return;
-      }
-    } else {
-      // Check if the "skip-changelog" label is present on the PR and remove it
-      await updatePRLabel(owner, repo, prNumber, skipLabel, false);
-    } 
+    // Check if the "skip" option is present in the entry map and respond accordingly
+    await handleSkipOption(entryMap, owner, repo, prNumber);
     // Prepare some parameters for creating or updating the changeset file
     const changesetEntriesContent = Buffer.from(
       prepareChangesetEntriesContent(entryMap)
@@ -56,7 +46,10 @@ async function run() {
       branchRef
     );
   } catch(error) {
-    await postPRComment(owner, repo, prNumber, error);
+    if (owner && repo && prNumber) {
+      await postPRComment(owner, repo, prNumber, error);
+    }
+    console.error(error);
     throw error;
   }
 }
