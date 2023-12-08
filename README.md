@@ -19,10 +19,9 @@ This GitHub Actions workflow automates the management of changelog entries for p
   - [3. Using a GitHub Actions Workflow to Generate Changeset Files](#3-using-a-github-actions-workflow-to-generate-changeset-files)
     - [Overview](#overview)
     - [Usage](#usage)
-- [Workflow Details](#workflow-details)
-- [Formatting Requirements](#formatting-requirements)
-- [Workflow Flowchart](#workflow-flowchart)
-    - [Workflow Flowchart](#workflow-flowchart-1)
+    - [Workflow Details](#workflow-details)
+    - [Formatting Requirements](#formatting-requirements)
+    - [Workflow Flowchart](#workflow-flowchart)
   - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
 - [Conclusion](#conclusion)
 
@@ -179,7 +178,7 @@ jobs:
           changeset_path: changelogs/fragments
 ```
 
-## Workflow Details
+#### Workflow Details
 
 Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
 
@@ -207,7 +206,7 @@ If the workflow encounters an error, it will fail, and a custom error message wi
 
 Contributors can then address the error and update their PR, which will trigger the workflow to run again.
 
-## Formatting Requirements
+#### Formatting Requirements
 
 In order for the workflow to successfully create or update a changeset file from a PR description, contributors will need to ensure that their entries in the "Changelog" section of the PR description adhere to the following formatting requirements:
 
@@ -262,9 +261,6 @@ feat: Adds a new feature
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
 
-## Workflow Flowchart
-
-Below is a flowchart, built using [Mermaid](https://mermaid.js.org/) syntax, demonstrating the logic this workflow follows:
 #### Workflow Flowchart
 
 The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax, illustrates the logic this workflow follows.
@@ -324,4 +320,4 @@ This command executes a script that performs the following actions:
 
 ## Conclusion
 
-This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve these process, please let us know!
+This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve this process, please let us know!
