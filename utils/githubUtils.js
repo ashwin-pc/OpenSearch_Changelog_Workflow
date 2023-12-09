@@ -57,9 +57,9 @@ export const extractPullRequestData = async () => {
  * @param {number} prNumber - Pull request number.
  * @param {string} label - Label to be added or removed.
  * @param {boolean} addLabel - Flag to add or remove the label.
- * 
+ *
  * @returns {Promise<void>} A promise that resolves when the label is added or removed.
- * 
+ *
  * @throws {Error} Throws an error if the label cannot be added or removed.
  */
 export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
@@ -114,21 +114,22 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
+ * @param {Function} updateLabel - Function to add or remove a label from a PR.
  */
-export const handleSkipOption = async (entryMap, owner, repo, prNumber) => {
-  if (entryMap["skip"]) {
+export const handleSkipOption = async (entryMap, owner, repo, prNumber, updateLabel) => {
+  if (entryMap["skip"] !== undefined) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
       throw new CategoryWithSkipOptionError();
     } else {
       console.log("No changeset file created or updated.");
       // Add the "skip-changelog" label to the PR
-      await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, true);
+      await updateLabel(owner, repo, prNumber, SKIP_LABEL, true);
       return;
     }
   } else {
     // Check if the "skip-changelog" label is present on the PR and remove it
-    await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, false);
+    await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
   }
 }
 
@@ -157,9 +158,9 @@ const errorCommentMap = {
 export const postPRComment = async (owner, repo, prNumber, error) => {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  
-  // If the error type is not one that merits a PR comment (either not listed in the 
-  // error comment map or explicitly mapped to null), the function will return null, 
+
+  // If the error type is not one that merits a PR comment (either not listed in the
+  // error comment map or explicitly mapped to null), the function will return null,
   // indicating that no comment should be posted.
   const commentGenerator = errorCommentMap[error.constructor] || (error => null);
 

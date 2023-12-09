@@ -7,17 +7,18 @@ import {
 import {
   extractPullRequestData,
   createOrUpdateFile,
+  updatePRLabel,
   handleSkipOption,
   postPRComment,
 } from "./utils/githubUtils.js";
 
 /**
- * Main function for the GitHub Actions workflow. Extracts relevant data from a pull request, parses changelog entries, handles "skip" entries, and creates or updates a changeset file in the repository. 
+ * Main function for the GitHub Actions workflow. Extracts relevant data from a pull request, parses changelog entries, handles "skip" entries, and creates or updates a changeset file in the repository.
 */
 async function run() {
   // Initial variables for storing extracted PR data
   let owner, repo, prNumber, prDescription, prLink, branchRef;
-  
+
   try {
     // Extract pull request data using the GitHub API
     ({ owner, repo, prNumber, prDescription, prLink, branchRef } =
@@ -27,7 +28,7 @@ async function run() {
     // Create a map of changeset entries organized by category
     const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
     // Check if the "skip" option is present in the entry map and respond accordingly
-    await handleSkipOption(entryMap, owner, repo, prNumber);
+    await handleSkipOption(entryMap, owner, repo, prNumber, updatePRLabel);
     // Prepare some parameters for creating or updating the changeset file
     const changesetEntriesContent = Buffer.from(
       prepareChangesetEntriesContent(entryMap)
@@ -35,7 +36,7 @@ async function run() {
     const changesetFileName = `${prNumber}.yml`;
     const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
     const message = `Add changeset for PR #${prNumber}`;
-  
+
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
       owner,
