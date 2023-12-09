@@ -20,8 +20,8 @@ async function run() {
   
   try {
     // Extract pull request data using the GitHub API
-    ({ owner, repo, prNumber, prDescription, prLink, branchRef }) =
-      await extractPullRequestData();
+    ({ owner, repo, prNumber, prDescription, prLink, branchRef } =
+      await extractPullRequestData());
     // Create an array of changelog entry strings from the PR description
     const changesetEntries = extractChangelogEntries(prDescription);
     // Create a map of changeset entries organized by category
