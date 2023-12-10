@@ -14,7 +14,6 @@ import {
   CategoryWithSkipOptionError,
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
-  CategoryWithSkipOptionError,
 } from "../utils";
 import { GITHUB_TOKEN } from "../config/constants";
 import { SKIP_LABEL } from "../config/constants.js";
