@@ -2,11 +2,14 @@ import github from "@actions/github";
 import {
   extractPullRequestData,
   updatePRLabel,
+  handleSkipOption,
+  postPRComment,
   createOrUpdateFile,
   PullRequestDataExtractionError,
   ChangesetFileAccessError,
-  postPRComment,
+  CategoryWithSkipOptionError,
 } from "../utils";
+import { SKIP_LABEL } from "../config/constants.js";
 
 // Mock the @actions/github module
 jest.mock("@actions/github", () => ({
@@ -300,5 +303,50 @@ describe("Github Utils Tests", () => {
       });
       expect(mockGetContent).toHaveBeenCalledTimes(1);
     });
+  });
+
+  describe("handleSkipOption Tests", () => {
+    const mockUpdateLabel = jest.fn();
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    test("adds 'skip-changelog' label when 'skip' is the only entry", async () => {
+      const entryMap = { "skip": "" };
+      await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
+      expect(mockUpdateLabel).toHaveBeenCalledWith(
+        owner,
+        repo,
+        prNumber,
+        SKIP_LABEL,
+        true
+      );
+      expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
+    });
+
+    test("throws CategoryWithSkipOptionError when 'skip' and other entries are present", async () => {
+      const entryMap = { skip: "", other: "data" };
+
+      await expect(
+        handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel)
+      ).rejects.toThrow(CategoryWithSkipOptionError);
+      expect(mockUpdateLabel).not.toHaveBeenCalled();
+    });
+
+    test("removes 'skip-changelog' label when 'skip' is not present", async () => {
+      const entryMap = {};
+      await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
+
+      expect(mockUpdateLabel).toHaveBeenCalledWith(
+        owner,
+        repo,
+        prNumber,
+        SKIP_LABEL,
+        false
+      );
+      expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
+    });
+
   });
 });
