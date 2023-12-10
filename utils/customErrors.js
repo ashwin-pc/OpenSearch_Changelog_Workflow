@@ -51,9 +51,9 @@ export class InvalidChangelogHeadingError extends Error {
 export class EmptyChangelogSectionError extends Error {
   /**
    * Constructs the EmptyChangelogSectionError instance.
-   * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries."] - Custom error message.
+   * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."] - Custom error message.
    */
-  constructor(message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries.") {
+  constructor(message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section.") {
     super(message);
     this.name = "EmptyChangelogSectionError"
   }
@@ -69,7 +69,7 @@ export class EntryTooLongError extends Error {
    */
   constructor(entryLength) {
     const characterOverage = entryLength - MAX_ENTRY_LENGTH;
-    const message = `Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters.`
+    const message = `Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`;
     super(message);
     this.name = "EntryTooLongError";
   }
@@ -96,9 +96,9 @@ export class InvalidPrefixError extends Error {
 export class CategoryWithSkipOptionError extends Error {
   /**
    * Constructs the CategoryWithSkipError instance.
-   * @param {string} [message="Cannot include a category entry with 'skip' option"] - Custom error message.
+   * @param {string} [message="If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section."] - Custom error message.
    */
-  constructor(message = "Cannot include a category entry with 'skip' option") {
+  constructor(message = "If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section.") {
     super(message);
     this.name = "CategoryWithSkipOptionError";
   }
