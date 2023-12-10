@@ -134,31 +134,28 @@ export const handleSkipOption = async (entryMap, owner, repo, prNumber, updateLa
 }
 
 /**
- * Maps error constructors to their corresponding error messages. Returns null if the error type does not require a comment in the PR.
- */
-const errorCommentMap = {
-  [PullRequestDataExtractionError]: () => null,
-  [ChangesetFileAccessError]: () => null,
-  [InvalidChangelogHeadingError]: error => `Error: ${error.message}`,
-  [EmptyChangelogSectionError]: error => `Error: ${error.message}`,
-  [EntryTooLongError]: error => `Error: ${error.message}`,
-  [InvalidPrefixError]: error => `Error: ${error.message}`,
-  [CategoryWithSkipOptionError]: error => `Error: ${error.message}`,
-  [ChangelogEntryMissingHyphenError]: error => `Error: ${error.message}`,
-  [EmptyEntryDescriptionError]: error => `Error: ${error.message}`,
-}
-
-/**
  * Posts a comment to a GitHub pull request based on the error type.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {Error} error - Error object that determines the comment to be posted.
- */
+*/
 export const postPRComment = async (owner, repo, prNumber, error) => {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-
+  // Map error constructors to their corresponding error messages. 
+  // Returns null if the error type does not require a comment in the PR.
+  const errorCommentMap = {
+    [PullRequestDataExtractionError]: () => null,
+    [ChangesetFileAccessError]: () => null,
+    [InvalidChangelogHeadingError]: error => `Invalid Changelog Heading Error: ${error.message}`,
+    [EmptyChangelogSectionError]: error => `Empty Changelog Section Error: ${error.message}`,
+    [EntryTooLongError]: error => `Entry Too Long Error: ${error.message}`,
+    [InvalidPrefixError]: error => `Invalid Prefix Error: ${error.message}`,
+    [CategoryWithSkipOptionError]: error => `Category With Skip Option Error: ${error.message}`,
+    [ChangelogEntryMissingHyphenError]: error => `Changelog Entry Missing Hyphen Error: ${error.message}`,
+    [EmptyEntryDescriptionError]: error => `Empty Entry Description Error: ${error.message}`,
+  }
   // If the error type is not one that merits a PR comment (either not listed in the
   // error comment map or explicitly mapped to null), the function will return null,
   // indicating that no comment should be posted.

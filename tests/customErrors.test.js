@@ -34,7 +34,7 @@ describe('Custom Errors Tests', () => {
 
   test('EmptyChangelogSectionError default message', () => {
     const error = new EmptyChangelogSectionError();
-    expect(error.message).toBe("The Changelog section in your PR description is empty. Please add a valid changelog entry or entries.");
+    expect(error.message).toBe("The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section.");
     expect(error.name).toBe('EmptyChangelogSectionError');
   })
 
@@ -42,7 +42,7 @@ describe('Custom Errors Tests', () => {
     const entryLength = MAX_ENTRY_LENGTH + 1;
     const characterOverage = entryLength - MAX_ENTRY_LENGTH;
     const error = new EntryTooLongError(entryLength);
-    expect(error.message).toBe(`Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters.`);
+    expect(error.message).toBe(`Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`);
     expect(error.name).toBe('EntryTooLongError');
   });
 
@@ -55,7 +55,7 @@ describe('Custom Errors Tests', () => {
 
   test('CategoryWithSkipOptionError default message', () => {
     const error = new CategoryWithSkipOptionError();
-    expect(error.message).toBe("Cannot include a category entry with 'skip' option");
+    expect(error.message).toBe("If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section.");
     expect(error.name).toBe('CategoryWithSkipOptionError');
   });
 
