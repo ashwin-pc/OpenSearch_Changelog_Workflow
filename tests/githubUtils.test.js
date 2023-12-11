@@ -7,6 +7,7 @@ import {
   createOrUpdateFile,
   PullRequestDataExtractionError,
   ChangesetFileAccessError,
+  UpdatePRLabelError,
   InvalidChangelogHeadingError,
   EmptyChangelogSectionError,
   EntryTooLongError,
@@ -326,6 +327,16 @@ describe("Github Utils Tests", () => {
         SKIP_LABEL,
         false
       );
+      expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
+    });
+
+    test("handles errors from updateLabel function gracefully", async () => {
+      const entryMap = { skip: "" };
+      mockUpdateLabel.mockRejectedValueOnce(new Error("Update label failed"));
+
+      await expect(
+        handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel)
+      ).rejects.toThrow("Update label failed");
       expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
     });
   });

@@ -46,6 +46,21 @@ export class InvalidChangelogHeadingError extends Error {
 }
 
 /**
+ * Represents an error that occurs when updating the label of a pull request.
+ */
+export class UpdatePRLabelError extends Error {
+  /**
+   * Constructs the UpdatePRLabelError instance.
+   * @param {string} [message="There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct."] - Custom error message.
+   */
+  constructor(message = "There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct.") {
+    super(message);
+    this.name = "UpdatePRLabelError";
+  }
+}
+
+
+/**
  * Represents an error for an empty changelog section in a PR description.
  */
 export class EmptyChangelogSectionError extends Error {
