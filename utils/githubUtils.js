@@ -89,6 +89,20 @@ export const extractPullRequestData = async (octokit) => {
  * // Remove a label from a pull request
  * await updatePRLabel(octokit, 'owner', 'repo', 123, 'enhancement', false);
  */
+/**
+ * Adds or removes a label from a GitHub pull request.
+ *
+ * @param {Object} octokit - An Octokit instance ready to use for GitHub Actions.
+ * @param {string} owner - Owner of the repository.
+ * @param {string} repo - Repository name.
+ * @param {number} prNumber - Pull request number.
+ * @param {string} label - Label to be added or removed.
+ * @param {boolean} addLabel - Flag to add or remove the label.
+ *
+ * @returns {Promise<void>} A promise that resolves when the label is added or removed.
+ *
+ * @throws {Error} Throws an error if the label cannot be added or removed.
+ */
 export const updatePRLabel = async (octokit, owner, repo, prNumber, label, addLabel) => {
   try {
     // Get the current labels on the pull request
