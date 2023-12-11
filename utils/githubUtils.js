@@ -147,7 +147,7 @@ export const handleSkipOption = async (
   prNumber,
   updateLabel
 ) => {
-  if (entryMap && entryMap["skip"]) {
+  if (entryMap && Object.keys(entryMap).includes('skip')) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
       throw new CategoryWithSkipOptionError();
