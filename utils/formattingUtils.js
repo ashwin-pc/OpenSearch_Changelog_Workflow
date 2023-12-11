@@ -31,7 +31,7 @@ import {
  * @throws {EntryTooLongError} When the changelog entry exceeds the maximum allowed length.
  * @throws {ChangelogEntryMissingHyphenError} When the changelog entry does not match the expected format.
  */
-export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
+export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
@@ -55,15 +55,15 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
 };
 
 /**
- * Prepares a map of changeset entries categorized by their prefixes.
+ * Prepares a map of changelog entries categorized by their prefixes.
  * @param {string[]} entries - Array of changelog entry strings.
  * @param {number} prNumber - The pull request number associated with the entries.
  * @param {string} prLink - The link to the pull request.
  * @returns {Object} An object where keys are prefixes and values are arrays of associated entries.
  */
-export const prepareChangesetEntryMap = (entries, prNumber, prLink) => {
+export const prepareChangelogEntriesMap = (entries, prNumber, prLink, prepareChangelogEntry) => {
   return entries
-    .map((entry) => prepareChangesetEntry(entry, prNumber, prLink))
+    .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
       // Initialize the array for the prefix if it doesn't exist
       if (!acc[prefix]) {

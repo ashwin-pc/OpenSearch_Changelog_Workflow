@@ -2,7 +2,8 @@ import github from "@actions/github";
 import { CHANGESET_PATH } from "./config/constants.js";
 import { extractChangelogEntries } from "./utils/changelogParser.js";
 import {
-  prepareChangesetEntryMap,
+  prepareChangelogEntry,
+  prepareChangelogEntriesMap,
   prepareChangesetEntriesContent,
 } from "./utils/formattingUtils.js";
 import {
@@ -28,14 +29,15 @@ async function run() {
     ({ owner, repo, prNumber, prDescription, prLink, branchRef } =
       await extractPullRequestData(octokit));
     // Create an array of changelog entry strings from the PR description
-    const changesetEntries = extractChangelogEntries(prDescription);
+    const changelogEntries = extractChangelogEntries(prDescription);
     // Create a map of changeset entries organized by category
-    const entryMap = prepareChangesetEntryMap(changesetEntries, prNumber, prLink);
+    const changelogEntriesMap = prepareChangelogEntriesMap(changelogEntries, prNumber, prLink, prepareChangelogEntry);
     // Check if the "skip" option is present in the entry map and respond accordingly
-    await handleSkipOption(octokit, entryMap, owner, repo, prNumber, updatePRLabel);
+    await handleSkipOption(octokit, changelogEntriesMap, owner, repo, prNumber, updatePRLabel);
+
     // Prepare some parameters for creating or updating the changeset file
     const changesetEntriesContent = Buffer.from(
-      prepareChangesetEntriesContent(entryMap)
+      prepareChangesetEntriesContent(changelogEntriesMap)
     ).toString("base64");
     const changesetFileName = `${prNumber}.yml`;
     const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
