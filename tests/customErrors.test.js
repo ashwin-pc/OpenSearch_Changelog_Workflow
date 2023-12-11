@@ -20,24 +20,32 @@ describe("Custom Errors Tests", () => {
     const error = new PullRequestDataExtractionError();
     expect(error.message).toBe("Error extracting data from Pull Request");
     expect(error.name).toBe("PullRequestDataExtractionError");
+    expect(error.shouldResultInPRComment).toBe(false);
+    expect(error.messagePrefix).toBe("Pull Request Data Extraction Error");
   });
 
   test("GetGithubContentError default message", () => {
     const error = new GetGithubContentError();
     expect(error.message).toBe("Error retrieving content from GitHub repository");
     expect(error.name).toBe("GetGithubContentError");
+    expect(error.shouldResultInPRComment).toBe(false);
+    expect(error.messagePrefix).toBe("Get Github Content Error");
   });
 
   test("CreateChangesetFileError default message", () => {
     const error = new CreateChangesetFileError();
     expect(error.message).toBe("Error creating changeset file");
     expect(error.name).toBe("CreateChangesetFileError");
+    expect(error.shouldResultInPRComment).toBe(false);
+    expect(error.messagePrefix).toBe("Create Changeset File Error");
   });
 
   test("UpdateChangesetFileError default message", () => {
     const error = new UpdateChangesetFileError();
     expect(error.message).toBe("Error updating changeset file");
     expect(error.name).toBe("UpdateChangesetFileError");
+    expect(error.shouldResultInPRComment).toBe(false);
+    expect(error.messagePrefix).toBe("Update Changeset File Error");
   });
 
   test("UpdatePRLabelError default message", () => {
@@ -46,6 +54,8 @@ describe("Custom Errors Tests", () => {
       "There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct."
     );
     expect(error.name).toBe("UpdatePRLabelError");
+    expect(error.shouldResultInPRComment).toBe(false);
+    expect(error.messagePrefix).toBe("Update PR Label Error");
   });
 
   test("InvalidChangelogHeadingError default message", () => {
@@ -54,6 +64,8 @@ describe("Custom Errors Tests", () => {
       "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."
     );
     expect(error.name).toBe("InvalidChangelogHeadingError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Invalid Changelog Heading Error");
   });
 
   test("EmptyChangelogSectionError default message", () => {
@@ -62,6 +74,8 @@ describe("Custom Errors Tests", () => {
       "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."
     );
     expect(error.name).toBe("EmptyChangelogSectionError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Empty Changelog Section Error");
   });
 
   test("EntryTooLongError default message", () => {
@@ -74,6 +88,8 @@ describe("Custom Errors Tests", () => {
       } longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`
     );
     expect(error.name).toBe("EntryTooLongError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Entry Too Long Error");
   });
 
   test("InvalidPrefixError with foundPrefix", () => {
@@ -83,6 +99,8 @@ describe("Custom Errors Tests", () => {
       `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`
     );
     expect(error.name).toBe("InvalidPrefixError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Invalid Prefix Error");
   });
 
   test("CategoryWithSkipOptionError default message", () => {
@@ -91,6 +109,8 @@ describe("Custom Errors Tests", () => {
       "If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section."
     );
     expect(error.name).toBe("CategoryWithSkipOptionError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Category With Skip Option Error");
   });
 
   test("ChangelogEntryMissingHyphenError default message", () => {
@@ -99,6 +119,8 @@ describe("Custom Errors Tests", () => {
       "Changelog entries must begin with a hyphen (-)."
     );
     expect(error.name).toBe("ChangelogEntryMissingHyphenError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Changelog Entry Missing Hyphen Error");
   });
 
   test("EmptyEntryDescriptionError with foundPrefix", () => {
@@ -107,6 +129,8 @@ describe("Custom Errors Tests", () => {
     expect(error.message).toBe(
       `Description for "${foundPrefix}" entry cannot be empty.`
     );
-    expect(error.name).toBe("EmptyDescriptionError");
+    expect(error.name).toBe("EmptyEntryDescriptionError");
+    expect(error.shouldResultInPRComment).toBe(true);
+    expect(error.messagePrefix).toBe("Empty Entry Description Error");
   });
 });
