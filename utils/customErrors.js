@@ -16,20 +16,47 @@ export class PullRequestDataExtractionError extends Error {
 }
 
 /**
- * Represents an error during file access operations related to changesets in a GitHub repository.
+ * Represents an error during the retrieval of content from a GitHub repository.
  */
-export class ChangesetFileAccessError extends Error {
+export class GetGithubContentError extends Error {
   /**
-   * Constructs the ChangesetFileAccessError instance.
-   * @param {string} message - Custom error message.
-   * @param {number} statusCode - HTTP status code associated with the error.
+   * Constructs the GetGithubContentError instance.
+   * @param {string} [message="Error retrieving content from GitHub"] - Custom error message.
    */
-  constructor(message, statusCode) {
+  constructor(message = "Error retrieving content from GitHub repository") {
     super(message);
-    this.name = "ChangesetFileAccessError";
-    this.statusCode = statusCode;
+    this.name = "GetGithubContentError";
   }
 }
+
+/**
+ * Represents an error during the creation of a changeset file in a GitHub repository.
+ */
+export class CreateChangesetFileError extends Error {
+  /**
+   * Constructs the CreateChangesetFileError instance.
+   * @param {string} [message="Error creating changeset file"] - Custom error message.
+   */
+  constructor(message = "Error creating changeset file") {
+    super(message);
+    this.name = "CreateChangesetFileError";
+  }
+}
+
+/**
+ * Represents an error during the update of a changeset file in a GitHub repository.
+ */
+export class UpdateChangesetFileError extends Error {
+  /**
+   * Constructs the UpdateChangesetFileError instance.
+   * @param {string} [message="Error updating changeset file"] - Custom error message.
+   */
+  constructor(message = "Error updating changeset file") {
+    super(message);
+    this.name = "UpdateChangesetFileError";
+  }
+}
+
 
 /**
  * Represents an error for a missing or malformed changelog heading in a PR description.

@@ -496,24 +496,26 @@ describe("Github Utils Tests", () => {
     const mockGetContent = jest.fn();
     const mockCreateOrUpdateFileContents = jest.fn();
 
-    beforeAll(() => {
-      github.getOctokit.mockImplementation(() => ({
-        rest: {
-          repos: {
-            getContent: mockGetContent,
-            createOrUpdateFileContents: mockCreateOrUpdateFileContents,
-          },
+    const octokitMock = {
+      rest: {
+        repos: {
+          getContent: mockGetContent,
+          createOrUpdateFileContents: mockCreateOrUpdateFileContents,
         },
-      }));
-    });
+      },
+    };
 
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    });
     beforeEach(() => {
-      jest.clearAllMocks();
+      github.getOctokit.mockClear();
     });
 
     test("creates a new file when it does not exist", async () => {
       mockGetContent.mockRejectedValueOnce({ status: 404 });
       await createOrUpdateFile(
+        octokitMock,
         owner,
         repo,
         changesetFilePath,
@@ -545,6 +547,7 @@ describe("Github Utils Tests", () => {
       const sha = "existing-file-sha";
       mockGetContent.mockResolvedValueOnce({ data: { sha } });
       await createOrUpdateFile(
+        octokitMock,
         owner,
         repo,
         changesetFilePath,
@@ -573,12 +576,13 @@ describe("Github Utils Tests", () => {
     });
 
     test("throws an error when file access fails with a non-404 error", async () => {
-      const error = new Error("API Failure");
+      const error = new Error("API Failure with 500 Error");
       error.status = 500;
       mockGetContent.mockRejectedValueOnce(error);
 
       await expect(
         createOrUpdateFile(
+          octokitMock,
           owner,
           repo,
           changesetFilePath,
@@ -596,6 +600,5 @@ describe("Github Utils Tests", () => {
       expect(mockGetContent).toHaveBeenCalledTimes(1);
     });
   });
-
 
 });

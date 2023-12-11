@@ -1,6 +1,8 @@
 import {
   PullRequestDataExtractionError,
-  ChangesetFileAccessError,
+  GetGithubContentError,
+  CreateChangesetFileError,
+  UpdateChangesetFileError,
   UpdatePRLabelError,
   InvalidChangelogHeadingError,
   EntryTooLongError,
@@ -14,17 +16,28 @@ import {
 import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 
 describe("Custom Errors Tests", () => {
-  test("PullRequestDataExtractionError defaults", () => {
+  test("PullRequestDataExtractionError default message", () => {
     const error = new PullRequestDataExtractionError();
     expect(error.message).toBe("Error extracting data from Pull Request");
     expect(error.name).toBe("PullRequestDataExtractionError");
   });
 
-  test("ChangesetFileAccessError with custom message and statusCode", () => {
-    const error = new ChangesetFileAccessError("Custom message", 404);
-    expect(error.message).toBe("Custom message");
-    expect(error.statusCode).toBe(404);
-    expect(error.name).toBe("ChangesetFileAccessError");
+  test("GetGithubContentError default message", () => {
+    const error = new GetGithubContentError();
+    expect(error.message).toBe("Error retrieving content from GitHub repository");
+    expect(error.name).toBe("GetGithubContentError");
+  });
+
+  test("CreateChangesetFileError default message", () => {
+    const error = new CreateChangesetFileError();
+    expect(error.message).toBe("Error creating changeset file");
+    expect(error.name).toBe("CreateChangesetFileError");
+  });
+
+  test("UpdateChangesetFileError default message", () => {
+    const error = new UpdateChangesetFileError();
+    expect(error.message).toBe("Error updating changeset file");
+    expect(error.name).toBe("UpdateChangesetFileError");
   });
 
   test("UpdatePRLabelError default message", () => {

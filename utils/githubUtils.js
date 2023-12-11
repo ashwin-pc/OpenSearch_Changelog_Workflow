@@ -1,7 +1,9 @@
 import github from "@actions/github";
 import {
   PullRequestDataExtractionError,
-  ChangesetFileAccessError,
+  GetGithubContentError,
+  CreateChangesetFileError,
+  UpdateChangesetFileError,
   InvalidChangelogHeadingError,
   EmptyChangelogSectionError,
   EntryTooLongError,
@@ -241,7 +243,6 @@ export const createOrUpdateFile = async (
 ) => {
   // File's SHA to check if file exists
   let sha;
-
   // Attempt to retrieve the file's SHA to check if it exists
   try {
     const response = await octokit.rest.repos.getContent({
@@ -255,23 +256,27 @@ export const createOrUpdateFile = async (
     if (error.status === 404) {
       console.log("Changeset file not found, will create a new one.");
     } else {
-      throw new ChangesetFileAccessError(
-        `Failed to access changeset file at ${path}: ${error.message}`,
-        error.status
-      );
+      throw new GetGithubContentError();
     }
   }
 
   // Create or update the file content
-  await octokit.rest.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    path,
-    message,
-    content,
-    sha, // If file exists, sha is used to update; otherwise, file is created
-    branch: branchRef,
-  });
-
-  console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
+  try {
+    await octokit.rest.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content,
+      sha, // If file exists, sha is used to update; otherwise, file is created
+      branch: branchRef,
+    });
+    console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
+  } catch (error) {
+    if (!sha) {
+      throw new CreateChangesetFileError();
+    } else {
+      throw new UpdateChangesetFileError();
+    }
+  }
 };
