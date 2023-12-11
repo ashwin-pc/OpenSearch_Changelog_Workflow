@@ -35,7 +35,8 @@ describe("Formatting Utils Tests", () => {
       const actualChangesetEntryMap = prepareChangelogEntriesMap(
         changesetEntries,
         prNumber,
-        prLink
+        prLink,
+        prepareChangelogEntry
       );
 
       expect(actualChangesetEntryMap).toEqual(expectedChangesetEntryMap);
@@ -139,7 +140,8 @@ describe("Formatting Utils Tests", () => {
       const entryMap = prepareChangelogEntriesMap(
         changesetEntries,
         prNumber,
-        prLink
+        prLink,
+        prepareChangelogEntry,
       );
 
       // Define the expected output
