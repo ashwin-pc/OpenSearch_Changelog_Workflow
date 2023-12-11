@@ -225,10 +225,10 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when adding a label fails", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [] });
-      mockAddLabels.mockRejectedValueOnce(apiError);
+      mockAddLabels.mockRejectedValueOnce(UpdatePRLabelError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, true)
-      ).rejects.toThrow(apiError);
+      ).rejects.toThrow(UpdatePRLabelError);
 
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
@@ -248,10 +248,10 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when checking labels fails", async () => {
 
-      mockListLabelsOnIssue.mockRejectedValueOnce(apiError);
+      mockListLabelsOnIssue.mockRejectedValueOnce(UpdatePRLabelError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
-      ).rejects.toThrow(apiError);
+      ).rejects.toThrow(UpdatePRLabelError);
 
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
@@ -265,10 +265,10 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when removing a label fails", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
-      mockRemoveLabel.mockRejectedValueOnce(apiError);
+      mockRemoveLabel.mockRejectedValueOnce(UpdatePRLabelError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
-      ).rejects.toThrow(apiError);
+      ).rejects.toThrow(UpdatePRLabelError);
 
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,

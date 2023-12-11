@@ -9,6 +9,7 @@ import {
   CategoryWithSkipOptionError,
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
+  UpdatePRLabelError,
 } from "./customErrors.js";
 import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
 
@@ -130,7 +131,7 @@ export const updatePRLabel = async (octokit, owner, repo, prNumber, label, addLa
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
-    throw error;
+    throw UpdatePRLabelError();
   }
 };
 
