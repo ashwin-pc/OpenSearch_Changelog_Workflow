@@ -254,13 +254,13 @@ export const createOrUpdateFile = async (
     sha = response.data.sha;
   } catch (error) {
     if (error.status === 404) {
-      console.log("Changeset file not found, will create a new one.");
+      console.log("Changeset file not found. Proceeding to create a new one.");
     } else {
       throw new GetGithubContentError();
     }
   }
 
-  // Create or update the file content
+  // Create or update the changeset file content
   try {
     await octokit.rest.repos.createOrUpdateFileContents({
       owner,

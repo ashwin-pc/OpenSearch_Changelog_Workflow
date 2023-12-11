@@ -6,7 +6,9 @@ import {
   postPRComment,
   createOrUpdateFile,
   PullRequestDataExtractionError,
-  ChangesetFileAccessError,
+  GetGithubContentError,
+  CreateChangesetFileError,
+  UpdateChangesetFileError,
   UpdatePRLabelError,
   InvalidChangelogHeadingError,
   EmptyChangelogSectionError,
@@ -41,7 +43,6 @@ describe("Github Utils Tests", () => {
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const prNumber = github.context.payload.pull_request.number;
-
   const branchRef = github.context.payload.pull_request.head.ref;
 
   const apiError = new Error("API Failure");
@@ -184,20 +185,19 @@ describe("Github Utils Tests", () => {
         repo,
         issue_number: prNumber,
       });
-
       expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
+      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
         name: label,
       });
-      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).toHaveBeenCalledTimes(1);
     });
 
     test("tries to add a label that is present", async () => {
-      mockListLabelsOnIssue.mockResolvedValue({ data: [{name: label}] });
+      mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
       await updatePRLabel(octokitMock, owner, repo, prNumber, label, true);
 
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
@@ -247,7 +247,6 @@ describe("Github Utils Tests", () => {
     });
 
     test("throws an error when checking labels fails", async () => {
-
       mockListLabelsOnIssue.mockRejectedValueOnce(apiError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
@@ -321,18 +320,27 @@ describe("Github Utils Tests", () => {
       [null, "null entryMap"],
       [undefined, "undefined entryMap"],
       [{}, "empty entryMap"],
-    ])("calls updateLabel() with 'skip-changelog' label when entry is %s", async (entryMap, description) => {
-      await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
+    ])(
+      "calls updateLabel() with 'skip-changelog' label when entry is %s",
+      async (entryMap, description) => {
+        await handleSkipOption(
+          entryMap,
+          owner,
+          repo,
+          prNumber,
+          mockUpdateLabel
+        );
 
-      expect(mockUpdateLabel).toHaveBeenCalledWith(
-        owner,
-        repo,
-        prNumber,
-        SKIP_LABEL,
-        false
-      );
-      expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
-    });
+        expect(mockUpdateLabel).toHaveBeenCalledWith(
+          owner,
+          repo,
+          prNumber,
+          SKIP_LABEL,
+          false
+        );
+        expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
+      }
+    );
   });
 
   describe("postPRComment", () => {
@@ -512,8 +520,9 @@ describe("Github Utils Tests", () => {
       github.getOctokit.mockClear();
     });
 
-    test("creates a new file when it does not exist", async () => {
+    test("creates a new changeset file when it does not exist", async () => {
       mockGetContent.mockRejectedValueOnce({ status: 404 });
+      mockCreateOrUpdateFileContents.mockResolvedValueOnce({ status: 200 });
       await createOrUpdateFile(
         octokitMock,
         owner,
@@ -546,6 +555,8 @@ describe("Github Utils Tests", () => {
     test("updates an existing file", async () => {
       const sha = "existing-file-sha";
       mockGetContent.mockResolvedValueOnce({ data: { sha } });
+      mockCreateOrUpdateFileContents.mockResolvedValueOnce({ status: 200 });
+
       await createOrUpdateFile(
         octokitMock,
         owner,
@@ -576,7 +587,7 @@ describe("Github Utils Tests", () => {
     });
 
     test("throws an error when file access fails with a non-404 error", async () => {
-      const error = new Error("API Failure with 500 Error");
+      const error = new Error("API Failure with non-404 Error");
       error.status = 500;
       mockGetContent.mockRejectedValueOnce(error);
 
@@ -590,7 +601,7 @@ describe("Github Utils Tests", () => {
           changesetCommitMessage,
           branchRef
         )
-      ).rejects.toThrow(ChangesetFileAccessError);
+      ).rejects.toThrow(GetGithubContentError);
       expect(mockGetContent).toHaveBeenCalledWith({
         owner,
         repo,
@@ -598,7 +609,43 @@ describe("Github Utils Tests", () => {
         ref: branchRef,
       });
       expect(mockGetContent).toHaveBeenCalledTimes(1);
+      expect(mockCreateOrUpdateFileContents).not.toHaveBeenCalled();
+    });
+
+    test("throws CreateChangesetFileError when creating a new file fails", async () => {
+      mockGetContent.mockRejectedValueOnce({ status: 404 });
+      mockCreateOrUpdateFileContents.mockRejectedValueOnce(apiError);
+
+      await expect(
+        createOrUpdateFile(
+          octokitMock,
+          owner,
+          repo,
+          changesetFilePath,
+          changesetFileContent,
+          changesetCommitMessage,
+          branchRef
+        )
+      ).rejects.toThrow(CreateChangesetFileError);
+    });
+
+    test("throws UpdateChangesetFileError when updating an existing file fails", async () => {
+      const sha = "existing-file-sha";
+      mockGetContent.mockResolvedValueOnce({ data: { sha } });
+      const updateError = new Error("Update failed");
+      mockCreateOrUpdateFileContents.mockRejectedValueOnce(updateError);
+
+      await expect(
+        createOrUpdateFile(
+          octokitMock,
+          owner,
+          repo,
+          changesetFilePath,
+          changesetFileContent,
+          changesetCommitMessage,
+          branchRef
+        )
+      ).rejects.toThrow(UpdateChangesetFileError);
     });
   });
-
 });
