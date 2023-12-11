@@ -90,14 +90,23 @@ export const extractPullRequestData = async (octokit) => {
  * // Remove a label from a pull request
  * await updatePRLabel(octokit, 'owner', 'repo', 123, 'enhancement', false);
  */
-export const updatePRLabel = async (octokit, owner, repo, prNumber, label, addLabel) => {
+export const updatePRLabel = async (
+  octokit,
+  owner,
+  repo,
+  prNumber,
+  label,
+  addLabel
+) => {
   try {
     // Get the current labels on the pull request
-    const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue({
-      owner,
-      repo,
-      issue_number: prNumber,
-    });
+    const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue(
+      {
+        owner,
+        repo,
+        issue_number: prNumber,
+      }
+    );
 
     // Check to see if the label is already on the pull request
     const labelExists = currentLabels.some((element) => element.name === label);
@@ -131,10 +140,9 @@ export const updatePRLabel = async (octokit, owner, repo, prNumber, label, addLa
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
-    throw UpdatePRLabelError();
+    throw new UpdatePRLabelError();
   }
 };
-
 
 /**
  * Handles a changeset entry map that contains the "skip" option.
@@ -151,20 +159,19 @@ export const handleSkipOption = async (
   prNumber,
   updateLabel
 ) => {
-  if (!entryMap["skip"]) {
+  if (entryMap && entryMap["skip"]) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
       throw new CategoryWithSkipOptionError();
     } else {
       console.log("No changeset file created or updated.");
-      // Add the "skip-changelog" label to the PR
+      // Adds  "skip-changelog" label in PR if not present
       await updateLabel(owner, repo, prNumber, SKIP_LABEL, true);
       return;
     }
-  } else {
-    // Check if the "skip-changelog" label is present on the PR and remove it
-    await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
   }
+  // Removes "skip-changelog" label in PR if present
+  await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
 };
 
 /**

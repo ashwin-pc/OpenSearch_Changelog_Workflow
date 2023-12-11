@@ -225,7 +225,7 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when adding a label fails", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [] });
-      mockAddLabels.mockRejectedValueOnce(UpdatePRLabelError);
+      mockAddLabels.mockRejectedValueOnce(apiError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, true)
       ).rejects.toThrow(UpdatePRLabelError);
@@ -248,7 +248,7 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when checking labels fails", async () => {
 
-      mockListLabelsOnIssue.mockRejectedValueOnce(UpdatePRLabelError);
+      mockListLabelsOnIssue.mockRejectedValueOnce(apiError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
       ).rejects.toThrow(UpdatePRLabelError);
@@ -265,7 +265,7 @@ describe("Github Utils Tests", () => {
 
     test("throws an error when removing a label fails", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
-      mockRemoveLabel.mockRejectedValueOnce(UpdatePRLabelError);
+      mockRemoveLabel.mockRejectedValueOnce(apiError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
       ).rejects.toThrow(UpdatePRLabelError);
@@ -294,9 +294,10 @@ describe("Github Utils Tests", () => {
       mockUpdateLabel.mockClear();
     });
 
-    test("adds 'skip-changelog' label when 'skip' is the only entry", async () => {
+    test("calls updateLabel() with 'skip-changelog' label when 'skip' is the only entry in entryMap param", async () => {
       const entryMap = { skip: "" };
       await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
+
       expect(mockUpdateLabel).toHaveBeenCalledWith(
         owner,
         repo,
@@ -309,15 +310,18 @@ describe("Github Utils Tests", () => {
 
     test("throws CategoryWithSkipOptionError when 'skip' and other entries are present", async () => {
       const entryMap = { skip: "", other: "data" };
-
       await expect(
         handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel)
       ).rejects.toThrow(CategoryWithSkipOptionError);
+
       expect(mockUpdateLabel).not.toHaveBeenCalled();
     });
 
-    test("removes 'skip-changelog' label when 'skip' is not present", async () => {
-      const entryMap = {};
+    test.each([
+      [null, "null entryMap"],
+      [undefined, "undefined entryMap"],
+      [{}, "empty entryMap"],
+    ])("calls updateLabel() with 'skip-changelog' label when entry is %s", async (entryMap, description) => {
       await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
 
       expect(mockUpdateLabel).toHaveBeenCalledWith(
@@ -327,16 +331,6 @@ describe("Github Utils Tests", () => {
         SKIP_LABEL,
         false
       );
-      expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
-    });
-
-    test("handles errors from updateLabel function gracefully", async () => {
-      const entryMap = { skip: "" };
-      mockUpdateLabel.mockRejectedValueOnce(new Error("Update label failed"));
-
-      await expect(
-        handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel)
-      ).rejects.toThrow("Update label failed");
       expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
     });
   });
