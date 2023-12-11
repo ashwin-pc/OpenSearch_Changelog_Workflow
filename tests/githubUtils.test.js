@@ -154,8 +154,16 @@ describe("Github Utils Tests", () => {
       github.getOctokit.mockClear();
     });
 
-    test("successfully adds a label", async () => {
-      await updatePRLabel(octokitMock,owner, repo, prNumber, label, true);
+    test("successfully adds a label when it doesn't exist", async () => {
+      mockListLabelsOnIssue.mockResolvedValue({ data: [] });
+      await updatePRLabel(octokitMock, owner, repo, prNumber, label, true);
+
+      expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
+        owner,
+        repo,
+        issue_number: prNumber,
+      });
+      expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
       expect(mockAddLabels).toHaveBeenCalledWith({
         owner,
         repo,
@@ -163,16 +171,19 @@ describe("Github Utils Tests", () => {
         labels: [label],
       });
       expect(mockAddLabels).toHaveBeenCalledTimes(1);
+      expect(mockRemoveLabel).not.toHaveBeenCalled();
     });
 
     test("successfully removes an existing label", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
-      await updatePRLabel(octokitMock,owner, repo, prNumber, label, false);
+      await updatePRLabel(octokitMock, owner, repo, prNumber, label, false);
+
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
       });
+
       expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
       expect(mockRemoveLabel).toHaveBeenCalledWith({
         owner,
@@ -180,28 +191,50 @@ describe("Github Utils Tests", () => {
         issue_number: prNumber,
         name: label,
       });
+      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).toHaveBeenCalledTimes(1);
     });
 
-    test("tries to remove a label that isn't present", async () => {
-      mockListLabelsOnIssue.mockResolvedValue({
-        data: [{ name: "unexistent-label" }],
-      });
-      await updatePRLabel(octokitMock, owner, repo, prNumber, label, false);
+    test("tries to add a label that is present", async () => {
+      mockListLabelsOnIssue.mockResolvedValue({ data: [{name: label}] });
+      await updatePRLabel(octokitMock, owner, repo, prNumber, label, true);
+
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
       });
       expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
+      expect(mockAddLabels).not.toHaveBeenCalled();
+      expect(mockRemoveLabel).not.toHaveBeenCalled();
+    });
+    test("tries to remove a label that isn't present", async () => {
+      mockListLabelsOnIssue.mockResolvedValue({ data: [] });
+      await updatePRLabel(octokitMock, owner, repo, prNumber, label, false);
+
+      expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
+        owner,
+        repo,
+        issue_number: prNumber,
+      });
+      expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
+      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).not.toHaveBeenCalled();
     });
 
     test("throws an error when adding a label fails", async () => {
+      mockListLabelsOnIssue.mockResolvedValue({ data: [] });
       mockAddLabels.mockRejectedValueOnce(apiError);
       await expect(
-        updatePRLabel(octokitMock,owner, repo, prNumber, label, true)
+        updatePRLabel(octokitMock, owner, repo, prNumber, label, true)
       ).rejects.toThrow(apiError);
+
+      expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
+        owner,
+        repo,
+        issue_number: prNumber,
+      });
+      expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
       expect(mockAddLabels).toHaveBeenCalledWith({
         owner,
         repo,
@@ -209,19 +242,23 @@ describe("Github Utils Tests", () => {
         labels: [label],
       });
       expect(mockAddLabels).toHaveBeenCalledTimes(1);
+      expect(mockRemoveLabel).not.toHaveBeenCalled();
     });
 
     test("throws an error when checking labels fails", async () => {
+
       mockListLabelsOnIssue.mockRejectedValueOnce(apiError);
       await expect(
         updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
       ).rejects.toThrow(apiError);
+
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
       });
       expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
+      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).not.toHaveBeenCalled();
     });
 
@@ -229,8 +266,16 @@ describe("Github Utils Tests", () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
       mockRemoveLabel.mockRejectedValueOnce(apiError);
       await expect(
-        updatePRLabel(octokitMock,owner, repo, prNumber, label, false)
+        updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
       ).rejects.toThrow(apiError);
+
+      expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
+        owner,
+        repo,
+        issue_number: prNumber,
+      });
+      expect(mockListLabelsOnIssue).toHaveBeenCalledTimes(1);
+      expect(mockAddLabels).not.toHaveBeenCalled();
       expect(mockRemoveLabel).toHaveBeenCalledWith({
         owner,
         repo,
