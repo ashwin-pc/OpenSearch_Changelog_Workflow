@@ -14,15 +14,11 @@ import {
 import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
 
 /**
- * Extracts relevant data from a GitHub Pull Request.
+ * Extracts relevant data from a GitHub Pull Request using Octokit instance.
  *
- * @param {Object} octokit - An Octokit instance ready to use for GitHub Actions.
- * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
- * @throws {PullRequestDataExtractionError} Throws a custom error if data extraction fails.
- *
- * @example
- * const octokit = getOctokit(token);
- * const prData = await extractPullRequestData(octokit);
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
+ * @returns {Promise<Object>} Promise resolving to object containing pull request details.
+ * @throws {PullRequestDataExtractionError} If data extraction fails.
  */
 export const extractPullRequestData = async (octokit) => {
   try {
@@ -68,27 +64,15 @@ export const extractPullRequestData = async (octokit) => {
 };
 
 /**
- * Adds or removes a label from a GitHub pull request.
+ * Adds or removes a label from a GitHub pull request using Octokit instance.
  *
- * @param {Object} octokit - An Octokit instance ready to use for GitHub Actions.
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {string} label - Label to be added or removed.
  * @param {boolean} addLabel - Flag to add or remove the label.
- *
- * @returns {Promise<void>} A promise that resolves when the label is added or removed.
- *
- * @throws {Error} Throws an error if the label cannot be added or removed.
- *
- * @example
- * const octokit = getOctokit(token);
- *
- * // Add a label to a pull request
- * await updatePRLabel(octokit, 'owner', 'repo', 123, 'bug', true);
- *
- * // Remove a label from a pull request
- * await updatePRLabel(octokit, 'owner', 'repo', 123, 'enhancement', false);
+ * @throws {UpdatePRLabelError} If unable to add or remove label.
  */
 export const updatePRLabel = async (
   octokit,
@@ -146,11 +130,13 @@ export const updatePRLabel = async (
 
 /**
  * Handles a changeset entry map that contains the "skip" option.
+ *
  * @param {Object} entryMap - Map of changeset entries.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {Function} updateLabel - Function to add or remove a label from a PR.
+ * @throws {CategoryWithSkipOptionError} If 'skip' and other entries are present.
  */
 export const handleSkipOption = async (
   entryMap,
@@ -175,15 +161,15 @@ export const handleSkipOption = async (
 };
 
 /**
- * Posts a comment to a GitHub pull request based on the error type.
+ * Posts a comment to a GitHub pull request based on the error type using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {Error} error - Error object that determines the comment to be posted.
  */
-export const postPRComment = async (owner, repo, prNumber, error) => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+export const postPRComment = async (octokit, owner, repo, prNumber, error) => {
   // Map error constructors to their corresponding error messages.
   // Returns null if the error type does not require a comment in the PR.
   const errorCommentMap = {
@@ -233,15 +219,19 @@ export const postPRComment = async (owner, repo, prNumber, error) => {
 };
 
 /**
- * Creates or updates a file in a GitHub repository.
+ * Creates or updates a file in a GitHub repository using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {string} path - File path within the repository.
- * @param {string} content - Content to be written to the file.
+ * @param {string} content - Base64 encoded content to be written to the file.
  * @param {string} message - Commit message.
  * @param {string} branchRef - Branch reference for the commit.
+ * @throws {ChangesetFileAccessError} If access to the file fails.
  */
 export const createOrUpdateFile = async (
+  octokit,
   owner,
   repo,
   path,
@@ -249,8 +239,6 @@ export const createOrUpdateFile = async (
   message,
   branchRef
 ) => {
-  // Initialize Octokit client
-  const octokit = github.getOctokit(GITHUB_TOKEN);
   // File's SHA to check if file exists
   let sha;
 
