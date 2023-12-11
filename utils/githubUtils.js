@@ -8,7 +8,7 @@ import {
   InvalidPrefixError,
   CategoryWithSkipOptionError,
   ChangelogEntryMissingHyphenError,
-  EmptyEntryDescriptionError
+  EmptyEntryDescriptionError,
 } from "./customErrors.js";
 import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
 
@@ -17,9 +17,7 @@ import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
  * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
  * @throws {PullRequestDataExtractionError} Throws a custom error if data extraction fails.
  */
-export const extractPullRequestData = async () => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+export const extractPullRequestData = async (octokit) => {
   try {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
@@ -35,6 +33,17 @@ export const extractPullRequestData = async () => {
       pull_number: prNumber,
     });
 
+    // Validate response
+    if (!pullRequest || typeof pullRequest !== "object") {
+      throw new PullRequestDataExtractionError();
+    }
+
+    // Destructure necessary fields and validate them
+    const { body, html_url } = pullRequest;
+    if (body === undefined || html_url === undefined) {
+      throw new PullRequestDataExtractionError();
+    }
+
     // Return relevant PR data
     return {
       owner,
@@ -45,6 +54,7 @@ export const extractPullRequestData = async () => {
       branchRef: context.payload.pull_request.head.ref,
     };
   } catch (error) {
+    console.error(`Error extracting data from pull request: ${error.message}`);
     // Throw a custom error for issues during data extraction
     throw new PullRequestDataExtractionError();
   }
@@ -116,7 +126,13 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
  * @param {number} prNumber - Pull request number.
  * @param {Function} updateLabel - Function to add or remove a label from a PR.
  */
-export const handleSkipOption = async (entryMap, owner, repo, prNumber, updateLabel) => {
+export const handleSkipOption = async (
+  entryMap,
+  owner,
+  repo,
+  prNumber,
+  updateLabel
+) => {
   if (entryMap["skip"] !== undefined) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
@@ -131,7 +147,7 @@ export const handleSkipOption = async (entryMap, owner, repo, prNumber, updateLa
     // Check if the "skip-changelog" label is present on the PR and remove it
     await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
   }
-}
+};
 
 /**
  * Posts a comment to a GitHub pull request based on the error type.
@@ -139,27 +155,33 @@ export const handleSkipOption = async (entryMap, owner, repo, prNumber, updateLa
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {Error} error - Error object that determines the comment to be posted.
-*/
+ */
 export const postPRComment = async (owner, repo, prNumber, error) => {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  // Map error constructors to their corresponding error messages. 
+  // Map error constructors to their corresponding error messages.
   // Returns null if the error type does not require a comment in the PR.
   const errorCommentMap = {
     [PullRequestDataExtractionError]: () => null,
     [ChangesetFileAccessError]: () => null,
-    [InvalidChangelogHeadingError]: error => `Invalid Changelog Heading Error: ${error.message}`,
-    [EmptyChangelogSectionError]: error => `Empty Changelog Section Error: ${error.message}`,
-    [EntryTooLongError]: error => `Entry Too Long Error: ${error.message}`,
-    [InvalidPrefixError]: error => `Invalid Prefix Error: ${error.message}`,
-    [CategoryWithSkipOptionError]: error => `Category With Skip Option Error: ${error.message}`,
-    [ChangelogEntryMissingHyphenError]: error => `Changelog Entry Missing Hyphen Error: ${error.message}`,
-    [EmptyEntryDescriptionError]: error => `Empty Entry Description Error: ${error.message}`,
-  }
+    [InvalidChangelogHeadingError]: (error) =>
+      `Invalid Changelog Heading Error: ${error.message}`,
+    [EmptyChangelogSectionError]: (error) =>
+      `Empty Changelog Section Error: ${error.message}`,
+    [EntryTooLongError]: (error) => `Entry Too Long Error: ${error.message}`,
+    [InvalidPrefixError]: (error) => `Invalid Prefix Error: ${error.message}`,
+    [CategoryWithSkipOptionError]: (error) =>
+      `Category With Skip Option Error: ${error.message}`,
+    [ChangelogEntryMissingHyphenError]: (error) =>
+      `Changelog Entry Missing Hyphen Error: ${error.message}`,
+    [EmptyEntryDescriptionError]: (error) =>
+      `Empty Entry Description Error: ${error.message}`,
+  };
   // If the error type is not one that merits a PR comment (either not listed in the
   // error comment map or explicitly mapped to null), the function will return null,
   // indicating that no comment should be posted.
-  const commentGenerator = errorCommentMap[error.constructor] || (error => null);
+  const commentGenerator =
+    errorCommentMap[error.constructor] || ((error) => null);
 
   const comment = commentGenerator(error);
 
@@ -170,17 +192,20 @@ export const postPRComment = async (owner, repo, prNumber, error) => {
         owner,
         repo,
         issue_number: prNumber,
-        body: comment
+        body: comment,
       });
       console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
-    } catch(error) {
-      console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
+    } catch (error) {
+      console.error(
+        `Error posting comment to PR #${prNumber}: ${error.message}`
+      );
     }
   } else {
-    console.log(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
+    console.log(
+      `No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`
+    );
   }
-}
-
+};
 
 /**
  * Creates or updates a file in a GitHub repository.

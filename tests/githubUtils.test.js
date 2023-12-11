@@ -15,8 +15,7 @@ import {
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
 } from "../utils";
-import { GITHUB_TOKEN } from "../config/constants";
-import { SKIP_LABEL } from "../config/constants.js";
+import { SKIP_LABEL } from "../config/constants";
 
 // Mock the @actions/github module
 jest.mock("@actions/github", () => ({
@@ -38,60 +37,97 @@ jest.mock("@actions/github", () => ({
 }));
 
 describe("Github Utils Tests", () => {
-  const owner = "testOwner";
-  const repo = "testRepo";
-  const prNumber = 123;
-  const prDescription = "Test PR body";
-  const prLink = "http://example.com/pr";
-  const branchRef = "testBranch";
+  const owner = github.context.repo.owner;
+  const repo = github.context.repo.repo;
+  const prNumber = github.context.payload.pull_request.number;
+
+  const branchRef = github.context.payload.pull_request.head.ref;
 
   const apiError = new Error("API Failure");
 
   describe("extractPullRequestData", () => {
     const mockPullsGet = jest.fn();
-    beforeAll(() => {
-      github.getOctokit.mockImplementation(() => ({
-        rest: {
-          pulls: {
-            get: mockPullsGet,
-          },
+    const octokitMock = {
+      rest: {
+        pulls: {
+          get: mockPullsGet,
         },
-      }));
-    });
+      },
+    };
 
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    });
     beforeEach(() => {
-      jest.clearAllMocks();
+      github.getOctokit.mockClear();
     });
 
     test("successfully extracts pull request data", async () => {
       const mockPRData = {
         data: {
           body: "Test PR body",
-          html_url: "http://example.com/pr",
+          html_url: "http://example.com/pr/123",
         },
       };
-      mockPullsGet.mockResolvedValue(mockPRData);
-
+      mockPullsGet.mockResolvedValueOnce(mockPRData);
       const expectedData = {
-        owner,
-        repo,
-        prNumber,
-        prDescription,
-        prLink,
-        branchRef,
+        owner: "testOwner",
+        repo: "testRepo",
+        prNumber: 123,
+        prDescription: mockPRData.data.body,
+        prLink: mockPRData.data.html_url,
+        branchRef: "testBranch",
       };
-      const actualData = await extractPullRequestData();
-
+      const actualData = await extractPullRequestData(octokitMock);
       expect(actualData).toEqual(expectedData);
+      expect(mockPullsGet).toHaveBeenCalledWith({
+        owner: expectedData.owner,
+        repo: expectedData.repo,
+        pull_number: expectedData.prNumber,
+      });
       expect(mockPullsGet).toHaveBeenCalledTimes(1);
     });
 
-    test("throws PullRequestDataExtractionError on failure", async () => {
+    test("throws PullRequestDataExtractionError on API failure", async () => {
       mockPullsGet.mockRejectedValueOnce(apiError);
-      await expect(extractPullRequestData()).rejects.toThrow(
+      await expect(extractPullRequestData(octokitMock)).rejects.toThrow(
         PullRequestDataExtractionError
       );
       expect(mockPullsGet).toHaveBeenCalledTimes(1);
+    });
+
+    test("throws error for invalid response data", async () => {
+      mockPullsGet.mockResolvedValueOnce(null); // or use undefined, or a non-object value
+      await expect(extractPullRequestData(octokitMock)).rejects.toThrow(
+        PullRequestDataExtractionError
+      );
+    });
+
+    test.each([
+      [undefined, "undefined response"],
+      [null, "null response"],
+      [{ data: {} }, "empty data field"],
+    ])(
+      "throws error for %s response from API",
+      async (resolvedValue, description) => {
+        mockPullsGet.mockResolvedValueOnce(resolvedValue);
+        await expect(extractPullRequestData(octokitMock)).rejects.toThrow(
+          PullRequestDataExtractionError
+        );
+      }
+    );
+
+    test("throws error for incomplete response data", async () => {
+      // Simulating missing 'body' in the response
+      const incompleteData = {
+        data: {
+          html_url: "http://example.com/pr",
+        },
+      };
+      mockPullsGet.mockResolvedValueOnce(incompleteData);
+      await expect(extractPullRequestData(octokitMock)).rejects.toThrow(
+        PullRequestDataExtractionError
+      );
     });
   });
 
@@ -101,24 +137,25 @@ describe("Github Utils Tests", () => {
     const mockListLabelsOnIssue = jest.fn();
     const mockRemoveLabel = jest.fn();
 
-    beforeAll(() => {
-      github.getOctokit.mockImplementation(() => ({
-        rest: {
-          issues: {
-            addLabels: mockAddLabels,
-            listLabelsOnIssue: mockListLabelsOnIssue,
-            removeLabel: mockRemoveLabel,
-          },
+    const octokitMock = {
+      rest: {
+        issues: {
+          addLabels: mockAddLabels,
+          listLabelsOnIssue: mockListLabelsOnIssue,
+          removeLabel: mockRemoveLabel,
         },
-      }));
-    });
+      },
+    };
 
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    });
     beforeEach(() => {
-      jest.clearAllMocks();
+      github.getOctokit.mockClear();
     });
 
     test("successfully adds a label", async () => {
-      await updatePRLabel(owner, repo, prNumber, label, true);
+      await updatePRLabel(octokitMock,owner, repo, prNumber, label, true);
       expect(mockAddLabels).toHaveBeenCalledWith({
         owner,
         repo,
@@ -130,7 +167,7 @@ describe("Github Utils Tests", () => {
 
     test("successfully removes an existing label", async () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
-      await updatePRLabel(owner, repo, prNumber, label, false);
+      await updatePRLabel(octokitMock,owner, repo, prNumber, label, false);
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
         repo,
@@ -150,7 +187,7 @@ describe("Github Utils Tests", () => {
       mockListLabelsOnIssue.mockResolvedValue({
         data: [{ name: "unexistent-label" }],
       });
-      await updatePRLabel(owner, repo, prNumber, label, false);
+      await updatePRLabel(octokitMock, owner, repo, prNumber, label, false);
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
         repo,
@@ -163,7 +200,7 @@ describe("Github Utils Tests", () => {
     test("throws an error when adding a label fails", async () => {
       mockAddLabels.mockRejectedValueOnce(apiError);
       await expect(
-        updatePRLabel(owner, repo, prNumber, label, true)
+        updatePRLabel(octokitMock,owner, repo, prNumber, label, true)
       ).rejects.toThrow(apiError);
       expect(mockAddLabels).toHaveBeenCalledWith({
         owner,
@@ -177,7 +214,7 @@ describe("Github Utils Tests", () => {
     test("throws an error when checking labels fails", async () => {
       mockListLabelsOnIssue.mockRejectedValueOnce(apiError);
       await expect(
-        updatePRLabel(owner, repo, prNumber, label, false)
+        updatePRLabel(octokitMock, owner, repo, prNumber, label, false)
       ).rejects.toThrow(apiError);
       expect(mockListLabelsOnIssue).toHaveBeenCalledWith({
         owner,
@@ -192,7 +229,7 @@ describe("Github Utils Tests", () => {
       mockListLabelsOnIssue.mockResolvedValue({ data: [{ name: label }] });
       mockRemoveLabel.mockRejectedValueOnce(apiError);
       await expect(
-        updatePRLabel(owner, repo, prNumber, label, false)
+        updatePRLabel(octokitMock,owner, repo, prNumber, label, false)
       ).rejects.toThrow(apiError);
       expect(mockRemoveLabel).toHaveBeenCalledWith({
         owner,
@@ -214,8 +251,8 @@ describe("Github Utils Tests", () => {
         rest: {
           issues: {
             createComment: mockCreateComment,
-          }
-        }
+          },
+        },
       }));
     });
 
@@ -244,7 +281,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Invalid Changelog Heading Error: ${error.message}`
+        body: `Invalid Changelog Heading Error: ${error.message}`,
       });
     });
 
@@ -255,7 +292,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Empty Changelog Section Error: ${error.message}`
+        body: `Empty Changelog Section Error: ${error.message}`,
       });
     });
 
@@ -266,7 +303,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Entry Too Long Error: ${error.message}`
+        body: `Entry Too Long Error: ${error.message}`,
       });
     });
 
@@ -277,7 +314,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Invalid Prefix Error: ${error.message}`
+        body: `Invalid Prefix Error: ${error.message}`,
       });
     });
 
@@ -288,7 +325,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Category With Skip Option Error: ${error.message}`
+        body: `Category With Skip Option Error: ${error.message}`,
       });
     });
 
@@ -299,7 +336,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Changelog Entry Missing Hyphen Error: ${error.message}`
+        body: `Changelog Entry Missing Hyphen Error: ${error.message}`,
       });
     });
 
@@ -310,7 +347,7 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         issue_number: prNumber,
-        body: `Empty Entry Description Error: ${error.message}`
+        body: `Empty Entry Description Error: ${error.message}`,
       });
     });
 
@@ -318,7 +355,9 @@ describe("Github Utils Tests", () => {
       const error = new InvalidChangelogHeadingError();
       jest.spyOn(console, "log");
       await postPRComment(owner, repo, prNumber, error);
-      expect(console.log).toHaveBeenCalledWith(`Comment posted to PR #${prNumber}: "Invalid Changelog Heading Error: ${error.message}"`);
+      expect(console.log).toHaveBeenCalledWith(
+        `Comment posted to PR #${prNumber}: "Invalid Changelog Heading Error: ${error.message}"`
+      );
     });
 
     test("logs error message if posting comment to PR fails", async () => {
@@ -326,14 +365,18 @@ describe("Github Utils Tests", () => {
       jest.spyOn(console, "error");
       mockCreateComment.mockRejectedValueOnce(apiError);
       await postPRComment(owner, repo, prNumber, error);
-      expect(console.error).toHaveBeenCalledWith(`Error posting comment to PR #${prNumber}: ${apiError.message}`);
+      expect(console.error).toHaveBeenCalledWith(
+        `Error posting comment to PR #${prNumber}: ${apiError.message}`
+      );
     });
 
     test("logs messsage if no comment is posted to the PR because of the error type", async () => {
       const error = new PullRequestDataExtractionError();
       jest.spyOn(console, "log");
       await postPRComment(owner, repo, prNumber, error);
-      expect(console.log).toHaveBeenCalledWith(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
+      expect(console.log).toHaveBeenCalledWith(
+        `No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`
+      );
     });
 
     test("handles unexpected errors gracefully", async () => {
@@ -346,7 +389,9 @@ describe("Github Utils Tests", () => {
       });
       jest.spyOn(console, "error");
       await postPRComment(owner, repo, prNumber, error);
-      expect(console.error).toHaveBeenCalledWith(`Error posting comment to PR #${prNumber}: ${unexpectedError.message}`)
+      expect(console.error).toHaveBeenCalledWith(
+        `Error posting comment to PR #${prNumber}: ${unexpectedError.message}`
+      );
     });
   });
 
@@ -466,7 +511,7 @@ describe("Github Utils Tests", () => {
     });
 
     test("adds 'skip-changelog' label when 'skip' is the only entry", async () => {
-      const entryMap = { "skip": "" };
+      const entryMap = { skip: "" };
       await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
       expect(mockUpdateLabel).toHaveBeenCalledWith(
         owner,
@@ -500,6 +545,5 @@ describe("Github Utils Tests", () => {
       );
       expect(mockUpdateLabel).toHaveBeenCalledTimes(1);
     });
-
   });
 });
