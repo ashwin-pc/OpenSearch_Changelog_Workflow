@@ -4,16 +4,10 @@ import {
   GetGithubContentError,
   CreateChangesetFileError,
   UpdateChangesetFileError,
-  InvalidChangelogHeadingError,
-  EmptyChangelogSectionError,
-  EntryTooLongError,
-  InvalidPrefixError,
   CategoryWithSkipOptionError,
-  ChangelogEntryMissingHyphenError,
-  EmptyEntryDescriptionError,
   UpdatePRLabelError,
 } from "./customErrors.js";
-import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
+import { SKIP_LABEL } from "../config/constants.js";
 
 /**
  * Extracts relevant data from a GitHub Pull Request using Octokit instance.
