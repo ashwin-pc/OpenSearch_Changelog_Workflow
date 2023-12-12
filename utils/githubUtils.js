@@ -4,16 +4,10 @@ import {
   GetGithubContentError,
   CreateChangesetFileError,
   UpdateChangesetFileError,
-  InvalidChangelogHeadingError,
-  EmptyChangelogSectionError,
-  EntryTooLongError,
-  InvalidPrefixError,
   CategoryWithSkipOptionError,
-  ChangelogEntryMissingHyphenError,
-  EmptyEntryDescriptionError,
   UpdatePRLabelError,
 } from "./customErrors.js";
-import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
+import { SKIP_LABEL } from "../config/constants.js";
 
 /**
  * Extracts relevant data from a GitHub Pull Request using Octokit instance.
@@ -163,6 +157,20 @@ export const handleSkipOption = async (
 };
 
 /**
+ * Generates a comment string for a given error object based on its properties.
+ * 
+ * @param {Error} error - Error object that determines the comment to be posted.
+ * @returns {string|null} - A formatted comment string if the error type merits a comment in the PR; otherwise, null.
+ * 
+ */
+export const getErrorComment = (error) => {
+  if (error.shouldResultInPRComment) {
+    return `${error.messagePrefix}: ${error.message}`;
+  }
+  return null;
+}
+
+/**
  * Posts a comment to a GitHub pull request based on the error type using Octokit instance.
  *
  * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
@@ -170,33 +178,10 @@ export const handleSkipOption = async (
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {Error} error - Error object that determines the comment to be posted.
+ * @param {Function} getErrorComment - Function that generates a comment string for a given error object based on its properties.
  */
-export const postPRComment = async (octokit, owner, repo, prNumber, error) => {
-  // Map error constructors to their corresponding error messages.
-  // Returns null if the error type does not require a comment in the PR.
-  const errorCommentMap = {
-    [PullRequestDataExtractionError]: () => null,
-    [ChangesetFileAccessError]: () => null,
-    [InvalidChangelogHeadingError]: (error) =>
-      `Invalid Changelog Heading Error: ${error.message}`,
-    [EmptyChangelogSectionError]: (error) =>
-      `Empty Changelog Section Error: ${error.message}`,
-    [EntryTooLongError]: (error) => `Entry Too Long Error: ${error.message}`,
-    [InvalidPrefixError]: (error) => `Invalid Prefix Error: ${error.message}`,
-    [CategoryWithSkipOptionError]: (error) =>
-      `Category With Skip Option Error: ${error.message}`,
-    [ChangelogEntryMissingHyphenError]: (error) =>
-      `Changelog Entry Missing Hyphen Error: ${error.message}`,
-    [EmptyEntryDescriptionError]: (error) =>
-      `Empty Entry Description Error: ${error.message}`,
-  };
-  // If the error type is not one that merits a PR comment (either not listed in the
-  // error comment map or explicitly mapped to null), the function will return null,
-  // indicating that no comment should be posted.
-  const commentGenerator =
-    errorCommentMap[error.constructor] || ((error) => null);
-
-  const comment = commentGenerator(error);
+export const postPRComment = async (octokit, owner, repo, prNumber, error, getErrorComment) => {
+  const comment = getErrorComment(error);
 
   if (comment) {
     try {
@@ -208,9 +193,9 @@ export const postPRComment = async (octokit, owner, repo, prNumber, error) => {
         body: comment,
       });
       console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
-    } catch (error) {
+    } catch (postError) {
       console.error(
-        `Error posting comment to PR #${prNumber}: ${error.message}`
+        `Error posting comment to PR #${prNumber}: ${postError.message}`
       );
     }
   } else {

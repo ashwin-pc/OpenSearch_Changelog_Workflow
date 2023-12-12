@@ -94,7 +94,8 @@ describe("Formatting Utils Tests", () => {
       const entryMap = prepareChangelogEntriesMap(
         changesetEntries,
         prNumber,
-        prLink
+        prLink,
+        prepareChangelogEntry,
       );
 
       // Define the expected output

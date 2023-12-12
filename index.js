@@ -12,6 +12,7 @@ import {
   updatePRLabel,
   handleSkipOption,
   postPRComment,
+  getErrorComment,
 } from "./utils/githubUtils.js";
 import { GITHUB_TOKEN } from "./config";
 /**
@@ -55,7 +56,7 @@ async function run() {
     );
   } catch(error) {
     if (owner && repo && prNumber) {
-      await postPRComment(octokit, owner, repo, prNumber, error);
+      await postPRComment(octokit, owner, repo, prNumber, error, getErrorComment);
     }
     console.error(error);
     throw error;
