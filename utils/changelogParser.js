@@ -61,7 +61,6 @@ export const extractChangelogEntries = (prDescription, processLine) => {
   const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
-  console.log(changelogSection[0].split("\n"));
   const changelogEntries = changelogSection[0]
     .split("\n")
     .reduce((acc, line) => {
