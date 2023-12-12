@@ -1,14 +1,15 @@
 import { PREFIXES, MAX_ENTRY_LENGTH } from "../config";
-
 import {
   prepareChangelogEntry,
   prepareChangelogEntriesMap,
   prepareChangesetEntriesContent,
+} from "../utils/formattingUtils.js";
+import {
   InvalidPrefixError,
   EmptyEntryDescriptionError,
   EntryTooLongError,
   ChangelogEntryMissingHyphenError,
-} from "../utils";
+} from "../utils/customErrors.js";
 
 describe("Formatting Utils Tests", () => {
   const prNumber = 123;

@@ -2,7 +2,6 @@ import {
   processLine,
   extractChangelogEntries,
 } from "../utils/changelogParser.js";
-
 import {
   EmptyChangelogSectionError,
   InvalidChangelogHeadingError,
