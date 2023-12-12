@@ -11,7 +11,7 @@ import {
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
   EmptyChangelogSectionError,
-} from "../utils";
+} from "../utils/customErrors.js";
 
 import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 
