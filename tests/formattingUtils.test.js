@@ -12,7 +12,7 @@ import {
 
 describe("Formatting Utils Tests", () => {
   const prNumber = 123;
-  const prLink = "http://example.com/pr/123";
+  const prLink = `http://example.com/pr/${prNumber}`;
 
   describe("prepareChangelogEntry", () => {
     const descriptionText = "test description";
@@ -198,30 +198,38 @@ describe("Formatting Utils Tests", () => {
   });
 
   describe("prepareChangesetEntriesContent", () => {
-    test("correctly formats changeset entries content", () => {
-      const changesetEntryMap = {
-        feat: [
-          "- Adds one feature ([#123](http://example.com/pr/123))",
-          "- Adds a second feature ([#123](http://example.com/pr/123))",
-        ],
-        fix: [
-          "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        ],
+    test("correctly formats changeset entries content for one pefix type", () => {
+      const changelogEntriesMap = {
+        prefix_1: ["- Some sample text", "- Other sample text"],
       };
       const expectedContent =
-        `feat:\n` +
-        `- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n` +
-        `- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n\n` +
-        `fix:\n` +
-        `- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))`;
+        `prefix_1:\n` +
+        `- Some sample text\n` +
+        `- Other sample text`;
 
-      const result = prepareChangesetEntriesContent(changesetEntryMap);
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
       expect(result).toBe(expectedContent);
     });
 
-    test("handles an empty changeset entry map", () => {
-      const changesetEntryMap = {};
-      const result = prepareChangesetEntriesContent(changesetEntryMap);
+    test("correctly formats changeset entries content for more than one pefix type", () => {
+      const changelogEntriesMap = {
+        prefix_1: ["- Some sample text", "- Other sample text"],
+        prefix_2: ["- New sample text"],
+      };
+      const expectedContent =
+        `prefix_1:\n` +
+        `- Some sample text\n` +
+        `- Other sample text\n\n` +
+        `prefix_2:\n` +
+        `- New sample text`;
+
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
+      expect(result).toBe(expectedContent);
+    });
+
+    test("returns empty string correctly formats changeset entries content more than one pefix type", () => {
+      const changelogEntriesMap = {};
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
       expect(result).toBe("");
     });
   });

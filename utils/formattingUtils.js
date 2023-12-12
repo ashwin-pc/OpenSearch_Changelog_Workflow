@@ -59,7 +59,7 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
  * @param {string[]} entries - Array of changelog entry strings.
  * @param {number} prNumber - The pull request number associated with the entries.
  * @param {string} prLink - The link to the pull request.
- * @returns {Object} An object where keys are prefixes and values are arrays of associated entries.
+ * @returns {Object} An object where keys are entry prefixes and values are arrays of associated formatted entry descriptions.
  */
 export const prepareChangelogEntriesMap = (
   entries,
@@ -82,11 +82,11 @@ export const prepareChangelogEntriesMap = (
 
 /**
  * Prepares the content for the changeset file.
- * @param {Object} entryMap - An object where keys are prefixes and values are arrays of associated entries.
+ * @param {Object} changelogEntriesMap -  An object where keys are entry prefixes and values are arrays of associated formatted entry descriptions.
  * @returns {string} The content for the changeset file.
  */
-export const prepareChangesetEntriesContent = (entryMap) => {
-  return Object.entries(entryMap)
+export const prepareChangesetEntriesContent = (changelogEntriesMap) => {
+  return Object.entries(changelogEntriesMap)
     .map(([prefix, entries]) => {
       return `${prefix}:\n${entries.join("\n")}`;
     })
