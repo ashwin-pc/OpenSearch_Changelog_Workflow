@@ -5,11 +5,12 @@ import {
 } from "./customErrors.js";
 
 /**
- * Processes a line of text to determine if it's a valid changelog entry.
- * Handles comment blocks and trims lines that are part of the changelog.
- * @param {string} line - A line of text.
- * @param {Object} state - An object maintaining the state of comment parsing.
- * @return {Object} An object containing the updated state and the processed line.
+ * Processes a line from a changelog section, handling comment blocks and trimming non-comment lines.
+ * Lines inside comments or empty are ignored (set to null).
+ *
+ * @param {string} line - A line from the changelog section.
+ * @param {Object} state - The current parsing state, including whether inside a comment block.
+ * @returns {Object} An object with the updated parsing state and the processed line (null for ignored lines, trimmed otherwise).
  */
 export const processLine = (line, state) => {
   // Check for the start of a comment block
@@ -42,7 +43,7 @@ export const processLine = (line, state) => {
 /**
  * Extracts changelog entries from a PR description.
  * @param {string} prDescription - The PR description text in markdown format.
- * @param {Function} processLine - A function that processes a line of text to determine if it's a valid changelog entry.
+ * @param {Function} processLine - A function that processes a line from the changelog section, handling comment blocks and trimming non-comment lines.
  * @return {string[]} An array of changelog entry strings.
  */
 export const extractChangelogEntries = (prDescription, processLine) => {
@@ -60,6 +61,7 @@ export const extractChangelogEntries = (prDescription, processLine) => {
   const initialAcc = { entries: [], state: { inComment: false } };
 
   // Process each line and filter out valid changelog entries
+  console.log(changelogSection[0].split("\n"));
   const changelogEntries = changelogSection[0]
     .split("\n")
     .reduce((acc, line) => {
