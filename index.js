@@ -1,6 +1,9 @@
 import github from "@actions/github";
 import { CHANGESET_PATH } from "./config/constants.js";
-import { extractChangelogEntries } from "./utils/changelogParser.js";
+import {
+  processLine,
+  extractChangelogEntries,
+} from "./utils/changelogParser.js";
 import {
   prepareChangelogEntry,
   prepareChangelogEntriesMap,
@@ -17,9 +20,8 @@ import {
 import { GITHUB_TOKEN } from "./config";
 /**
  * Main function for the GitHub Actions workflow. Extracts relevant data from a pull request, parses changelog entries, handles "skip" entries, and creates or updates a changeset file in the repository.
-*/
+ */
 async function run() {
-
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
   // Initial variables for storing extracted PR data
@@ -30,11 +32,26 @@ async function run() {
     ({ owner, repo, prNumber, prDescription, prLink, branchRef } =
       await extractPullRequestData(octokit));
     // Create an array of changelog entry strings from the PR description
-    const changelogEntries = extractChangelogEntries(prDescription);
+    const changelogEntries = extractChangelogEntries(
+      prDescription,
+      processLine
+    );
     // Create a map of changeset entries organized by category
-    const changelogEntriesMap = prepareChangelogEntriesMap(changelogEntries, prNumber, prLink, prepareChangelogEntry);
+    const changelogEntriesMap = prepareChangelogEntriesMap(
+      changelogEntries,
+      prNumber,
+      prLink,
+      prepareChangelogEntry
+    );
     // Check if the "skip" option is present in the entry map and respond accordingly
-    await handleSkipOption(octokit, changelogEntriesMap, owner, repo, prNumber, updatePRLabel);
+    await handleSkipOption(
+      octokit,
+      changelogEntriesMap,
+      owner,
+      repo,
+      prNumber,
+      updatePRLabel
+    );
 
     // Prepare some parameters for creating or updating the changeset file
     const changesetEntriesContent = Buffer.from(
@@ -54,9 +71,16 @@ async function run() {
       message,
       branchRef
     );
-  } catch(error) {
+  } catch (error) {
     if (owner && repo && prNumber) {
-      await postPRComment(octokit, owner, repo, prNumber, error, getErrorComment);
+      await postPRComment(
+        octokit,
+        owner,
+        repo,
+        prNumber,
+        error,
+        getErrorComment
+      );
     }
     console.error(error);
     throw error;

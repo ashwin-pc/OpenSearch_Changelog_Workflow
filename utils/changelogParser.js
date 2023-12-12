@@ -1,9 +1,9 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-import { InvalidChangelogHeadingError, EmptyChangelogSectionError } from "./customErrors.js";
+import {
+  InvalidChangelogHeadingError,
+  EmptyChangelogSectionError,
+} from "./customErrors.js";
 
-// **************************************************************
-// I) INTERNAL FUNCTIONS
-// **************************************************************
 /**
  * Processes a line of text to determine if it's a valid changelog entry.
  * Handles comment blocks and trims lines that are part of the changelog.
@@ -11,7 +11,7 @@ import { InvalidChangelogHeadingError, EmptyChangelogSectionError } from "./cust
  * @param {Object} state - An object maintaining the state of comment parsing.
  * @return {Object} An object containing the updated state and the processed line.
  */
-const processLine = (line, state) => {
+export const processLine = (line, state) => {
   // Check for the start of a comment block
   if (line.includes("<!--"))
     return {
@@ -25,24 +25,27 @@ const processLine = (line, state) => {
       state: { ...state, inComment: false },
       line: null,
     };
-  
+
   const trimmedLine = line.trim();
   // If the line is not in a comment, contains text, and does not begin with "#" (which would indicate a section heading), consider it as part of the changelog
-  if (!state.inComment && trimmedLine.length > 0 && !trimmedLine.startsWith("#")) return { state, line: trimmedLine };
+  if (
+    !state.inComment &&
+    trimmedLine.length > 0 &&
+    !trimmedLine.startsWith("#")
+  )
+    return { state, line: trimmedLine };
 
   // For lines within comments or empty lines, return null
   return { state, line: null };
 };
 
-// **************************************************************
-// II) EXPORTED FUNCTIONS
-// **************************************************************
 /**
  * Extracts changelog entries from a PR description.
  * @param {string} prDescription - The PR description text in markdown format.
+ * @param {Function} processLine - A function that processes a line of text to determine if it's a valid changelog entry.
  * @return {string[]} An array of changelog entry strings.
  */
-export const extractChangelogEntries = (prDescription) => {
+export const extractChangelogEntries = (prDescription, processLine) => {
   // Match the changelog section using the defined regex
   const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
   // Output -> Array of length 2:
@@ -70,7 +73,11 @@ export const extractChangelogEntries = (prDescription) => {
     throw new EmptyChangelogSectionError();
   }
 
-  console.log(`Found ${changelogEntries.length} changelog ${changelogEntries.length === 1 ? 'entry' : 'entries'}.`);
+  console.log(
+    `Found ${changelogEntries.length} changelog ${
+      changelogEntries.length === 1 ? "entry" : "entries"
+    }.`
+  );
 
   return changelogEntries;
 };
