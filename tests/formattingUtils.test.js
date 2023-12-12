@@ -101,10 +101,10 @@ describe("Formatting Utils Tests", () => {
       // Define the expected output
       const expectedContent =
         "feat:\n" +
-        "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n" +
-        "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n\n" +
+        "- Adds one feature ([#123](http://example.com/pr/123))\n" +
+        "- Adds a second feature ([#123](http://example.com/pr/123))\n\n" +
         "fix:\n" +
-        "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))";
+        "- Fixes a bug ([#123](http://example.com/pr/123))";
 
       // Call the function
       const actualContent = prepareChangesetEntriesContent(entryMap);
@@ -118,11 +118,11 @@ describe("Formatting Utils Tests", () => {
     test("should return an object with changeset entries categorized by their prefixes", () => {
       const expectedChangesetEntryMap = {
         feat: [
-          "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-          "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+          "- Adds one feature ([#123](http://example.com/pr/123))",
+          "- Adds a second feature ([#123](http://example.com/pr/123))",
         ],
         fix: [
-          "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+          "- Fixes a bug ([#123](http://example.com/pr/123))",
         ],
       };
 
