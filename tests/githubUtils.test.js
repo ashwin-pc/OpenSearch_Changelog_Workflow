@@ -289,15 +289,7 @@ describe("Github Utils Tests", () => {
 
   describe("handleSkipOption Tests", () => {
     const mockUpdateLabel = jest.fn();
-    const mockGetContent = jest.fn();
-
-    const octokitMock = {
-      rest: {
-        repos: {
-          getContent: mockGetContent,
-        },
-      },
-    };
+    const octokitMock = jest.fn();
 
     beforeAll(() => {
       github.getOctokit.mockImplementation(() => octokitMock);
