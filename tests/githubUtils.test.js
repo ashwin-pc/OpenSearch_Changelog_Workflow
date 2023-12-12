@@ -343,29 +343,29 @@ describe("Github Utils Tests", () => {
   });
 
   describe("getErrorComment", () => {
-    const mockError = new Error("Test error message");
-    mockError.name = "TestError";
+    const mockErrorInput = new Error("Test error message");
+    mockErrorInput.name = "TestError";
     test("returns a comment string for errors that should result in a PR comment", () => {
-      mockError.shouldResultInPRComment = true;
-      const result = getErrorComment(mockError);
-      expect(result).toBe("TestError: Test error message");
+      mockErrorInput.shouldResultInPRComment = true;
+      const result = getErrorComment(mockErrorInput);
+      expect(result).toBe("Test Error: Test error message");
     });
 
     test("returns null for errors that should not result in a PR comment", () => {
-      mockError.shouldResultInPRComment = false;
-      const result = getErrorComment(mockError);
+      mockErrorInput.shouldResultInPRComment = false;
+      const result = getErrorComment(mockErrorInput);
       expect(result).toBeNull();
     });
 
     test("returns null for errors without a shouldResultInPRComment property", () => {
-      const result = getErrorComment(mockError);
+      const result = getErrorComment(mockErrorInput);
       expect(result).toBeNull();
     });
   });
 
   describe("postPRComment", () => {
-    const mockError = new Error("Test error message");
-    const testComment = "TestError: Test error message"
+    const mockErrorInput = new Error("Test error message");
+    const testComment = "formatted comment string"
     const mockGetErrorComment = jest.fn();
     const mockCreateComment = jest.fn();
 
@@ -393,11 +393,11 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         prNumber,
-        mockError,
+        mockErrorInput,
         mockGetErrorComment
       );
 
-      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
       expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
       expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
@@ -415,10 +415,10 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         prNumber,
-        mockError,
+        mockErrorInput,
         mockGetErrorComment
       );
-      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
       expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
       expect(mockCreateComment).not.toHaveBeenCalled();
     });
@@ -432,10 +432,10 @@ describe("Github Utils Tests", () => {
         owner,
         repo,
         prNumber,
-        mockError,
+        mockErrorInput,
         mockGetErrorComment
       );
-      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
       expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
       expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
