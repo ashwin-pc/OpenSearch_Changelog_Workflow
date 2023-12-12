@@ -6,13 +6,15 @@ import {
   getErrorComment,
   postPRComment,
   createOrUpdateFile,
+} from "../utils/githubUtils.js";
+import {
   PullRequestDataExtractionError,
   GetGithubContentError,
   CreateChangesetFileError,
   UpdateChangesetFileError,
   UpdatePRLabelError,
   CategoryWithSkipOptionError,
-} from "../utils";
+} from "../utils/customErrors.js";
 import { SKIP_LABEL } from "../config/constants";
 
 // Mock the @actions/github module
@@ -365,7 +367,7 @@ describe("Github Utils Tests", () => {
 
   describe("postPRComment", () => {
     const mockErrorInput = new Error("Test error message");
-    const testComment = "formatted comment string"
+    const testComment = "formatted comment string";
     const mockGetErrorComment = jest.fn();
     const mockCreateComment = jest.fn();
 
