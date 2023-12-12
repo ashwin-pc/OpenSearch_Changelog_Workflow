@@ -43,7 +43,7 @@ async function run() {
       prepareChangelogEntry
     );
     // Check if the "skip" option is present in the entry map and respond accordingly
-    const isSkipLabelAdded = await handleSkipOption(
+    const isSkipOptionPresent = await handleSkipOption(
       octokit,
       changelogEntriesMap,
       owner,
@@ -53,7 +53,7 @@ async function run() {
     );
 
     // Skip changeset file creation if the "skip" label was added to the PR
-    if (isSkipLabelAdded) {
+    if (isSkipOptionPresent) {
       console.log("Skipping changeset creation because of 'skip' option.");
       return;
     }
