@@ -99,11 +99,11 @@ describe("Formatting Utils Tests", () => {
       mockPrepareChangelogEntry.mockClear();
     });
 
-    test("correctly initializes the array for a prefix", () => {
-      const entries = ["- feat: Adds one feature"];
+    test("correctly maps entries array to their prefixes considering one entry", () => {
+      const entries = ["- prefix_1: Some sample text"];
       mockPrepareChangelogEntry.mockReturnValueOnce([
-        "Formatted feat entry",
-        "feat",
+        "Some sample text formatted",
+        "prefix_1",
       ]);
 
       const result = prepareChangelogEntriesMap(
@@ -113,12 +113,9 @@ describe("Formatting Utils Tests", () => {
         mockPrepareChangelogEntry
       );
 
-      // Ensure that the 'feat' prefix has the array initialized with the formatted entry
       expect(result).toEqual({
-        feat: ["Formatted feat entry"],
+        prefix_1: ["Some sample text formatted"],
       });
-
-      // Verify that mockPrepareChangelogEntry is called
       expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(1);
       expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
         entries[0],
@@ -127,16 +124,16 @@ describe("Formatting Utils Tests", () => {
       );
     });
 
-    test("correctly maps entries array to their prefixes with expected output format considering all entries with different prefixes", () => {
+    test("correctly maps entries array to their prefixes considering more than one entry all with different prefixes", () => {
       const entries = [
-        "- feat: Adds one feature",
-        "- fix: Fixes a bug",
-        "- chore: Some chore",
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text",
       ];
       mockPrepareChangelogEntry
-        .mockReturnValueOnce(["Formatted feat entry", "feat"])
-        .mockReturnValueOnce(["Formatted fix entry", "fix"])
-        .mockReturnValueOnce(["Formatted chore entry", "chore"]);
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_2"])
+        .mockReturnValueOnce(["New sample text formatted", "prefix_3"]);
 
       const result = prepareChangelogEntriesMap(
         entries,
@@ -145,9 +142,9 @@ describe("Formatting Utils Tests", () => {
         mockPrepareChangelogEntry
       );
       expect(result).toEqual({
-        feat: ["Formatted feat entry"],
-        fix: ["Formatted fix entry"],
-        chore: ["Formatted chore entry"],
+        prefix_1: ["Some sample text formatted"],
+        prefix_2: ["Other sample text formatted"],
+        prefix_3: ["New sample text formatted"],
       });
       expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(entries.length);
       entries.forEach((entry) => {
@@ -159,16 +156,16 @@ describe("Formatting Utils Tests", () => {
       });
     });
 
-    test("correctly maps entries array to their prefixes with expected output format considering at least two entries with same prefixes", () => {
+    test("correctly maps entries array to their prefixes considering more than one entry with at least two of them with same prefix", () => {
       const entries = [
-        "- feat: Adds one feature",
-        "- feat: Adds one feature 2",
-        "- fix: Fixes a bug"
+        "- prefix_1: Some sample text",
+        "- prefix_1: Other sample text",
+        "- prefix_2: New sample text",
       ];
       mockPrepareChangelogEntry
-        .mockReturnValueOnce(["Formatted feat entry", "feat"])
-        .mockReturnValueOnce(["Formatted feat entry 2", "feat"])
-        .mockReturnValueOnce(["Formatted fix entry", "fix"]);
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["New sample text formatted", "prefix_2"]);
 
       const result = prepareChangelogEntriesMap(
         entries,
@@ -177,8 +174,8 @@ describe("Formatting Utils Tests", () => {
         mockPrepareChangelogEntry
       );
       expect(result).toEqual({
-        feat: ["Formatted feat entry", "Formatted feat entry 2"],
-        fix: ["Formatted fix entry"],
+        prefix_1: ["Some sample text formatted", "Other sample text formatted"],
+        prefix_2: ["New sample text formatted"],
       });
       expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(entries.length);
       entries.forEach((entry) => {
@@ -188,72 +185,107 @@ describe("Formatting Utils Tests", () => {
           prLink
         );
       });
-
     });
 
-    [
-      {
-        testName: "invalid entry at the beginning",
-        entries: [
-          "invalid entry of any type",
-          "- feat: Valid feature",
-          "- fix: Fixes a bug",
-        ],
-        expectedCalls: 1,
-      },
-      {
-        testName: "invalid entry in between",
-        entries: [
-          "- feat: Valid feature",
-          "invalid entry of any type",
-          "- fix: Fixes a bug",
-        ],
-        expectedCalls: 2,
-      },
-      {
-        testName: "invalid entry at the end",
-        entries: [
-          "- feat: Valid feature",
-          "- fix: Fixes a bug",
-          "invalid entry of any type",
-        ],
-        expectedCalls: 3,
-      },
-    ].forEach(({ testName, entries, expectedCalls }) => {
-      test(`throws an error when encounters an ${testName} of entries array`, () => {
-        for (let index in entries) {
-          if (index < expectedCalls - 1) {
-            mockPrepareChangelogEntry.mockReturnValueOnce([
-              `Formatted entry ${index}`,
-              `prefix ${index}`,
-            ]);
-          } else {
-            mockPrepareChangelogEntry.mockImplementationOnce(() => {
-              throw new Error("Invalid entry");
-            });
-            break;
-          }
-        }
+    test("throws an error when encountering an invalid entry at the beginning of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text - invalid",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text",
+      ];
+      mockPrepareChangelogEntry.mockImplementationOnce(() => {
+        throw new Error("Invalid entry");
+      });
 
-        expect(() => {
-          prepareChangelogEntriesMap(
-            entries,
-            prNumber,
-            prLink,
-            mockPrepareChangelogEntry
-          );
-        }).toThrow("Invalid entry");
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
 
-        entries.slice(0, expectedCalls).forEach((entry, index) => {
-          expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
-            entry,
-            prNumber,
-            prLink
-          );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(1);
+    });
+
+    test("throws an error when encountering an invalid entry in between of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text - invalid",
+        "- prefix_3: New sample text",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockImplementationOnce(() => {
+          throw new Error("Invalid entry");
         });
 
-        expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(expectedCalls);
-      });
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
+
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[1],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(2);
+    });
+
+    test("throws an error when encountering an invalid entry at the end of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text - invalid",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_2"])
+        .mockImplementationOnce(() => {
+          throw new Error("Invalid entry");
+        });
+
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
+
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[1],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[2],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(3);
     });
   });
 
