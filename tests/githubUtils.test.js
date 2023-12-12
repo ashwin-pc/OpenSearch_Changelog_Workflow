@@ -376,10 +376,10 @@ describe("Github Utils Tests", () => {
     });
 
     test.each([
-      ["", "returns null for errors with an empty message"],
-      [undefined, "returns null for errors with an undefined message"],
-      [123, "returns null for errors with a non-string message"],
-    ])("%s", (messageValue, description) => {
+      ["returns null for errors with an empty message", ""],
+      ["returns null for errors with an undefined message", undefined],
+      ["returns null for errors with a non-string message", 123],
+    ])("%s", (description, messageValue) => {
       const mockError = {
         message: messageValue,
         shouldResultInPRComment: true,
@@ -390,14 +390,14 @@ describe("Github Utils Tests", () => {
     });
 
     test.each([
-      ["", "returns null for errors with an empty messagePrefix"],
-      [undefined, "returns null for errors with an undefined messagePrefix"],
-      [123, "returns null for errors with a non-string messagePrefix"],
-    ])("%s", (messageValue, description) => {
+      ["returns null for errors with an empty messagePrefix", ""],
+      ["returns null for errors with an undefined messagePrefix", undefined],
+      ["returns null for errors with a non-string messagePrefix", 123],
+    ])("%s", (description, messagePrefixValue) => {
       const mockError = {
         message: "Test error message",
         shouldResultInPRComment: true,
-        messagePrefix: messageValue,
+        messagePrefix: messagePrefixValue,
       };
       const result = getErrorComment(mockError);
       expect(result).toBeNull();
