@@ -1,5 +1,5 @@
 import github from "@actions/github";
-import { CHANGESET_PATH, GITHUB_TOKEN } from "./config/index.js";
+import { CHANGESET_PATH, GITHUB_TOKEN } from "./config/constants.js";
 import {
   processLine,
   extractChangelogEntries,
