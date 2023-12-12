@@ -1,4 +1,4 @@
-import { MAX_ENTRY_LENGTH } from "../config";
+import { PREFIXES, MAX_ENTRY_LENGTH } from "../config";
 
 import {
   prepareChangelogEntry,
@@ -12,7 +12,9 @@ import {
 
 describe("Formatting Utils Tests", () => {
   const prNumber = 123;
-  const prLink = "https://github.com/TestUser/OpenSearch-Dashboards/pull/123";
+  const prLink = "http://example.com/pr/123";
+  const descriptionText = "Test description";
+
   // This array of strings is returned by the extractChangelogEntries function in the workflow, provided the "Changelog" section of the PR description is valid.
   const changesetEntries = [
     "- feat: Adds one feature",
@@ -20,74 +22,33 @@ describe("Formatting Utils Tests", () => {
     "- feat: Adds a second feature",
   ];
 
-  describe("prepareChangelogEntriesMap", () => {
-    test("should return an object with changeset entries categorized by their prefixes", () => {
-      const expectedChangesetEntryMap = {
-        feat: [
-          "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-          "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        ],
-        fix: [
-          "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        ],
-      };
-
-      const actualChangesetEntryMap = prepareChangelogEntriesMap(
-        changesetEntries,
-        prNumber,
-        prLink
-      );
-
-      expect(actualChangesetEntryMap).toEqual(expectedChangesetEntryMap);
-    });
-  });
-
   describe("prepareChangelogEntry", () => {
-    test("when provided with a single invalid changeset entry, should return a tuple containing the formatted changeset entry and the identified prefix", () => {
-      const expectedTupleOne = [
-        "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        "feat",
-      ];
-      const expectedTupleTwo = [
-        "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        "fix",
-      ];
-
-      const actualTupleOne = prepareChangelogEntry(
-        changesetEntries[0],
-        prNumber,
-        prLink
-      );
-      const actualTupleTwo = prepareChangelogEntry(
-        changesetEntries[1],
-        prNumber,
-        prLink
-      );
-
-      expect(actualTupleOne).toEqual(expectedTupleOne);
-      expect(actualTupleTwo).toEqual(expectedTupleTwo);
-    });
-
-    test("with 'skip' prefix, should return an empty string and 'skip'", () => {
-      const skipEntry = "- skip: This change should be skipped";
-      const expectedTuple = ["", "skip"];
-      const actualTuple = prepareChangelogEntry(skipEntry, prNumber, prLink);
-      expect(actualTuple).toEqual(expectedTuple);
-    });
+    test.each(PREFIXES)(
+      `correctly prepare changelog entry for "%s" prefix`,
+      (prefix) => {
+        const entry = `- ${prefix}: ${descriptionText}`;
+        const expectedOutput =
+          prefix === "skip"
+            ? ""
+            : `- ${
+                descriptionText.charAt(0).toUpperCase() +
+                descriptionText.slice(1)
+              } ([#${prNumber}](${prLink}))`;
+        expect(prepareChangelogEntry(entry, prNumber, prLink)).toEqual([
+          expectedOutput,
+          prefix,
+        ]);
+      }
+    );
 
     test("with invalid prefix, should throw InvalidPrefixError", () => {
       const invalidPrefix = "invalid";
       const invalidEntry = `- ${invalidPrefix}: This is an invalid prefix`;
+      const expectedErrorMessage = `Invalid description prefix. Found "${invalidPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
+
       expect(() => {
         prepareChangelogEntry(invalidEntry, prNumber, prLink);
       }).toThrow(InvalidPrefixError);
-    });
-
-    test("with invalid prefix, should throw InvalidPrefixError with the correct message", () => {
-      const invalidPrefix = "invalid";
-      const invalidEntry = `- ${invalidPrefix}: This is an invalid prefix`;
-      const expectedErrorMessage = `Invalid description prefix. Found "${invalidPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
-
       expect(() => {
         prepareChangelogEntry(invalidEntry, prNumber, prLink);
       }).toThrow(expectedErrorMessage);
@@ -104,15 +65,6 @@ describe("Formatting Utils Tests", () => {
       const longEntryText =
         " a very long entry with too much text that exceeds the maximum allowed length";
       const longEntry = `- feat:${longEntryText}`;
-      expect(() => {
-        prepareChangelogEntry(longEntry, prNumber, prLink);
-      }).toThrow(EntryTooLongError);
-    });
-
-    test("with entry too long, should throw an error with the correct message", () => {
-      const longEntryText =
-        "a very long entry with too much text that exceeds the maximum allowed length";
-      const longEntry = `- feat:${longEntryText}`;
       const characterOverage = longEntryText.length - MAX_ENTRY_LENGTH;
       const expectedErrorMessage = `Entry is ${
         longEntryText.length
@@ -122,10 +74,13 @@ describe("Formatting Utils Tests", () => {
 
       expect(() => {
         prepareChangelogEntry(longEntry, prNumber, prLink);
+      }).toThrow(EntryTooLongError);
+      expect(() => {
+        prepareChangelogEntry(longEntry, prNumber, prLink);
       }).toThrow(expectedErrorMessage);
     });
 
-    test("entry missing hyphen, should throw ChangelogEntryMissingHyphenError", () => {
+    test("with entry missing hyphen, should throw ChangelogEntryMissingHyphenError", () => {
       const noHyphenEntry = "feat: Missing hyphen at start";
       expect(() => {
         prepareChangelogEntry(noHyphenEntry, prNumber, prLink);
@@ -155,6 +110,29 @@ describe("Formatting Utils Tests", () => {
 
       // Assert the output
       expect(actualContent).toBe(expectedContent);
+    });
+  });
+
+  describe("prepareChangelogEntriesMap", () => {
+    test("should return an object with changeset entries categorized by their prefixes", () => {
+      const expectedChangesetEntryMap = {
+        feat: [
+          "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+          "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+        ],
+        fix: [
+          "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+        ],
+      };
+
+      const actualChangesetEntryMap = prepareChangelogEntriesMap(
+        changesetEntries,
+        prNumber,
+        prLink,
+        prepareChangelogEntry
+      );
+
+      expect(actualChangesetEntryMap).toEqual(expectedChangesetEntryMap);
     });
   });
 });
