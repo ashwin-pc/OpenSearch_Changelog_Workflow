@@ -200,9 +200,9 @@ export const postPRComment = async (
         body: comment,
       });
       console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
-    } catch (postError) {
+    } catch (error) {
       console.error(
-        `Error posting comment to PR #${prNumber}: ${postError.message}`
+        `Error posting comment to PR #${prNumber}: ${error.message}`
       );
     }
   } else {

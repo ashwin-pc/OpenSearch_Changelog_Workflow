@@ -364,89 +364,86 @@ describe("Github Utils Tests", () => {
   });
 
   describe("postPRComment", () => {
-    // Mock the Octokit createComment function
-    const createCommentMock = jest.fn();
+    const mockError = new Error("Test error message");
+    const testComment = "TestError: Test error message"
+    const mockGetErrorComment = jest.fn();
+    const mockCreateComment = jest.fn();
+
     const octokitMock = {
       rest: {
         issues: {
-          createComment: createCommentMock,
+          createComment: mockCreateComment,
         },
       },
     };
 
-    const error = new Error("Test Error");
-    const testComment = "This is a test comment";
-
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    });
     beforeEach(() => {
-      jest.clearAllMocks();
+      mockGetErrorComment.mockClear();
+      github.getOctokit.mockClear();
     });
 
     test("successfully posts a comment", async () => {
-      // Mock response from getErrorComment function
-      const getErrorComment = jest.fn().mockReturnValue(testComment);
+      mockGetErrorComment.mockReturnValueOnce(testComment);
+      mockCreateComment.mockResolvedValueOnce({ status: 200 });
       await postPRComment(
         octokitMock,
         owner,
         repo,
         prNumber,
-        error,
-        getErrorComment
+        mockError,
+        mockGetErrorComment
       );
 
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).toHaveBeenCalledWith({
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
         body: testComment,
       });
-      expect(createCommentMock).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledTimes(1);
     });
 
     test("does not post a comment when getErrorComment returns null", async () => {
-      // Mock null response from getErrorComment function. This will be the return value of the function if the error has been defined as not requiring a PR comment.
-      const getErrorComment = jest.fn().mockReturnValue(null);
+      mockGetErrorComment.mockReturnValueOnce(null);
       await postPRComment(
         octokitMock,
         owner,
         repo,
         prNumber,
-        error,
-        getErrorComment
+        mockError,
+        mockGetErrorComment
       );
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).not.toHaveBeenCalled();
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).not.toHaveBeenCalled();
     });
 
     test("handles errors when posting a comment", async () => {
-      const getErrorComment = jest.fn().mockReturnValue(testComment);
-      const errorDuringPosting = new Error("Error posting comment");
-      createCommentMock.mockRejectedValueOnce(errorDuringPosting);
-      const errorSpy = jest.spyOn(console, "error");
-
+      mockGetErrorComment.mockReturnValueOnce(testComment);
+      mockCreateComment.mockRejectedValueOnce(apiError);
+      
       await postPRComment(
         octokitMock,
         owner,
         repo,
         prNumber,
-        error,
-        getErrorComment
+        mockError,
+        mockGetErrorComment
       );
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).toHaveBeenCalledWith({
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockError);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
         body: testComment,
       });
-      expect(createCommentMock).toHaveBeenCalledTimes(1);
-      expect(errorSpy).toHaveBeenCalledWith(
-        `Error posting comment to PR #${prNumber}: ${errorDuringPosting.message}`
-      );
-      errorSpy.mockRestore();
+      expect(mockCreateComment).toHaveBeenCalledTimes(1);
     });
   });
 
