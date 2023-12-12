@@ -1,9 +1,12 @@
 import {
   processLine,
   extractChangelogEntries,
+} from "../utils/changelogParser.js";
+
+import {
   EmptyChangelogSectionError,
   InvalidChangelogHeadingError,
-} from "../utils";
+} from "../utils/customErrors.js";
 
 describe("Changelog Parser Tests", () => {
   describe("processLine", () => {
