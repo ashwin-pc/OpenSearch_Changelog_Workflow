@@ -289,16 +289,30 @@ describe("Github Utils Tests", () => {
 
   describe("handleSkipOption Tests", () => {
     const mockUpdateLabel = jest.fn();
+    const mockGetContent = jest.fn();
 
+    const octokitMock = {
+      rest: {
+        repos: {
+          getContent: mockGetContent,
+        },
+      },
+    };
+
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    })
     beforeEach(() => {
+      github.getOctokit.mockClear();
       mockUpdateLabel.mockClear();
     });
 
     test("calls updateLabel() with 'skip-changelog' label when 'skip' is the only entry in entryMap param", async () => {
       const entryMap = { skip: "" };
-      await handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel);
+      await handleSkipOption(octokitMock, entryMap, owner, repo, prNumber, mockUpdateLabel);
 
       expect(mockUpdateLabel).toHaveBeenCalledWith(
+        octokitMock,
         owner,
         repo,
         prNumber,
@@ -311,7 +325,7 @@ describe("Github Utils Tests", () => {
     test("throws CategoryWithSkipOptionError when 'skip' and other entries are present", async () => {
       const entryMap = { skip: "", other: "data" };
       await expect(
-        handleSkipOption(entryMap, owner, repo, prNumber, mockUpdateLabel)
+        handleSkipOption(octokitMock, entryMap, owner, repo, prNumber, mockUpdateLabel)
       ).rejects.toThrow(CategoryWithSkipOptionError);
 
       expect(mockUpdateLabel).not.toHaveBeenCalled();
@@ -325,6 +339,7 @@ describe("Github Utils Tests", () => {
       "calls updateLabel() with 'skip-changelog' label when entry is %s",
       async (entryMap, description) => {
         await handleSkipOption(
+          octokitMock,
           entryMap,
           owner,
           repo,
@@ -333,6 +348,7 @@ describe("Github Utils Tests", () => {
         );
 
         expect(mockUpdateLabel).toHaveBeenCalledWith(
+          octokitMock,
           owner,
           repo,
           prNumber,
