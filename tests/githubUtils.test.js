@@ -348,7 +348,7 @@ describe("Github Utils Tests", () => {
     test("returns a comment string for errors that should result in a PR comment", () => {
       mockErrorInput.shouldResultInPRComment = true;
       const result = getErrorComment(mockErrorInput);
-      expect(result).toBe("Test Error: Test error message");
+      expect(result).toBe("TestError: Test error message");
     });
 
     test("returns null for errors that should not result in a PR comment", () => {
