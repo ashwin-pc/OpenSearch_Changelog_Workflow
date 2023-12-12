@@ -21,7 +21,6 @@ describe("Custom Errors Tests", () => {
     expect(error.message).toBe("Error extracting data from Pull Request");
     expect(error.name).toBe("PullRequestDataExtractionError");
     expect(error.shouldResultInPRComment).toBe(false);
-    expect(error.messagePrefix).toBe("Pull Request Data Extraction Error");
   });
 
   test("GetGithubContentError default message", () => {
@@ -29,7 +28,6 @@ describe("Custom Errors Tests", () => {
     expect(error.message).toBe("Error retrieving content from GitHub repository");
     expect(error.name).toBe("GetGithubContentError");
     expect(error.shouldResultInPRComment).toBe(false);
-    expect(error.messagePrefix).toBe("Get Github Content Error");
   });
 
   test("CreateChangesetFileError default message", () => {
@@ -37,7 +35,6 @@ describe("Custom Errors Tests", () => {
     expect(error.message).toBe("Error creating changeset file");
     expect(error.name).toBe("CreateChangesetFileError");
     expect(error.shouldResultInPRComment).toBe(false);
-    expect(error.messagePrefix).toBe("Create Changeset File Error");
   });
 
   test("UpdateChangesetFileError default message", () => {
@@ -45,7 +42,6 @@ describe("Custom Errors Tests", () => {
     expect(error.message).toBe("Error updating changeset file");
     expect(error.name).toBe("UpdateChangesetFileError");
     expect(error.shouldResultInPRComment).toBe(false);
-    expect(error.messagePrefix).toBe("Update Changeset File Error");
   });
 
   test("UpdatePRLabelError default message", () => {
@@ -55,7 +51,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("UpdatePRLabelError");
     expect(error.shouldResultInPRComment).toBe(false);
-    expect(error.messagePrefix).toBe("Update PR Label Error");
   });
 
   test("InvalidChangelogHeadingError default message", () => {
@@ -65,7 +60,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("InvalidChangelogHeadingError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Invalid Changelog Heading Error");
   });
 
   test("EmptyChangelogSectionError default message", () => {
@@ -75,7 +69,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("EmptyChangelogSectionError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Empty Changelog Section Error");
   });
 
   test("EntryTooLongError default message", () => {
@@ -89,7 +82,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("EntryTooLongError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Entry Too Long Error");
   });
 
   test("InvalidPrefixError with foundPrefix", () => {
@@ -100,7 +92,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("InvalidPrefixError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Invalid Prefix Error");
   });
 
   test("CategoryWithSkipOptionError default message", () => {
@@ -110,7 +101,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("CategoryWithSkipOptionError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Category With Skip Option Error");
   });
 
   test("ChangelogEntryMissingHyphenError default message", () => {
@@ -120,7 +110,6 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("ChangelogEntryMissingHyphenError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Changelog Entry Missing Hyphen Error");
   });
 
   test("EmptyEntryDescriptionError with foundPrefix", () => {
@@ -131,6 +120,5 @@ describe("Custom Errors Tests", () => {
     );
     expect(error.name).toBe("EmptyEntryDescriptionError");
     expect(error.shouldResultInPRComment).toBe(true);
-    expect(error.messagePrefix).toBe("Empty Entry Description Error");
   });
 });
