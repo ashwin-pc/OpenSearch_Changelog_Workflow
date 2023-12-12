@@ -1,4 +1,4 @@
-import { PREFIXES, MAX_ENTRY_LENGTH } from "../config/constants.js";
+import { CHANGELOG_ENTRY_PREFIXES, MAX_ENTRY_LENGTH } from "../config/constants.js";
 import {
   prepareChangelogEntry,
   prepareChangelogEntriesMap,
@@ -17,7 +17,7 @@ describe("Formatting Utils Tests", () => {
 
   describe("prepareChangelogEntry", () => {
     const descriptionText = "test description";
-    test.each(PREFIXES)(
+    test.each(CHANGELOG_ENTRY_PREFIXES)(
       `correctly prepare formatted changelog entry for "%s" prefix`,
       (prefix) => {
         const entry = `- ${prefix}: ${descriptionText}`;

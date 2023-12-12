@@ -1,7 +1,7 @@
 
 /**
  * ****************************************************
- * I) ENTRY PREFIXES
+ * I) CHANGELOG ENTRY PREFIXES
  * ****************************************************
  */
 
@@ -9,7 +9,7 @@
  * Define the prefixes that can be used in the changelog entries.
  * @type {string[]}
  */
-export const PREFIXES = [
+export const CHANGELOG_ENTRY_PREFIXES = [
   "breaking",
   "deprecate",
   "feat",
@@ -90,7 +90,7 @@ export const GITHUB_TOKEN = process.env.INPUT_TOKEN;
  */
 export const CHANGESET_PATH = process.env.INPUT_CHANGESET_PATH;
 
-/** 
+/**
 * The label that will be added to the PR if the "skip" option is used.
 * @type {string}
 */

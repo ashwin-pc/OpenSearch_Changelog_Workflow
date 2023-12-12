@@ -1,6 +1,6 @@
 import {
   ENTRY_FORMATTING_PATTERN_REGEX,
-  PREFIXES,
+  CHANGELOG_ENTRY_PREFIXES,
   MAX_ENTRY_LENGTH,
 } from "../config/constants.js";
 import {
@@ -38,7 +38,7 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
     if (prefix === "skip") {
       return ["", "skip"];
     } else {
-      if (!PREFIXES.includes(prefix.toLowerCase()))
+      if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
       else if (!text) throw new EmptyEntryDescriptionError(prefix);
       else if (trimmedText.length > MAX_ENTRY_LENGTH)
