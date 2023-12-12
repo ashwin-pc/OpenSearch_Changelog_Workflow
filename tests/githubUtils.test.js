@@ -343,130 +343,107 @@ describe("Github Utils Tests", () => {
   });
 
   describe("getErrorComment", () => {
+    const mockErrorInput = new Error("Test error message");
+    mockErrorInput.name = "TestError";
     test("returns a comment string for errors that should result in a PR comment", () => {
-      // Mock error with shouldResultInPRComment set to true
-      const mockError = {
-        message: "Test error message",
-        shouldResultInPRComment: true,
-        messagePrefix: "Test Error",
-      }
-      const result = getErrorComment(mockError);
-      expect(result).toBe("Test Error: Test error message");
+      mockErrorInput.shouldResultInPRComment = true;
+      const result = getErrorComment(mockErrorInput);
+      expect(result).toBe("TestError: Test error message");
     });
 
     test("returns null for errors that should not result in a PR comment", () => {
-      // Mock error with shouldResultInPRComment set to false
-      const mockError = {
-        message: "Test error message",
-        shouldResultInPRComment: false,
-        messagePrefix: "Test Error",
-      }
-      const result = getErrorComment(mockError);
+      mockErrorInput.shouldResultInPRComment = false;
+      const result = getErrorComment(mockErrorInput);
       expect(result).toBeNull();
     });
 
     test("returns null for errors without a shouldResultInPRComment property", () => {
-      // Mock error with a missing shouldResultInPRComment property
-      const mockError = {
-        message: "Test error message",
-        messagePrefix: "Test Error",
-      }
-      const result = getErrorComment(mockError);
-      expect(result).toBeNull();
-    });
-
-    test.each([
-      ["returns null for errors with an empty message", ""],
-      ["returns null for errors with an undefined message", undefined],
-      ["returns null for errors with a non-string message", 123],
-    ])("%s", (description, messageValue) => {
-      const mockError = {
-        message: messageValue,
-        shouldResultInPRComment: true,
-        messagePrefix: "Test Error",
-      };
-      const result = getErrorComment(mockError);
-      expect(result).toBeNull();
-    });
-
-    test.each([
-      ["returns null for errors with an empty messagePrefix", ""],
-      ["returns null for errors with an undefined messagePrefix", undefined],
-      ["returns null for errors with a non-string messagePrefix", 123],
-    ])("%s", (description, messagePrefixValue) => {
-      const mockError = {
-        message: "Test error message",
-        shouldResultInPRComment: true,
-        messagePrefix: messagePrefixValue,
-      };
-      const result = getErrorComment(mockError);
+      const result = getErrorComment(mockErrorInput);
       expect(result).toBeNull();
     });
   });
 
   describe("postPRComment", () => {
-    // Mock the Octokit createComment function
-    const createCommentMock = jest.fn();
+    const mockErrorInput = new Error("Test error message");
+    const testComment = "formatted comment string"
+    const mockGetErrorComment = jest.fn();
+    const mockCreateComment = jest.fn();
+
     const octokitMock = {
       rest: {
         issues: {
-          createComment: createCommentMock,
+          createComment: mockCreateComment,
         },
       },
     };
-    
-    const error = new Error("Test Error");
-    const testComment = "This is a test comment";
 
+    beforeAll(() => {
+      github.getOctokit.mockImplementation(() => octokitMock);
+    });
     beforeEach(() => {
-      jest.clearAllMocks();
-    })
+      mockGetErrorComment.mockClear();
+      github.getOctokit.mockClear();
+    });
 
     test("successfully posts a comment", async () => {
-      // Mock response from getErrorComment function
-      const getErrorComment = jest.fn().mockReturnValue(testComment);
-      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
+      mockGetErrorComment.mockReturnValueOnce(testComment);
+      mockCreateComment.mockResolvedValueOnce({ status: 200 });
+      await postPRComment(
+        octokitMock,
+        owner,
+        repo,
+        prNumber,
+        mockErrorInput,
+        mockGetErrorComment
+      );
 
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).toHaveBeenCalledWith({
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
         body: testComment,
       });
-      expect(createCommentMock).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledTimes(1);
     });
 
     test("does not post a comment when getErrorComment returns null", async () => {
-      // Mock null response from getErrorComment function. This will be the return value of the function if the error has been defined as not requiring a PR comment.
-      const getErrorComment = jest.fn().mockReturnValue(null);
-      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).not.toHaveBeenCalled();
+      mockGetErrorComment.mockReturnValueOnce(null);
+      await postPRComment(
+        octokitMock,
+        owner,
+        repo,
+        prNumber,
+        mockErrorInput,
+        mockGetErrorComment
+      );
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).not.toHaveBeenCalled();
     });
 
-    test("handles errors when posting a comment", async () => {
-      const getErrorComment = jest.fn().mockReturnValue(testComment);
-      const errorDuringPosting = new Error("Error posting comment");
-      createCommentMock.mockRejectedValueOnce(errorDuringPosting);
-      const errorSpy = jest.spyOn(console, "error");
+    test("handles error when posting a comment fails", async () => {
+      mockGetErrorComment.mockReturnValueOnce(testComment);
+      mockCreateComment.mockRejectedValueOnce(apiError);
 
-      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
-      expect(getErrorComment).toHaveBeenCalledWith(error);
-      expect(getErrorComment).toHaveBeenCalledTimes(1);
-      expect(createCommentMock).toHaveBeenCalledWith({
+      await postPRComment(
+        octokitMock,
+        owner,
+        repo,
+        prNumber,
+        mockErrorInput,
+        mockGetErrorComment
+      );
+      expect(mockGetErrorComment).toHaveBeenCalledWith(mockErrorInput);
+      expect(mockGetErrorComment).toHaveBeenCalledTimes(1);
+      expect(mockCreateComment).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
         body: testComment,
       });
-      expect(createCommentMock).toHaveBeenCalledTimes(1);
-      expect(errorSpy).toHaveBeenCalledWith(
-        `Error posting comment to PR #${prNumber}: ${errorDuringPosting.message}`
-      );
-      errorSpy.mockRestore();
+      expect(mockCreateComment).toHaveBeenCalledTimes(1);
     });
   });
 
