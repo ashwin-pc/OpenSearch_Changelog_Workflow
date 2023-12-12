@@ -99,7 +99,35 @@ describe("Formatting Utils Tests", () => {
       mockPrepareChangelogEntry.mockClear();
     });
 
-    test("correctly maps entries array to their prefixes with expected output format", () => {
+    test("correctly initializes the array for a prefix", () => {
+      const entries = ["- feat: Adds one feature"];
+      mockPrepareChangelogEntry.mockReturnValueOnce([
+        "Formatted feat entry",
+        "feat",
+      ]);
+
+      const result = prepareChangelogEntriesMap(
+        entries,
+        prNumber,
+        prLink,
+        mockPrepareChangelogEntry
+      );
+
+      // Ensure that the 'feat' prefix has the array initialized with the formatted entry
+      expect(result).toEqual({
+        feat: ["Formatted feat entry"],
+      });
+
+      // Verify that mockPrepareChangelogEntry is called
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(1);
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+    });
+
+    test("correctly maps entries array to their prefixes with expected output format considering all entries with different prefixes", () => {
       const entries = [
         "- feat: Adds one feature",
         "- fix: Fixes a bug",
@@ -129,6 +157,38 @@ describe("Formatting Utils Tests", () => {
           prLink
         );
       });
+    });
+
+    test("correctly maps entries array to their prefixes with expected output format considering at least two entries with same prefixes", () => {
+      const entries = [
+        "- feat: Adds one feature",
+        "- feat: Adds one feature 2",
+        "- fix: Fixes a bug"
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Formatted feat entry", "feat"])
+        .mockReturnValueOnce(["Formatted feat entry 2", "feat"])
+        .mockReturnValueOnce(["Formatted fix entry", "fix"]);
+
+      const result = prepareChangelogEntriesMap(
+        entries,
+        prNumber,
+        prLink,
+        mockPrepareChangelogEntry
+      );
+      expect(result).toEqual({
+        feat: ["Formatted feat entry", "Formatted feat entry 2"],
+        fix: ["Formatted fix entry"],
+      });
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(entries.length);
+      entries.forEach((entry) => {
+        expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+          entry,
+          prNumber,
+          prLink
+        );
+      });
+
     });
 
     [
@@ -203,9 +263,7 @@ describe("Formatting Utils Tests", () => {
         prefix_1: ["- Some sample text", "- Other sample text"],
       };
       const expectedContent =
-        `prefix_1:\n` +
-        `- Some sample text\n` +
-        `- Other sample text`;
+        `prefix_1:\n` + `- Some sample text\n` + `- Other sample text`;
 
       const result = prepareChangesetEntriesContent(changelogEntriesMap);
       expect(result).toBe(expectedContent);
