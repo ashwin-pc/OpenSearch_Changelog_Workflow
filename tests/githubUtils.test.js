@@ -423,10 +423,10 @@ describe("Github Utils Tests", () => {
       expect(mockCreateComment).not.toHaveBeenCalled();
     });
 
-    test("handles errors when posting a comment", async () => {
+    test("handles error when posting a comment fails", async () => {
       mockGetErrorComment.mockReturnValueOnce(testComment);
       mockCreateComment.mockRejectedValueOnce(apiError);
-      
+
       await postPRComment(
         octokitMock,
         owner,
