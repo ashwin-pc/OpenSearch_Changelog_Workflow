@@ -1,8 +1,8 @@
-import { MAX_ENTRY_LENGTH } from "../config";
+import { PREFIXES, MAX_ENTRY_LENGTH } from "../config";
 
 import {
-  prepareChangesetEntryMap,
-  prepareChangesetEntry,
+  prepareChangelogEntry,
+  prepareChangelogEntriesMap,
   prepareChangesetEntriesContent,
   InvalidPrefixError,
   EmptyEntryDescriptionError,
@@ -12,106 +12,62 @@ import {
 
 describe("Formatting Utils Tests", () => {
   const prNumber = 123;
-  const prLink = "https://github.com/TestUser/OpenSearch-Dashboards/pull/123";
-  // This array of strings is returned by the extractChangelogEntries function in the workflow, provided the "Changelog" section of the PR description is valid.
-  const changesetEntries = [
-    "- feat: Adds one feature",
-    "- fix: Fixes a bug",
-    "- feat: Adds a second feature",
-  ];
+  const prLink = `http://example.com/pr/${prNumber}`;
 
-  describe("prepareChangesetEntryMap", () => {
-    test("should return an object with changeset entries categorized by their prefixes", () => {
-      const expectedChangesetEntryMap = {
-        feat: [
-          "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-          "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        ],
-        fix: [
-          "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        ],
-      };
+  describe("prepareChangelogEntry", () => {
+    const descriptionText = "test description";
+    test.each(PREFIXES)(
+      `correctly prepare formatted changelog entry for "%s" prefix`,
+      (prefix) => {
+        const entry = `- ${prefix}: ${descriptionText}`;
+        const [formattedEntry, returnedPrefix] = prepareChangelogEntry(
+          entry,
+          prNumber,
+          prLink
+        );
 
-      const actualChangesetEntryMap = prepareChangesetEntryMap(
-        changesetEntries,
-        prNumber,
-        prLink
-      );
+        const expectedOutput =
+          prefix === "skip"
+            ? ""
+            : `- ${
+                descriptionText.charAt(0).toUpperCase() +
+                descriptionText.slice(1)
+              } ([#${prNumber}](${prLink}))`;
 
-      expect(actualChangesetEntryMap).toEqual(expectedChangesetEntryMap);
-    });
-  });
-
-  describe("prepareChangesetEntry", () => {
-    test("when provided with a single invalid changeset entry, should return a tuple containing the formatted changeset entry and the identified prefix", () => {
-      const expectedTupleOne = [
-        "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        "feat",
-      ];
-      const expectedTupleTwo = [
-        "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-        "fix",
-      ];
-
-      const actualTupleOne = prepareChangesetEntry(
-        changesetEntries[0],
-        prNumber,
-        prLink
-      );
-      const actualTupleTwo = prepareChangesetEntry(
-        changesetEntries[1],
-        prNumber,
-        prLink
-      );
-
-      expect(actualTupleOne).toEqual(expectedTupleOne);
-      expect(actualTupleTwo).toEqual(expectedTupleTwo);
-    });
-
-    test("with 'skip' prefix, should return an empty string and 'skip'", () => {
-      const skipEntry = "- skip: This change should be skipped";
-      const expectedTuple = ["", "skip"];
-      const actualTuple = prepareChangesetEntry(skipEntry, prNumber, prLink);
-      expect(actualTuple).toEqual(expectedTuple);
-    });
+        expect(formattedEntry).toEqual(expectedOutput);
+        expect(returnedPrefix).toEqual(prefix);
+        // Check capitalization of the first letter of formattedEntry
+        if (prefix !== "skip") {
+          expect(formattedEntry.charAt(2)).toEqual(
+            descriptionText.charAt(0).toUpperCase()
+          );
+        }
+      }
+    );
 
     test("with invalid prefix, should throw InvalidPrefixError", () => {
-      const invalidPrefix = "invalid";
-      const invalidEntry = `- ${invalidPrefix}: This is an invalid prefix`;
-      expect(() => {
-        prepareChangesetEntry(invalidEntry, prNumber, prLink);
-      }).toThrow(InvalidPrefixError);
-    });
-
-    test("with invalid prefix, should throw InvalidPrefixError with the correct message", () => {
       const invalidPrefix = "invalid";
       const invalidEntry = `- ${invalidPrefix}: This is an invalid prefix`;
       const expectedErrorMessage = `Invalid description prefix. Found "${invalidPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
 
       expect(() => {
-        prepareChangesetEntry(invalidEntry, prNumber, prLink);
+        prepareChangelogEntry(invalidEntry, prNumber, prLink);
+      }).toThrow(InvalidPrefixError);
+      expect(() => {
+        prepareChangelogEntry(invalidEntry, prNumber, prLink);
       }).toThrow(expectedErrorMessage);
     });
 
     test("with empty entry description, should throw EmptyEntryDescriptionError", () => {
       const emptyDescriptionEntry = "- feat:";
       expect(() => {
-        prepareChangesetEntry(emptyDescriptionEntry, prNumber, prLink);
+        prepareChangelogEntry(emptyDescriptionEntry, prNumber, prLink);
       }).toThrow(EmptyEntryDescriptionError);
     });
 
     test("with entry too long, should throw EntryTooLongError", () => {
       const longEntryText =
         " a very long entry with too much text that exceeds the maximum allowed length";
-      const longEntry = `- feat:${longEntryText}`;
-      expect(() => {
-        prepareChangesetEntry(longEntry, prNumber, prLink);
-      }).toThrow(EntryTooLongError);
-    });
-
-    test("with entry too long, should throw an error with the correct message", () => {
-      const longEntryText =
-        "a very long entry with too much text that exceeds the maximum allowed length";
       const longEntry = `- feat:${longEntryText}`;
       const characterOverage = longEntryText.length - MAX_ENTRY_LENGTH;
       const expectedErrorMessage = `Entry is ${
@@ -121,40 +77,250 @@ describe("Formatting Utils Tests", () => {
       } longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters.`;
 
       expect(() => {
-        prepareChangesetEntry(longEntry, prNumber, prLink);
+        prepareChangelogEntry(longEntry, prNumber, prLink);
+      }).toThrow(EntryTooLongError);
+      expect(() => {
+        prepareChangelogEntry(longEntry, prNumber, prLink);
       }).toThrow(expectedErrorMessage);
     });
 
-    test("entry missing hyphen, should throw ChangelogEntryMissingHyphenError", () => {
+    test("with entry missing hyphen, should throw ChangelogEntryMissingHyphenError", () => {
       const noHyphenEntry = "feat: Missing hyphen at start";
       expect(() => {
-        prepareChangesetEntry(noHyphenEntry, prNumber, prLink);
+        prepareChangelogEntry(noHyphenEntry, prNumber, prLink);
       }).toThrow(ChangelogEntryMissingHyphenError);
     });
   });
 
-  describe("prepareChangesetEntriesContent", () => {
-    test("should return formatted content for the changeset file based on the entry map generated by prepareChangesetEntryMap", () => {
-      // Generate the entry map using prepareChangesetEntryMap
-      const entryMap = prepareChangesetEntryMap(
-        changesetEntries,
+  describe("prepareChangelogEntriesMap", () => {
+    const mockPrepareChangelogEntry = jest.fn();
+
+    beforeEach(() => {
+      mockPrepareChangelogEntry.mockClear();
+    });
+
+    test("correctly maps entries array to their prefixes considering one entry", () => {
+      const entries = ["- prefix_1: Some sample text"];
+      mockPrepareChangelogEntry.mockReturnValueOnce([
+        "Some sample text formatted",
+        "prefix_1",
+      ]);
+
+      const result = prepareChangelogEntriesMap(
+        entries,
+        prNumber,
+        prLink,
+        mockPrepareChangelogEntry
+      );
+
+      expect(result).toEqual({
+        prefix_1: ["Some sample text formatted"],
+      });
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(1);
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
         prNumber,
         prLink
       );
+    });
 
-      // Define the expected output
+    test("correctly maps entries array to their prefixes considering more than one entry all with different prefixes", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_2"])
+        .mockReturnValueOnce(["New sample text formatted", "prefix_3"]);
+
+      const result = prepareChangelogEntriesMap(
+        entries,
+        prNumber,
+        prLink,
+        mockPrepareChangelogEntry
+      );
+      expect(result).toEqual({
+        prefix_1: ["Some sample text formatted"],
+        prefix_2: ["Other sample text formatted"],
+        prefix_3: ["New sample text formatted"],
+      });
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(entries.length);
+      entries.forEach((entry) => {
+        expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+          entry,
+          prNumber,
+          prLink
+        );
+      });
+    });
+
+    test("correctly maps entries array to their prefixes considering more than one entry with at least two of them with same prefix", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_1: Other sample text",
+        "- prefix_2: New sample text",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["New sample text formatted", "prefix_2"]);
+
+      const result = prepareChangelogEntriesMap(
+        entries,
+        prNumber,
+        prLink,
+        mockPrepareChangelogEntry
+      );
+      expect(result).toEqual({
+        prefix_1: ["Some sample text formatted", "Other sample text formatted"],
+        prefix_2: ["New sample text formatted"],
+      });
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(entries.length);
+      entries.forEach((entry) => {
+        expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+          entry,
+          prNumber,
+          prLink
+        );
+      });
+    });
+
+    test("throws an error when encountering an invalid entry at the beginning of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text - invalid",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text",
+      ];
+      mockPrepareChangelogEntry.mockImplementationOnce(() => {
+        throw new Error("Invalid entry");
+      });
+
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
+
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(1);
+    });
+
+    test("throws an error when encountering an invalid entry in between of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text - invalid",
+        "- prefix_3: New sample text",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockImplementationOnce(() => {
+          throw new Error("Invalid entry");
+        });
+
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
+
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[1],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(2);
+    });
+
+    test("throws an error when encountering an invalid entry at the end of entries array", () => {
+      const entries = [
+        "- prefix_1: Some sample text",
+        "- prefix_2: Other sample text",
+        "- prefix_3: New sample text - invalid",
+      ];
+      mockPrepareChangelogEntry
+        .mockReturnValueOnce(["Some sample text formatted", "prefix_1"])
+        .mockReturnValueOnce(["Other sample text formatted", "prefix_2"])
+        .mockImplementationOnce(() => {
+          throw new Error("Invalid entry");
+        });
+
+      expect(() => {
+        prepareChangelogEntriesMap(
+          entries,
+          prNumber,
+          prLink,
+          mockPrepareChangelogEntry
+        );
+      }).toThrow("Invalid entry");
+
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[0],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[1],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledWith(
+        entries[2],
+        prNumber,
+        prLink
+      );
+      expect(mockPrepareChangelogEntry).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  describe("prepareChangesetEntriesContent", () => {
+    test("correctly formats changeset entries content for one pefix type", () => {
+      const changelogEntriesMap = {
+        prefix_1: ["- Some sample text", "- Other sample text"],
+      };
       const expectedContent =
-        "feat:\n" +
-        "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n" +
-        "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))\n\n" +
-        "fix:\n" +
-        "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))";
+        `prefix_1:\n` + `- Some sample text\n` + `- Other sample text`;
 
-      // Call the function
-      const actualContent = prepareChangesetEntriesContent(entryMap);
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
+      expect(result).toBe(expectedContent);
+    });
 
-      // Assert the output
-      expect(actualContent).toBe(expectedContent);
+    test("correctly formats changeset entries content for more than one pefix type", () => {
+      const changelogEntriesMap = {
+        prefix_1: ["- Some sample text", "- Other sample text"],
+        prefix_2: ["- New sample text"],
+      };
+      const expectedContent =
+        `prefix_1:\n` +
+        `- Some sample text\n` +
+        `- Other sample text\n\n` +
+        `prefix_2:\n` +
+        `- New sample text`;
+
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
+      expect(result).toBe(expectedContent);
+    });
+
+    test("returns empty string correctly formats changeset entries content more than one pefix type", () => {
+      const changelogEntriesMap = {};
+      const result = prepareChangesetEntriesContent(changelogEntriesMap);
+      expect(result).toBe("");
     });
   });
 });

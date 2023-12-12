@@ -11,15 +11,14 @@ import {
 } from "./customErrors.js";
 
 /**
- * Prepares and formats a changelog entry based on the provided inputs.
- * The function processes a changelog entry text, associates it with a PR number, and creates a link to the PR.
- * It handles various checks such as entry format validation, prefix recognition, and text length constraints.
- * If the entry meets the criteria, it is formatted with a prefix, capitalized, and linked to the PR.
- * In case of errors like invalid prefix, empty description, entry too long, or invalid entry format,
- * appropriate exceptions are thrown.
+ * Formats a changelog entry with its associated PR number and link.
  *
- * The function uses constants and patterns (like ENTRY_FORMATTING_PATTERN_REGEX and PREFIXES)
- * defined elsewhere in the code to perform validations and formatting.
+ * This function checks the changelog entry for format compliance, prefix validity, and length constraints.
+ * If valid, it formats the entry, capitalizes it, and links it to the provided PR.
+ *
+ * - If the prefix is "skip", it returns an empty string and "skip".
+ * - If errors occur (like invalid prefix, empty description, entry too long, or format mismatch),
+ *   corresponding custom exceptions are thrown.
  *
  * @param {string} changelogEntry - The changelog entry text to be formatted.
  * @param {string} prNumber - The PR number associated with the changelog entry.
@@ -31,7 +30,7 @@ import {
  * @throws {EntryTooLongError} When the changelog entry exceeds the maximum allowed length.
  * @throws {ChangelogEntryMissingHyphenError} When the changelog entry does not match the expected format.
  */
-export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
+export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
@@ -42,7 +41,8 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
       if (!PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
       else if (!text) throw new EmptyEntryDescriptionError(prefix);
-      else if (trimmedText.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError(text.length);
+      else if (trimmedText.length > MAX_ENTRY_LENGTH)
+        throw new EntryTooLongError(text.length);
     }
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
     const capitalizedText =
@@ -55,15 +55,20 @@ export const prepareChangesetEntry = (changelogEntry, prNumber, prLink) => {
 };
 
 /**
- * Prepares a map of changeset entries categorized by their prefixes.
+ * Prepares a map of changelog entries categorized by their prefixes.
  * @param {string[]} entries - Array of changelog entry strings.
  * @param {number} prNumber - The pull request number associated with the entries.
  * @param {string} prLink - The link to the pull request.
- * @returns {Object} An object where keys are prefixes and values are arrays of associated entries.
+ * @returns {Object} An object where keys are entry prefixes and values are arrays of associated formatted entry descriptions.
  */
-export const prepareChangesetEntryMap = (entries, prNumber, prLink) => {
+export const prepareChangelogEntriesMap = (
+  entries,
+  prNumber,
+  prLink,
+  prepareChangelogEntry
+) => {
   return entries
-    .map((entry) => prepareChangesetEntry(entry, prNumber, prLink))
+    .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
       // Initialize the array for the prefix if it doesn't exist
       if (!acc[prefix]) {
@@ -77,11 +82,11 @@ export const prepareChangesetEntryMap = (entries, prNumber, prLink) => {
 
 /**
  * Prepares the content for the changeset file.
- * @param {Object} entryMap - An object where keys are prefixes and values are arrays of associated entries.
+ * @param {Object} changelogEntriesMap -  An object where keys are entry prefixes and values are arrays of associated formatted entry descriptions.
  * @returns {string} The content for the changeset file.
  */
-export const prepareChangesetEntriesContent = (entryMap) => {
-  return Object.entries(entryMap)
+export const prepareChangesetEntriesContent = (changelogEntriesMap) => {
+  return Object.entries(changelogEntriesMap)
     .map(([prefix, entries]) => {
       return `${prefix}:\n${entries.join("\n")}`;
     })

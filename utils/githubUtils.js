@@ -1,25 +1,22 @@
 import github from "@actions/github";
 import {
   PullRequestDataExtractionError,
-  ChangesetFileAccessError,
-  InvalidChangelogHeadingError,
-  EmptyChangelogSectionError,
-  EntryTooLongError,
-  InvalidPrefixError,
+  GetGithubContentError,
+  CreateChangesetFileError,
+  UpdateChangesetFileError,
   CategoryWithSkipOptionError,
-  ChangelogEntryMissingHyphenError,
-  EmptyEntryDescriptionError
+  UpdatePRLabelError,
 } from "./customErrors.js";
-import { GITHUB_TOKEN, SKIP_LABEL } from "../config/constants.js";
+import { SKIP_LABEL } from "../config/constants.js";
 
 /**
- * Extracts relevant data from a GitHub Pull Request.
- * @returns {Promise<Object>} A promise that resolves to an object containing details of the pull request.
- * @throws {PullRequestDataExtractionError} Throws a custom error if data extraction fails.
+ * Extracts relevant data from a GitHub Pull Request using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
+ * @returns {Promise<Object>} Promise resolving to object containing pull request details.
+ * @throws {PullRequestDataExtractionError} If data extraction fails.
  */
-export const extractPullRequestData = async () => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+export const extractPullRequestData = async (octokit) => {
   try {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
@@ -35,6 +32,17 @@ export const extractPullRequestData = async () => {
       pull_number: prNumber,
     });
 
+    // Validate response
+    if (!pullRequest || typeof pullRequest !== "object") {
+      throw new PullRequestDataExtractionError();
+    }
+
+    // Destructure necessary fields and validate them
+    const { body, html_url } = pullRequest;
+    if (body === undefined || html_url === undefined) {
+      throw new PullRequestDataExtractionError();
+    }
+
     // Return relevant PR data
     return {
       owner,
@@ -45,28 +53,45 @@ export const extractPullRequestData = async () => {
       branchRef: context.payload.pull_request.head.ref,
     };
   } catch (error) {
+    console.error(`Error extracting data from pull request: ${error.message}`);
     // Throw a custom error for issues during data extraction
     throw new PullRequestDataExtractionError();
   }
 };
 
 /**
- * Adds or removes a label from a GitHub pull request.
+ * Adds or removes a label from a GitHub pull request using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
  * @param {string} label - Label to be added or removed.
  * @param {boolean} addLabel - Flag to add or remove the label.
- * 
- * @returns {Promise<void>} A promise that resolves when the label is added or removed.
- * 
- * @throws {Error} Throws an error if the label cannot be added or removed.
+ * @throws {UpdatePRLabelError} If unable to add or remove label.
  */
-export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+export const updatePRLabel = async (
+  octokit,
+  owner,
+  repo,
+  prNumber,
+  label,
+  addLabel
+) => {
   try {
-    if (addLabel) {
+    // Get the current labels on the pull request
+    const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue(
+      {
+        owner,
+        repo,
+        issue_number: prNumber,
+      }
+    );
+
+    // Check to see if the label is already on the pull request
+    const labelExists = currentLabels.some((element) => element.name === label);
+
+    if (addLabel && !labelExists) {
       // Add the label to the pull request
       await octokit.rest.issues.addLabels({
         owner,
@@ -75,95 +100,95 @@ export const updatePRLabel = async (owner, repo, prNumber, label, addLabel) => {
         labels: [label],
       });
       console.log(`Label "${label}" added to PR #${prNumber}`);
+    } else if (!addLabel && labelExists) {
+      // Remove the label from the pull request
+      await octokit.rest.issues.removeLabel({
+        owner,
+        repo,
+        issue_number: prNumber,
+        name: label,
+      });
+      console.log(`Label "${label}" removed from PR #${prNumber}`);
     } else {
-      // Get the current labels on the pull request
-      const { data: currentLabels } =
-        await octokit.rest.issues.listLabelsOnIssue({
-          owner,
-          repo,
-          issue_number: prNumber,
-        });
-
-      // Check to see if the label is already on the pull request
-      if (currentLabels.some((element) => element.name === label)) {
-        // Remove the label from the pull request
-        await octokit.rest.issues.removeLabel({
-          owner,
-          repo,
-          issue_number: prNumber,
-          name: label,
-        });
-        console.log(`Label "${label}" removed from PR #${prNumber}`);
-      } else {
-        console.log(
-          `Label "${label}" not present on PR #${prNumber}. No action taken.`
-        );
-      }
+      console.log(
+        `Label "${label}" is already ${
+          addLabel ? "present" : "absent"
+        } on PR #${prNumber}. No action taken.`
+      );
     }
   } catch (error) {
     console.error(
       `Error updating label "${label}" for PR #${prNumber}: ${error.message}`
     );
-    throw error;
+    throw new UpdatePRLabelError();
   }
 };
 
 /**
  * Handles a changeset entry map that contains the "skip" option.
+ *
  * @param {Object} entryMap - Map of changeset entries.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
+ * @param {Function} updateLabel - Function to add or remove a label from a PR.
+ * @throws {CategoryWithSkipOptionError} If 'skip' and other entries are present.
  */
-export const handleSkipOption = async (entryMap, owner, repo, prNumber) => {
-  if (entryMap["skip"]) {
+export const handleSkipOption = async (
+  entryMap,
+  owner,
+  repo,
+  prNumber,
+  updateLabel
+) => {
+  if (entryMap && Object.keys(entryMap).includes("skip")) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
       throw new CategoryWithSkipOptionError();
     } else {
       console.log("No changeset file created or updated.");
-      // Add the "skip-changelog" label to the PR
-      await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, true);
+      // Adds  "skip-changelog" label in PR if not present
+      await updateLabel(owner, repo, prNumber, SKIP_LABEL, true);
       return;
     }
-  } else {
-    // Check if the "skip-changelog" label is present on the PR and remove it
-    await updatePRLabel(owner, repo, prNumber, SKIP_LABEL, false);
   }
-}
+  // Removes "skip-changelog" label in PR if present
+  await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
+};
 
 /**
- * Maps error constructors to their corresponding error messages. Returns null if the error type does not require a comment in the PR.
+ * Generates a comment string for a given error object based on its properties.
+ *
+ * @param {Error} errorInput - Error object that determines the comment to be posted.
+ * @returns {string|null} - A formatted comment string if the error type merits a comment in the PR; otherwise, null.
+ *
  */
-const errorCommentMap = {
-  [PullRequestDataExtractionError]: () => null,
-  [ChangesetFileAccessError]: () => null,
-  [InvalidChangelogHeadingError]: error => `Error: ${error.message}`,
-  [EmptyChangelogSectionError]: error => `Error: ${error.message}`,
-  [EntryTooLongError]: error => `Error: ${error.message}`,
-  [InvalidPrefixError]: error => `Error: ${error.message}`,
-  [CategoryWithSkipOptionError]: error => `Error: ${error.message}`,
-  [ChangelogEntryMissingHyphenError]: error => `Error: ${error.message}`,
-  [EmptyEntryDescriptionError]: error => `Error: ${error.message}`,
-}
+export const getErrorComment = (errorInput) => {
+  if (errorInput.shouldResultInPRComment) {
+    return `${errorInput.name}: ${errorInput.message}`;
+  }
+  return null;
+};
 
 /**
- * Posts a comment to a GitHub pull request based on the error type.
+ * Posts a comment to a GitHub pull request based on the error type using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
- * @param {Error} error - Error object that determines the comment to be posted.
+ * @param {Error} errorInput - Error object that determines the comment to be posted.
+ * @param {Function} getErrorComment - Function that generates a comment string for a given error object based on its properties.
  */
-export const postPRComment = async (owner, repo, prNumber, error) => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
-  
-  // If the error type is not one that merits a PR comment (either not listed in the 
-  // error comment map or explicitly mapped to null), the function will return null, 
-  // indicating that no comment should be posted.
-  const commentGenerator = errorCommentMap[error.constructor] || (error => null);
-
-  const comment = commentGenerator(error);
+export const postPRComment = async (
+  octokit,
+  owner,
+  repo,
+  prNumber,
+  errorInput,
+  getErrorComment
+) => {
+  const comment = getErrorComment(errorInput);
 
   if (comment) {
     try {
@@ -172,28 +197,35 @@ export const postPRComment = async (owner, repo, prNumber, error) => {
         owner,
         repo,
         issue_number: prNumber,
-        body: comment
+        body: comment,
       });
       console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
-    } catch(error) {
-      console.error(`Error posting comment to PR #${prNumber}: ${error.message}`);
+    } catch (error) {
+      console.error(
+        `Error posting comment to PR #${prNumber}: ${error.message}`
+      );
     }
   } else {
-    console.log(`No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`);
+    console.log(
+      `No comment posted to PR #${prNumber} due to error type: ${errorInput.name}`
+    );
   }
-}
-
+};
 
 /**
- * Creates or updates a file in a GitHub repository.
+ * Creates or updates a file in a GitHub repository using Octokit instance.
+ *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {string} path - File path within the repository.
- * @param {string} content - Content to be written to the file.
+ * @param {string} content - Base64 encoded content to be written to the file.
  * @param {string} message - Commit message.
  * @param {string} branchRef - Branch reference for the commit.
+ * @throws {ChangesetFileAccessError} If access to the file fails.
  */
 export const createOrUpdateFile = async (
+  octokit,
   owner,
   repo,
   path,
@@ -201,11 +233,8 @@ export const createOrUpdateFile = async (
   message,
   branchRef
 ) => {
-  // Initialize Octokit client
-  const octokit = github.getOctokit(GITHUB_TOKEN);
   // File's SHA to check if file exists
   let sha;
-
   // Attempt to retrieve the file's SHA to check if it exists
   try {
     const response = await octokit.rest.repos.getContent({
@@ -217,25 +246,29 @@ export const createOrUpdateFile = async (
     sha = response.data.sha;
   } catch (error) {
     if (error.status === 404) {
-      console.log("Changeset file not found, will create a new one.");
+      console.log("Changeset file not found. Proceeding to create a new one.");
     } else {
-      throw new ChangesetFileAccessError(
-        `Failed to access changeset file at ${path}: ${error.message}`,
-        error.status
-      );
+      throw new GetGithubContentError();
     }
   }
 
-  // Create or update the file content
-  await octokit.rest.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    path,
-    message,
-    content,
-    sha, // If file exists, sha is used to update; otherwise, file is created
-    branch: branchRef,
-  });
-
-  console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
+  // Create or update the changeset file content
+  try {
+    await octokit.rest.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content,
+      sha, // If file exists, sha is used to update; otherwise, file is created
+      branch: branchRef,
+    });
+    console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
+  } catch (error) {
+    if (!sha) {
+      throw new CreateChangesetFileError();
+    } else {
+      throw new UpdateChangesetFileError();
+    }
+  }
 };
