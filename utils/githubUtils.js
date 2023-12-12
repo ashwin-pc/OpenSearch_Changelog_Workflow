@@ -141,7 +141,7 @@ export const handleSkipOption = async (
   prNumber,
   updateLabel
 ) => {
-  if (entryMap && Object.keys(entryMap).includes('skip')) {
+  if (entryMap && Object.keys(entryMap).includes("skip")) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
       throw new CategoryWithSkipOptionError();
@@ -158,17 +158,23 @@ export const handleSkipOption = async (
 
 /**
  * Generates a comment string for a given error object based on its properties.
- * 
+ *
  * @param {Error} error - Error object that determines the comment to be posted.
  * @returns {string|null} - A formatted comment string if the error type merits a comment in the PR; otherwise, null.
- * 
+ *
  */
 export const getErrorComment = (error) => {
-  if (error.shouldResultInPRComment && error.messagePrefix && typeof error.messagePrefix === "string" && error.message && typeof error.message === "string") {
+  if (
+    error.shouldResultInPRComment &&
+    error.messagePrefix &&
+    error.message &&
+    typeof error.messagePrefix === "string" &&
+    typeof error.message === "string"
+  ) {
     return `${error.messagePrefix}: ${error.message}`;
   }
   return null;
-}
+};
 
 /**
  * Posts a comment to a GitHub pull request based on the error type using Octokit instance.
@@ -180,7 +186,14 @@ export const getErrorComment = (error) => {
  * @param {Error} error - Error object that determines the comment to be posted.
  * @param {Function} getErrorComment - Function that generates a comment string for a given error object based on its properties.
  */
-export const postPRComment = async (octokit, owner, repo, prNumber, error, getErrorComment) => {
+export const postPRComment = async (
+  octokit,
+  owner,
+  repo,
+  prNumber,
+  error,
+  getErrorComment
+) => {
   const comment = getErrorComment(error);
 
   if (comment) {
