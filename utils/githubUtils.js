@@ -159,19 +159,13 @@ export const handleSkipOption = async (
 /**
  * Generates a comment string for a given error object based on its properties.
  *
- * @param {Error} error - Error object that determines the comment to be posted.
+ * @param {Error} errorInput - Error object that determines the comment to be posted.
  * @returns {string|null} - A formatted comment string if the error type merits a comment in the PR; otherwise, null.
  *
  */
-export const getErrorComment = (error) => {
-  if (
-    error.shouldResultInPRComment &&
-    error.messagePrefix &&
-    error.message &&
-    typeof error.messagePrefix === "string" &&
-    typeof error.message === "string"
-  ) {
-    return `${error.messagePrefix}: ${error.message}`;
+export const getErrorComment = (errorInput) => {
+  if (errorInput.shouldResultInPRComment) {
+    return `${errorInput.name}: ${errorInput.message}`;
   }
   return null;
 };
@@ -183,7 +177,7 @@ export const getErrorComment = (error) => {
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
  * @param {number} prNumber - Pull request number.
- * @param {Error} error - Error object that determines the comment to be posted.
+ * @param {Error} errorInput - Error object that determines the comment to be posted.
  * @param {Function} getErrorComment - Function that generates a comment string for a given error object based on its properties.
  */
 export const postPRComment = async (
@@ -191,10 +185,10 @@ export const postPRComment = async (
   owner,
   repo,
   prNumber,
-  error,
+  errorInput,
   getErrorComment
 ) => {
-  const comment = getErrorComment(error);
+  const comment = getErrorComment(errorInput);
 
   if (comment) {
     try {
@@ -206,14 +200,14 @@ export const postPRComment = async (
         body: comment,
       });
       console.log(`Comment posted to PR #${prNumber}: "${comment}"`);
-    } catch (postError) {
+    } catch (error) {
       console.error(
-        `Error posting comment to PR #${prNumber}: ${postError.message}`
+        `Error posting comment to PR #${prNumber}: ${error.message}`
       );
     }
   } else {
     console.log(
-      `No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`
+      `No comment posted to PR #${prNumber} due to error type: ${errorInput.name}`
     );
   }
 };

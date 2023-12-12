@@ -1,6 +1,5 @@
 import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 
-
 /**
  * Represents an error during the extraction of data from a GitHub Pull Request.
  */
@@ -11,21 +10,12 @@ export class PullRequestDataExtractionError extends Error {
    */
   constructor(message = "Error extracting data from Pull Request") {
     super(message);
-    this.name = "PullRequestDataExtractionError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = false;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Pull Request Data Extraction Error";
   }
 }
 
@@ -39,21 +29,12 @@ export class GetGithubContentError extends Error {
    */
   constructor(message = "Error retrieving content from GitHub repository") {
     super(message);
-    this.name = "GetGithubContentError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = false;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Get Github Content Error";
   }
 }
 
@@ -67,21 +48,12 @@ export class CreateChangesetFileError extends Error {
    */
   constructor(message = "Error creating changeset file") {
     super(message);
-    this.name = "CreateChangesetFileError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = false;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Create Changeset File Error";
   }
 }
 
@@ -95,21 +67,12 @@ export class UpdateChangesetFileError extends Error {
    */
   constructor(message = "Error updating changeset file") {
     super(message);
-    this.name = "UpdateChangesetFileError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = false;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Update Changeset File Error";
   }
 }
 
@@ -121,23 +84,16 @@ export class UpdatePRLabelError extends Error {
    * Constructs the UpdatePRLabelError instance.
    * @param {string} [message="There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct."] - Custom error message.
    */
-  constructor(message = "There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct.") {
+  constructor(
+    message = "There was an error updating the label of the pull request. Please ensure the PR is accessible and the label format is correct."
+  ) {
     super(message);
-    this.name = "UpdatePRLabelError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = false;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Update PR Label Error";
   }
 }
 
@@ -149,27 +105,18 @@ export class InvalidChangelogHeadingError extends Error {
    * Constructs the InvalidChangelogHeadingError instance.
    * @param {string} [message="The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."] - Custom error message.
    */
-  constructor(message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax.") {
+  constructor(
+    message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."
+  ) {
     super(message);
-    this.name = "InvalidChangelogHeadingError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Invalid Changelog Heading Error";
   }
 }
-
-
 
 /**
  * Represents an error for an empty changelog section in a PR description.
@@ -179,23 +126,16 @@ export class EmptyChangelogSectionError extends Error {
    * Constructs the EmptyChangelogSectionError instance.
    * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."] - Custom error message.
    */
-  constructor(message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section.") {
+  constructor(
+    message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."
+  ) {
     super(message);
-    this.name = "EmptyChangelogSectionError"
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Empty Changelog Section Error";
   }
 }
 
@@ -209,23 +149,16 @@ export class EntryTooLongError extends Error {
    */
   constructor(entryLength) {
     const characterOverage = entryLength - MAX_ENTRY_LENGTH;
-    const message = `Entry is ${entryLength} characters long, which is ${characterOverage} ${characterOverage === 1 ? 'character' : 'characters'} longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`;
+    const message = `Entry is ${entryLength} characters long, which is ${characterOverage} ${
+      characterOverage === 1 ? "character" : "characters"
+    } longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`;
     super(message);
-    this.name = "EntryTooLongError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Entry Too Long Error";
   }
 }
 
@@ -238,23 +171,14 @@ export class InvalidPrefixError extends Error {
    * @param {string} [foundPrefix] - The prefix provided by the user.
    */
   constructor(foundPrefix) {
-    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`
+    const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
     super(message);
-    this.name = "InvalidPrefixError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Invalid Prefix Error";
   }
 }
 
@@ -266,23 +190,16 @@ export class CategoryWithSkipOptionError extends Error {
    * Constructs the CategoryWithSkipError instance.
    * @param {string} [message="If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section."] - Custom error message.
    */
-  constructor(message = "If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section.") {
+  constructor(
+    message = "If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section."
+  ) {
     super(message);
-    this.name = "CategoryWithSkipOptionError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Category With Skip Option Error";
   }
 }
 
@@ -296,21 +213,12 @@ export class ChangelogEntryMissingHyphenError extends Error {
    */
   constructor(message = "Changelog entries must begin with a hyphen (-).") {
     super(message);
-    this.name = "ChangelogEntryMissingHyphenError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Changelog Entry Missing Hyphen Error";
   }
 }
 
@@ -325,20 +233,11 @@ export class EmptyEntryDescriptionError extends Error {
   constructor(foundPrefix) {
     const message = `Description for "${foundPrefix}" entry cannot be empty.`;
     super(message);
-    this.name = "EmptyEntryDescriptionError";
+    this.name = this.constructor.name;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
-     * This helps in automated error handling to decide if the error context is
-     * significant enough to notify users via PR comments.
-     * 
      * @type {boolean}
      */
     this.shouldResultInPRComment = true;
-    /**
-     * The prefix to be used for the error message that succinctly identifies the error type.
-     * 
-     * @type {string}
-     */
-    this.messagePrefix = "Empty Entry Description Error";
   }
 }
