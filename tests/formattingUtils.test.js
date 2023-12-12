@@ -1,4 +1,4 @@
-import { PREFIXES, MAX_ENTRY_LENGTH } from "../config";
+import { PREFIXES, MAX_ENTRY_LENGTH } from "../config/constants.js";
 import {
   prepareChangelogEntry,
   prepareChangelogEntriesMap,
