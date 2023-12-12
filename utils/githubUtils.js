@@ -127,6 +127,7 @@ export const updatePRLabel = async (
 /**
  * Handles a changeset entry map that contains the "skip" option.
  *
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
  * @param {Object} entryMap - Map of changeset entries.
  * @param {string} owner - Owner of the repository.
  * @param {string} repo - Repository name.
@@ -135,6 +136,7 @@ export const updatePRLabel = async (
  * @throws {CategoryWithSkipOptionError} If 'skip' and other entries are present.
  */
 export const handleSkipOption = async (
+  octokit,
   entryMap,
   owner,
   repo,
@@ -148,12 +150,12 @@ export const handleSkipOption = async (
     } else {
       console.log("No changeset file created or updated.");
       // Adds  "skip-changelog" label in PR if not present
-      await updateLabel(owner, repo, prNumber, SKIP_LABEL, true);
+      await updateLabel(octokit, owner, repo, prNumber, SKIP_LABEL, true);
       return;
     }
   }
   // Removes "skip-changelog" label in PR if present
-  await updateLabel(owner, repo, prNumber, SKIP_LABEL, false);
+  await updateLabel(octokit, owner, repo, prNumber, SKIP_LABEL, false);
 };
 
 /**
