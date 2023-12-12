@@ -151,11 +151,14 @@ export const handleSkipOption = async (
       console.log("No changeset file created or updated.");
       // Adds  "skip-changelog" label in PR if not present
       await updateLabel(octokit, owner, repo, prNumber, SKIP_LABEL, true);
-      return;
+      // Indicates to index.js that the program should exit without creating or updating the changeset file
+      return false;
     }
   }
   // Removes "skip-changelog" label in PR if present
   await updateLabel(octokit, owner, repo, prNumber, SKIP_LABEL, false);
+  // Indicates to index.js that the program should proceed with creating or updating the changeset file
+  return true;
 };
 
 /**
