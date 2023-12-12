@@ -3,6 +3,7 @@ import {
   extractPullRequestData,
   updatePRLabel,
   handleSkipOption,
+  getErrorComment,
   postPRComment,
   createOrUpdateFile,
   PullRequestDataExtractionError,
@@ -10,13 +11,7 @@ import {
   CreateChangesetFileError,
   UpdateChangesetFileError,
   UpdatePRLabelError,
-  InvalidChangelogHeadingError,
-  EmptyChangelogSectionError,
-  EntryTooLongError,
-  InvalidPrefixError,
   CategoryWithSkipOptionError,
-  ChangelogEntryMissingHyphenError,
-  EmptyEntryDescriptionError,
 } from "../utils";
 import { SKIP_LABEL } from "../config/constants";
 
@@ -98,8 +93,12 @@ describe("Github Utils Tests", () => {
       expect(mockPullsGet).toHaveBeenCalledTimes(1);
     });
 
-    test("throws error for invalid response data", async () => {
-      mockPullsGet.mockResolvedValueOnce(null); // or use undefined, or a non-object value
+    test.each([
+      [null, "null response"],
+      [undefined, "undefined response"],
+      ["not-an-object", "non-object response"],
+    ])("throws error for %s data", async (response, description) => {
+      mockPullsGet.mockResolvedValueOnce({ data: response });
       await expect(extractPullRequestData(octokitMock)).rejects.toThrow(
         PullRequestDataExtractionError
       );
@@ -343,157 +342,131 @@ describe("Github Utils Tests", () => {
     );
   });
 
+  describe("getErrorComment", () => {
+    test("returns a comment string for errors that should result in a PR comment", () => {
+      // Mock error with shouldResultInPRComment set to true
+      const mockError = {
+        message: "Test error message",
+        shouldResultInPRComment: true,
+        messagePrefix: "Test Error",
+      }
+      const result = getErrorComment(mockError);
+      expect(result).toBe("Test Error: Test error message");
+    });
+
+    test("returns null for errors that should not result in a PR comment", () => {
+      // Mock error with shouldResultInPRComment set to false
+      const mockError = {
+        message: "Test error message",
+        shouldResultInPRComment: false,
+        messagePrefix: "Test Error",
+      }
+      const result = getErrorComment(mockError);
+      expect(result).toBeNull();
+    });
+
+    test("returns null for errors without a shouldResultInPRComment property", () => {
+      // Mock error with a missing shouldResultInPRComment property
+      const mockError = {
+        message: "Test error message",
+        messagePrefix: "Test Error",
+      }
+      const result = getErrorComment(mockError);
+      expect(result).toBeNull();
+    });
+
+    test.each([
+      ["returns null for errors with an empty message", ""],
+      ["returns null for errors with an undefined message", undefined],
+      ["returns null for errors with a non-string message", 123],
+    ])("%s", (description, messageValue) => {
+      const mockError = {
+        message: messageValue,
+        shouldResultInPRComment: true,
+        messagePrefix: "Test Error",
+      };
+      const result = getErrorComment(mockError);
+      expect(result).toBeNull();
+    });
+
+    test.each([
+      ["returns null for errors with an empty messagePrefix", ""],
+      ["returns null for errors with an undefined messagePrefix", undefined],
+      ["returns null for errors with a non-string messagePrefix", 123],
+    ])("%s", (description, messagePrefixValue) => {
+      const mockError = {
+        message: "Test error message",
+        shouldResultInPRComment: true,
+        messagePrefix: messagePrefixValue,
+      };
+      const result = getErrorComment(mockError);
+      expect(result).toBeNull();
+    });
+  });
+
   describe("postPRComment", () => {
-    // Mock the createComment method
-    const mockCreateComment = jest.fn();
+    // Mock the Octokit createComment function
+    const createCommentMock = jest.fn();
+    const octokitMock = {
+      rest: {
+        issues: {
+          createComment: createCommentMock,
+        },
+      },
+    };
+    
+    const error = new Error("Test Error");
+    const testComment = "This is a test comment";
 
     beforeEach(() => {
       jest.clearAllMocks();
-      github.getOctokit.mockImplementation(() => ({
-        rest: {
-          issues: {
-            createComment: mockCreateComment,
-          },
-        },
-      }));
-    });
+    })
 
-    test("calls getOctokit with the correct token", async () => {
-      const error = new PullRequestDataExtractionError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(github.getOctokit).toHaveBeenCalledWith(GITHUB_TOKEN);
-    });
+    test("successfully posts a comment", async () => {
+      // Mock response from getErrorComment function
+      const getErrorComment = jest.fn().mockReturnValue(testComment);
+      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
 
-    test("does not generate a comment for a PullRequestDataExtractionError", async () => {
-      const error = new PullRequestDataExtractionError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).not.toHaveBeenCalled();
-    });
-
-    test("does not generate a comment for a ChangesetFileAccessError", async () => {
-      const error = new ChangesetFileAccessError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).not.toHaveBeenCalled();
-    });
-
-    test("generates the correct comment for InvalidChangelogHeadingError", async () => {
-      const error = new InvalidChangelogHeadingError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
+      expect(getErrorComment).toHaveBeenCalledWith(error);
+      expect(getErrorComment).toHaveBeenCalledTimes(1);
+      expect(createCommentMock).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
-        body: `Invalid Changelog Heading Error: ${error.message}`,
+        body: testComment,
       });
+      expect(createCommentMock).toHaveBeenCalledTimes(1);
     });
 
-    test("generates the correct comment for EmptyChangelogSectionError", async () => {
-      const error = new EmptyChangelogSectionError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
+    test("does not post a comment when getErrorComment returns null", async () => {
+      // Mock null response from getErrorComment function. This will be the return value of the function if the error has been defined as not requiring a PR comment.
+      const getErrorComment = jest.fn().mockReturnValue(null);
+      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
+      expect(getErrorComment).toHaveBeenCalledWith(error);
+      expect(getErrorComment).toHaveBeenCalledTimes(1);
+      expect(createCommentMock).not.toHaveBeenCalled();
+    });
+
+    test("handles errors when posting a comment", async () => {
+      const getErrorComment = jest.fn().mockReturnValue(testComment);
+      const errorDuringPosting = new Error("Error posting comment");
+      createCommentMock.mockRejectedValueOnce(errorDuringPosting);
+      const errorSpy = jest.spyOn(console, "error");
+
+      await postPRComment(octokitMock, owner, repo, prNumber, error, getErrorComment);
+      expect(getErrorComment).toHaveBeenCalledWith(error);
+      expect(getErrorComment).toHaveBeenCalledTimes(1);
+      expect(createCommentMock).toHaveBeenCalledWith({
         owner,
         repo,
         issue_number: prNumber,
-        body: `Empty Changelog Section Error: ${error.message}`,
+        body: testComment,
       });
-    });
-
-    test("generates the correct comment for EntryTooLongError", async () => {
-      const error = new EntryTooLongError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body: `Entry Too Long Error: ${error.message}`,
-      });
-    });
-
-    test("generates the correct comment for InvalidPrefixError", async () => {
-      const error = new InvalidPrefixError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body: `Invalid Prefix Error: ${error.message}`,
-      });
-    });
-
-    test("generates the correct comment for CategoryWithSkipOptionError", async () => {
-      const error = new CategoryWithSkipOptionError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body: `Category With Skip Option Error: ${error.message}`,
-      });
-    });
-
-    test("generates the correct comment for ChangelogEntryMissingHyphenError", async () => {
-      const error = new ChangelogEntryMissingHyphenError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body: `Changelog Entry Missing Hyphen Error: ${error.message}`,
-      });
-    });
-
-    test("generates the correct comment for EmptyEntryDescriptionError", async () => {
-      const error = new EmptyEntryDescriptionError();
-      await postPRComment(owner, repo, prNumber, error);
-      expect(mockCreateComment).toHaveBeenCalledWith({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body: `Empty Entry Description Error: ${error.message}`,
-      });
-    });
-
-    test("logs success message after posting comment to PR", async () => {
-      const error = new InvalidChangelogHeadingError();
-      jest.spyOn(console, "log");
-      await postPRComment(owner, repo, prNumber, error);
-      expect(console.log).toHaveBeenCalledWith(
-        `Comment posted to PR #${prNumber}: "Invalid Changelog Heading Error: ${error.message}"`
+      expect(createCommentMock).toHaveBeenCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledWith(
+        `Error posting comment to PR #${prNumber}: ${errorDuringPosting.message}`
       );
-    });
-
-    test("logs error message if posting comment to PR fails", async () => {
-      const error = new InvalidChangelogHeadingError();
-      jest.spyOn(console, "error");
-      mockCreateComment.mockRejectedValueOnce(apiError);
-      await postPRComment(owner, repo, prNumber, error);
-      expect(console.error).toHaveBeenCalledWith(
-        `Error posting comment to PR #${prNumber}: ${apiError.message}`
-      );
-    });
-
-    test("logs messsage if no comment is posted to the PR because of the error type", async () => {
-      const error = new PullRequestDataExtractionError();
-      jest.spyOn(console, "log");
-      await postPRComment(owner, repo, prNumber, error);
-      expect(console.log).toHaveBeenCalledWith(
-        `No comment posted to PR #${prNumber} due to error type: ${error.constructor.name}`
-      );
-    });
-
-    test("handles unexpected errors gracefully", async () => {
-      const error = new InvalidChangelogHeadingError();
-      const unexpectedError = new Error("Unexpected error");
-
-      // Override the mock implementation for this test
-      mockCreateComment.mockImplementationOnce(() => {
-        throw unexpectedError;
-      });
-      jest.spyOn(console, "error");
-      await postPRComment(owner, repo, prNumber, error);
-      expect(console.error).toHaveBeenCalledWith(
-        `Error posting comment to PR #${prNumber}: ${unexpectedError.message}`
-      );
+      errorSpy.mockRestore();
     });
   });
 

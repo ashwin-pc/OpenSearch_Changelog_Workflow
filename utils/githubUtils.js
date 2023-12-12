@@ -164,7 +164,7 @@ export const handleSkipOption = async (
  * 
  */
 export const getErrorComment = (error) => {
-  if (error.shouldResultInPRComment) {
+  if (error.shouldResultInPRComment && error.messagePrefix && typeof error.messagePrefix === "string" && error.message && typeof error.message === "string") {
     return `${error.messagePrefix}: ${error.message}`;
   }
   return null;

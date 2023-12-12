@@ -201,8 +201,8 @@ describe("Formatting Utils Tests", () => {
     test("correctly formats changeset entries content", () => {
       const changesetEntryMap = {
         feat: [
-          "- Adds one feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
-          "- Adds a second feature ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
+          "- Adds one feature ([#123](http://example.com/pr/123))",
+          "- Adds a second feature ([#123](http://example.com/pr/123))",
         ],
         fix: [
           "- Fixes a bug ([#123](https://github.com/TestUser/OpenSearch-Dashboards/pull/123))",
