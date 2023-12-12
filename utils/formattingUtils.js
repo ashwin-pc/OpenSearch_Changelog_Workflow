@@ -11,15 +11,14 @@ import {
 } from "./customErrors.js";
 
 /**
- * Prepares and formats a changelog entry based on the provided inputs.
- * The function processes a changelog entry text, associates it with a PR number, and creates a link to the PR.
- * It handles various checks such as entry format validation, prefix recognition, and text length constraints.
- * If the entry meets the criteria, it is formatted with a prefix, capitalized, and linked to the PR.
- * In case of errors like invalid prefix, empty description, entry too long, or invalid entry format,
- * appropriate exceptions are thrown.
+ * Formats a changelog entry with its associated PR number and link.
  *
- * The function uses constants and patterns (like ENTRY_FORMATTING_PATTERN_REGEX and PREFIXES)
- * defined elsewhere in the code to perform validations and formatting.
+ * This function checks the changelog entry for format compliance, prefix validity, and length constraints.
+ * If valid, it formats the entry, capitalizes it, and links it to the provided PR.
+ *
+ * - If the prefix is "skip", it returns an empty string and "skip".
+ * - If errors occur (like invalid prefix, empty description, entry too long, or format mismatch),
+ *   corresponding custom exceptions are thrown.
  *
  * @param {string} changelogEntry - The changelog entry text to be formatted.
  * @param {string} prNumber - The PR number associated with the changelog entry.
@@ -42,7 +41,8 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
       if (!PREFIXES.includes(prefix.toLowerCase()))
         throw new InvalidPrefixError(prefix);
       else if (!text) throw new EmptyEntryDescriptionError(prefix);
-      else if (trimmedText.length > MAX_ENTRY_LENGTH) throw new EntryTooLongError(text.length);
+      else if (trimmedText.length > MAX_ENTRY_LENGTH)
+        throw new EntryTooLongError(text.length);
     }
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
     const capitalizedText =
@@ -61,7 +61,12 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
  * @param {string} prLink - The link to the pull request.
  * @returns {Object} An object where keys are prefixes and values are arrays of associated entries.
  */
-export const prepareChangelogEntriesMap = (entries, prNumber, prLink, prepareChangelogEntry) => {
+export const prepareChangelogEntriesMap = (
+  entries,
+  prNumber,
+  prLink,
+  prepareChangelogEntry
+) => {
   return entries
     .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
