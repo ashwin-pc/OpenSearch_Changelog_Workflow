@@ -1,5 +1,5 @@
 import github from "@actions/github";
-import { CHANGESET_PATH } from "./config/constants.js";
+import { CHANGESET_PATH, GITHUB_TOKEN } from "./config/index.js";
 import {
   processLine,
   extractChangelogEntries,
@@ -17,7 +17,6 @@ import {
   postPRComment,
   getErrorComment,
 } from "./utils/githubUtils.js";
-import { GITHUB_TOKEN } from "./config";
 /**
  * Main function for the GitHub Actions workflow. Extracts relevant data from a pull request, parses changelog entries, handles "skip" entries, and creates or updates a changeset file in the repository.
  */
