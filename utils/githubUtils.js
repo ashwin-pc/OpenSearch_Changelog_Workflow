@@ -272,6 +272,10 @@ export const createOrUpdateFile = async (
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
   } catch (error) {
+
+    console.log(" ---------------- SHA -------------------")
+    console.log(sha)
+    console.log(" ------------------------------------------")
     console.log(" ---------------- ERROR -------------------")
     console.log(error)
     console.log(" ------------------------------------------")
