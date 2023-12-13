@@ -89,7 +89,9 @@ export const updatePRLabel = async (
     );
 
     // Check to see if the label is already on the pull request
-    const labelExists = currentLabels.some((element) => element.name === label.toLowerCase());
+    const labelExists = currentLabels.some(
+      (element) => element.name === label.toLowerCase()
+    );
 
     if (addLabel && !labelExists) {
       // Add the label to the pull request
@@ -270,11 +272,11 @@ export const createOrUpdateFile = async (
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
   } catch (error) {
+    console.log(`Error creating or updating file: ${error.message}`);
     if (!sha) {
       throw new CreateChangesetFileError();
     } else {
       throw new UpdateChangesetFileError();
     }
-    console.log(`Error creating or updating file: ${error.message}`)
   }
 };
