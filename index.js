@@ -35,7 +35,6 @@ async function run() {
     console.log(owner)
     console.log(repo)
     console.log(prNumber)
-    console.log(prDescription)
     console.log(prLink)
     console.log(branchRef)
     console.log(prUser)

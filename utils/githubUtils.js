@@ -75,6 +75,9 @@ export const updatePRLabel = async (
       (element) => element.name === label.toLowerCase()
     );
 
+    console.log(`Label "${label}" exists: ${labelExists}`)
+    console.log(`Add label: ${addLabel}`)
+    
     if (addLabel && !labelExists) {
       // Add the label to the pull request
       await octokit.rest.issues.addLabels({
