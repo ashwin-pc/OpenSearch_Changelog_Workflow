@@ -1,5 +1,5 @@
 import github from "@actions/github";
-import { CHANGESET_PATH, GITHUB_TOKEN } from "./config/constants.js";
+import { CHANGESET_PATH, GITHUB_TOKEN, FAILED_CHANGESET_LABEL } from "./config/constants.js";
 import {
   processLine,
   extractChangelogEntries,
@@ -79,6 +79,14 @@ async function run() {
       message,
       branchRef
     );
+    await updatePRLabel(
+      octokit,
+      owner,
+      repo,
+      prNumber,
+      FAILED_CHANGESET_LABEL,
+      false
+    );
   } catch (error) {
     if (owner && repo && prNumber) {
       await postPRComment(
@@ -88,6 +96,14 @@ async function run() {
         prNumber,
         error,
         getErrorComment
+      );
+      await updatePRLabel(
+        octokit,
+        owner,
+        repo,
+        prNumber,
+        FAILED_CHANGESET_LABEL,
+        true
       );
     }
     console.error(error);

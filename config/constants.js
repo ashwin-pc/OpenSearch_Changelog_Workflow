@@ -95,3 +95,9 @@ export const CHANGESET_PATH = process.env.INPUT_CHANGESET_PATH;
 * @type {string}
 */
 export const SKIP_LABEL = "Skip-Changelog";
+
+/**
+* The label that will be added to the PR if the "skip" option is used.
+* @type {string}
+*/
+export const FAILED_CHANGESET_LABEL = "failed changeset";
