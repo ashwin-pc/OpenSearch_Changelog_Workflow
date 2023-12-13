@@ -24,19 +24,19 @@ async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
   // Initial variables for storing extracted PR data
-  let owner, repo, prNumber, prDescription, prLink, branchRef;
+  let owner, repo, prNumber, prDescription, prLink, branchRef, prUser;
 
   try {
     // Extract pull request data using the GitHub API
-    ({ owner, repo, prNumber, prDescription, prLink, branchRef } =
+    ({ owner, repo, prNumber, prDescription, prLink, branchRef, prUser } =
       await extractPullRequestData(octokit));
-    
+
       // Create an array of changelog entry strings from the PR description
     const changelogEntries = extractChangelogEntries(
       prDescription,
       processLine
     );
-    
+
     // Create a map of changeset entries organized by category
     const changelogEntriesMap = prepareChangelogEntriesMap(
       changelogEntries,
@@ -44,7 +44,7 @@ async function run() {
       prLink,
       prepareChangelogEntry
     );
-    
+
     // Check if the "skip" option is present in the entry map and respond accordingly
     const isSkipOptionPresent = await handleSkipOption(
       octokit,
@@ -54,13 +54,13 @@ async function run() {
       prNumber,
       updatePRLabel
     );
-    
+
     // Skip changeset file creation if the "skip" label was added to the PR
     if (isSkipOptionPresent) {
       console.log("Skipping changeset creation because of 'skip' option.");
       return;
     }
-    
+
     // Prepare some parameters for creating or updating the changeset file
     const changesetEntriesContent = Buffer.from(
       prepareChangesetEntriesContent(changelogEntriesMap)
@@ -77,7 +77,8 @@ async function run() {
       changesetFilePath,
       changesetEntriesContent,
       message,
-      branchRef
+      branchRef,
+      prUser
     );
     await updatePRLabel(
       octokit,

@@ -38,9 +38,15 @@ export const extractPullRequestData = async (octokit) => {
     }
 
     // Destructure necessary fields and validate them
-    const { body, html_url } = pullRequest;
-    if (body === undefined || html_url === undefined) {
+    const { body, html_url, user } = pullRequest;
+    if (body === undefined || html_url === undefined || user === undefined) {
       throw new PullRequestDataExtractionError();
+    }
+
+    // Validate user object for the username
+    const { login } = user;
+    if (login === undefined) {
+      throw new PullRequestDataExtractionError("Invalid user data in pull request.");
     }
 
     // Return relevant PR data
@@ -51,6 +57,7 @@ export const extractPullRequestData = async (octokit) => {
       prDescription: pullRequest.body,
       prLink: pullRequest.html_url,
       branchRef: context.payload.pull_request.head.ref,
+      prUser: login,
     };
   } catch (error) {
     console.error(`Error extracting data from pull request: ${error.message}`);
@@ -238,7 +245,8 @@ export const createOrUpdateFile = async (
   path,
   content,
   message,
-  branchRef
+  branchRef,
+  prUser
 ) => {
   // File's SHA to check if file exists
   let sha;
@@ -281,6 +289,7 @@ export const createOrUpdateFile = async (
     console.log(content)
     console.log(sha)
     console.log(branchRef)
+    console.log(prUser)
     console.log(" ------------------------------------------")
     console.log(" ---------------- ERROR -------------------")
     console.log(error)
