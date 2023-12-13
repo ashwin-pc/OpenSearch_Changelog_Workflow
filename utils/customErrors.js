@@ -106,7 +106,7 @@ export class InvalidChangelogHeadingError extends Error {
    * @param {string} [message="The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."] - Custom error message.
    */
   constructor(
-    message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."
+    message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with proper spelling, capitalization, spacing, and Markdown syntax."
   ) {
     super(message);
     this.name = this.constructor.name;
