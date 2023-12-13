@@ -23,6 +23,10 @@ export const extractPullRequestData = async (octokit) => {
     const { owner, repo } = context.repo;
     const prNumber = context.payload.pull_request.number;
 
+    console.log(" ---------------- CONTEXT -------------------")
+    console.log(context)
+    console.log(" ------------------------------------------")
+    
     console.log(`Extracting data for PR #${prNumber} in ${owner}/${repo}`);
 
     // Fetch pull request details using Octokit
