@@ -28,7 +28,15 @@ async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
   // Initial variables for storing extracted PR data
-  let owner, repo, prNumber, prDescription, prLink, branchRef, prUser;
+  let owner,
+    repo,
+    branchRef,
+    prOwner,
+    prRepo,
+    prBranchRef,
+    prNumber,
+    prDescription,
+    prLink;
 
   try {
     // Extract pull request data using the GitHub API
