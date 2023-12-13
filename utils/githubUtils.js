@@ -10,62 +10,28 @@ import {
 import { SKIP_LABEL } from "../config/constants.js";
 
 /**
- * Extracts relevant data from a GitHub Pull Request using Octokit instance.
+ * Extracts relevant data from a GitHub Pull Request from the GitHub action context.
  *
- * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance initialized with a GitHub token.
- * @returns {Promise<Object>} Promise resolving to object containing pull request details.
+ * @returns {Object} Object containing pull request details.
  * @throws {PullRequestDataExtractionError} If data extraction fails.
  */
-export const extractPullRequestData = async (octokit) => {
+export const extractPullRequestData = () => {
   try {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
-    const { owner, repo } = context.repo;
-    const prNumber = context.payload.pull_request.number;
+    const pr = context.payload.pull_request;
 
-    console.log(" ---------------- CONTEXT -------------------")
-    console.log(context)
-    console.log(" ------------------------------------------")
+    console.log(`Extracting data for PR #${pr.number} in ${pr.base.repo.owner.login}/${pr.base.repo.name}`);
 
-    console.log(`Extracting data for PR #${prNumber} in ${owner}/${repo}`);
-
-    // Fetch pull request details using Octokit
-    const { data: pullRequest } = await octokit.rest.pulls.get({
-      owner,
-      repo,
-      pull_number: prNumber,
-    });
-
-    console.log(" ---------------- PULL REQUEST -------------------")
-    console.log(pullRequest)
-    console.log(" ------------------------------------------")
-
-    // Validate response
-    if (!pullRequest || typeof pullRequest !== "object") {
-      throw new PullRequestDataExtractionError();
-    }
-
-    // Destructure necessary fields and validate them
-    const { body, html_url, user } = pullRequest;
-    if (!body || !html_url || !user) {
-      throw new PullRequestDataExtractionError();
-    }
-
-    // Validate user object for the username
-    const { login } = user;
-    if (!login) {
-      throw new PullRequestDataExtractionError();
-    }
-
-    // Return relevant PR data
+    // Return relevant PR data including user's username
     return {
-      owner,
-      repo,
-      prNumber,
-      prDescription: pullRequest.body,
-      prLink: pullRequest.html_url,
-      branchRef: context.payload.pull_request.head.ref,
-      prUser: login,
+      owner: pr.base.repo.owner.login,
+      repo: pr.base.repo.name,
+      prNumber: pr.number,
+      prDescription: pr.body,
+      prLink: pr.html_url,
+      branchRef: pr.head.ref,
+      prUser: pr.user.login, // Username of the user who created the PR
     };
   } catch (error) {
     console.error(`Error extracting data from pull request: ${error.message}`);
@@ -73,6 +39,7 @@ export const extractPullRequestData = async (octokit) => {
     throw new PullRequestDataExtractionError();
   }
 };
+
 
 /**
  * Adds or removes a label from a GitHub pull request using Octokit instance.
