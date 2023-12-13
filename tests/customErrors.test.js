@@ -56,7 +56,7 @@ describe("Custom Errors Tests", () => {
   test("InvalidChangelogHeadingError default message", () => {
     const error = new InvalidChangelogHeadingError();
     expect(error.message).toBe(
-      "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."
+      "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with proper spelling, capitalization, spacing, and Markdown syntax."
     );
     expect(error.name).toBe("InvalidChangelogHeadingError");
     expect(error.shouldResultInPRComment).toBe(true);
