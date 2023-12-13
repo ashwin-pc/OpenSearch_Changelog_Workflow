@@ -68,7 +68,7 @@ describe("Formatting Utils Tests", () => {
 
     test("with entry too long, should throw EntryTooLongError", () => {
       const longEntryText =
-        " a very long entry with too much text that exceeds the maximum allowed length";
+        " a very long entry with too much text that exceeds the maximum allowed length limit specified for for a changelog entry"
       const longEntry = `- feat:${longEntryText}`;
       const characterOverage = longEntryText.length - MAX_ENTRY_LENGTH;
       const expectedErrorMessage = `Entry is ${

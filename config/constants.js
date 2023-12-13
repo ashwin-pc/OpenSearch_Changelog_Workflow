@@ -74,7 +74,7 @@ export const ENTRY_FORMATTING_PATTERN_REGEX = new RegExp(
  * Define the maximum length of a changelog entry.
  * @type {number}
  */
-export const MAX_ENTRY_LENGTH = 50;
+export const MAX_ENTRY_LENGTH = 100;
 
 /**
  * GitHub authentication token used for accessing the GitHub API.
