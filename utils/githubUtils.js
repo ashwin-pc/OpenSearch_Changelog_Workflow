@@ -89,7 +89,7 @@ export const updatePRLabel = async (
     );
 
     // Check to see if the label is already on the pull request
-    const labelExists = currentLabels.some((element) => element.name === label.toLowerCase());
+    const labelExists = currentLabels.some((element) => element.name === label);
 
     if (addLabel && !labelExists) {
       // Add the label to the pull request
