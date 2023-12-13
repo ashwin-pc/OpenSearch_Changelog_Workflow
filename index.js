@@ -31,7 +31,17 @@ async function run() {
     ({ owner, repo, prNumber, prDescription, prLink, branchRef, prUser } =
       await extractPullRequestData(octokit));
 
-      // Create an array of changelog entry strings from the PR description
+    console.log("-----------------------------------")
+    console.log(owner)
+    console.log(repo)
+    console.log(prNumber)
+    console.log(prDescription)
+    console.log(prLink)
+    console.log(branchRef)
+    console.log(prUser)
+    console.log("-----------------------------------")
+
+    // Create an array of changelog entry strings from the PR description
     const changelogEntries = extractChangelogEntries(
       prDescription,
       processLine
