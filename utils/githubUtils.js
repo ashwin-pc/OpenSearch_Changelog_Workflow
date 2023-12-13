@@ -275,5 +275,6 @@ export const createOrUpdateFile = async (
     } else {
       throw new UpdateChangesetFileError();
     }
+    console.log(`Error creating or updating file: ${error.message}`)
   }
 };
