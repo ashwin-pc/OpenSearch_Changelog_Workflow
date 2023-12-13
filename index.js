@@ -1,5 +1,9 @@
 import github from "@actions/github";
-import { CHANGESET_PATH, GITHUB_TOKEN, FAILED_CHANGESET_LABEL } from "./config/constants.js";
+import {
+  CHANGESET_PATH,
+  GITHUB_TOKEN,
+  FAILED_CHANGESET_LABEL,
+} from "./config/constants.js";
 import {
   processLine,
   extractChangelogEntries,
@@ -28,17 +32,29 @@ async function run() {
 
   try {
     // Extract pull request data using the GitHub API
-    ({ owner, repo, prNumber, prDescription, prLink, branchRef, prUser } =
-      await extractPullRequestData(octokit));
+    ({
+      owner,
+      repo,
+      branchRef,
+      prOwner,
+      prRepo,
+      prBranchRef,
+      prNumber,
+      prDescription,
+      prLink,
+    } = await extractPullRequestData(octokit));
 
-    console.log("-----------------------------------")
-    console.log(owner)
-    console.log(repo)
-    console.log(prNumber)
-    console.log(prLink)
-    console.log(branchRef)
-    console.log(prUser)
-    console.log("-----------------------------------")
+    console.log("-----------------------------------");
+    console.log(owner);
+    console.log(repo);
+    console.log(branchRef);
+    console.log(prOwner);
+    console.log(prRepo);
+    console.log(prBranchRef);
+    console.log(prNumber);
+    console.log(prLink);
+    console.log(branchRef);
+    console.log("-----------------------------------");
 
     // Create an array of changelog entry strings from the PR description
     const changelogEntries = extractChangelogEntries(

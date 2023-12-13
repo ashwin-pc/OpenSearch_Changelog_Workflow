@@ -21,17 +21,21 @@ export const extractPullRequestData = () => {
     const context = github.context;
     const pr = context.payload.pull_request;
 
-    console.log(`Extracting data for PR #${pr.number} in ${pr.base.repo.owner.login}/${pr.base.repo.name}`);
+    console.log(
+      `Extracting data for PR #${pr.number} in ${pr.base.repo.owner.login}/${pr.base.repo.name}`
+    );
 
     // Return relevant PR data including user's username
     return {
-      owner: pr.head.repo.owner.login,
-      repo: pr.head.repo.name,
+      owner: pr.base.repo.owner.login,
+      repo: pr.base.repo.name,
+      branchRef: pr.base.ref,
+      prOwner: pr.head.repo.owner.login,
+      prRepo: pr.head.repo.name,
+      prBranchRef: pr.head.ref,
       prNumber: pr.number,
       prDescription: pr.body,
       prLink: pr.html_url,
-      branchRef: pr.head.ref,
-      prUser: pr.user.login, // Username of the user who created the PR
     };
   } catch (error) {
     console.error(`Error extracting data from pull request: ${error.message}`);
@@ -39,7 +43,6 @@ export const extractPullRequestData = () => {
     throw new PullRequestDataExtractionError();
   }
 };
-
 
 /**
  * Adds or removes a label from a GitHub pull request using Octokit instance.
@@ -60,6 +63,7 @@ export const updatePRLabel = async (
   label,
   addLabel
 ) => {
+
   try {
     // Get the current labels on the pull request
     const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue(
@@ -75,9 +79,6 @@ export const updatePRLabel = async (
       (element) => element.name === label.toLowerCase()
     );
 
-    console.log(`Label "${label}" exists: ${labelExists}`)
-    console.log(`Add label: ${addLabel}`)
-    
     if (addLabel && !labelExists) {
       // Add the label to the pull request
       await octokit.rest.issues.addLabels({
@@ -223,8 +224,7 @@ export const createOrUpdateFile = async (
   path,
   content,
   message,
-  branchRef,
-  prUser
+  branchRef
 ) => {
   // File's SHA to check if file exists
   let sha;
@@ -258,20 +258,18 @@ export const createOrUpdateFile = async (
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
   } catch (error) {
-
-    console.log(" ---------------- DETAILS -------------------")
-    console.log(owner)
-    console.log(repo)
-    console.log(path)
-    console.log(message)
-    console.log(content)
-    console.log(sha)
-    console.log(branchRef)
-    console.log(prUser)
-    console.log(" ------------------------------------------")
-    console.log(" ---------------- ERROR -------------------")
-    console.log(error)
-    console.log(" ------------------------------------------")
+    console.log(" ---------------- DETAILS -------------------");
+    console.log(owner);
+    console.log(repo);
+    console.log(path);
+    console.log(message);
+    console.log(content);
+    console.log(sha);
+    console.log(branchRef);
+    console.log(" ------------------------------------------");
+    console.log(" ---------------- ERROR -------------------");
+    console.log(error);
+    console.log(" ------------------------------------------");
     if (!sha) {
       throw new CreateChangesetFileError();
     } else {
