@@ -273,8 +273,14 @@ export const createOrUpdateFile = async (
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
   } catch (error) {
 
-    console.log(" ---------------- SHA -------------------")
+    console.log(" ---------------- DETAILS -------------------")
+    console.log(owner)
+    console.log(repo)
+    console.log(path)
+    console.log(message)
+    console.log(content)
     console.log(sha)
+    console.log(branchRef)
     console.log(" ------------------------------------------")
     console.log(" ---------------- ERROR -------------------")
     console.log(error)
