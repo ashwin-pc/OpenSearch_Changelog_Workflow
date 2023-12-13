@@ -272,7 +272,9 @@ export const createOrUpdateFile = async (
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
   } catch (error) {
-    console.log(`Error creating or updating file: ${error.message}`);
+    console.log(" ---------------- ERROR -------------------")
+    console.log(error)
+    console.log(" ------------------------------------------")
     if (!sha) {
       throw new CreateChangesetFileError();
     } else {
