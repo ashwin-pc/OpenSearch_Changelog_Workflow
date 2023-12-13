@@ -25,8 +25,8 @@ export const extractPullRequestData = () => {
 
     // Return relevant PR data including user's username
     return {
-      owner: pr.base.repo.owner.login,
-      repo: pr.base.repo.name,
+      owner: pr.head.repo.owner.login,
+      repo: pr.head.repo.name,
       prNumber: pr.number,
       prDescription: pr.body,
       prLink: pr.html_url,
