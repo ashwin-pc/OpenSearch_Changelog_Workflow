@@ -67,6 +67,7 @@ export const prepareChangelogEntriesMap = (
   prLink,
   prepareChangelogEntry
 ) => {
+  console.log("Inside prepareChangelogEntriesMap");
   return entries
     .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
@@ -86,6 +87,7 @@ export const prepareChangelogEntriesMap = (
  * @returns {string} The content for the changeset file.
  */
 export const prepareChangesetEntriesContent = (changelogEntriesMap) => {
+  console.log("Inside prepareChangesetEntriesContent");
   return Object.entries(changelogEntriesMap)
     .map(([prefix, entries]) => {
       return `${prefix}:\n${entries.join("\n")}`;
