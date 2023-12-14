@@ -186,6 +186,15 @@ export const postPRComment = async (
   getErrorComment
 ) => {
   console.log("Inside postPRComment");
+  console.log(`
+  Arguments passed to postPRComment:
+  octokit: ${octokit}
+  owner: ${owner}
+  repo: ${repo}
+  prNumber: ${prNumber}
+  errorInput: ${errorInput}
+  getErrorComment: ${getErrorComment}
+  `)
   const comment = getErrorComment(errorInput);
 
   if (comment) {
