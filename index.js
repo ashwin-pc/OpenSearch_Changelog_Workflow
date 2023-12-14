@@ -28,11 +28,11 @@ async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(OPENSEARCH_TOKEN);
   console.log("___________________________________");
-  console.log("octokit", octokit);
+  console.log("octokit: ", octokit);
   console.log("___________________________________");
 
-  console.log("___________GITHUB_TOKEN___________ ");
-  console.log("token", GITHUB_TOKEN);
+  console.log("___________OPENSEARCH_TOKEN___________ ");
+  console.log("token: ", OPENSEARCH_TOKEN);
   console.log("___________________________________");
   // Initial variables for storing extracted PR data
   let owner,
