@@ -27,9 +27,10 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  console.log("___________________________________");
-  console.log("octokit", octokit);
-  console.log("___________________________________");
+
+  // console.log("---------- OCTOKIT CLIENT ----------");
+  // console.log("octokit", octokit);
+  // console.log("------------------------------------");
 
   // Initial variables for storing extracted PR data
   let owner,
