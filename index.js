@@ -75,7 +75,7 @@ async function run() {
       prNumber,
       updatePRLabel
     );
-    
+
     // Skip changeset file creation if the "skip" label was added to the PR
     if (isSkipOptionPresent) {
       console.log("Skipping changeset creation because of 'skip' option.");
@@ -89,7 +89,7 @@ async function run() {
     const changesetFileName = `${prNumber}.yml`;
     const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
     const message = `Add changeset for PR #${prNumber}`;
-    
+
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
       octokit,

@@ -26,6 +26,20 @@ export const extractPullRequestData = () => {
     );
 
     // Return relevant PR data including user's username
+
+    const data = {
+      owner: pr.base.repo.owner.login,
+      repo: pr.base.repo.name,
+      branchRef: pr.base.ref,
+      prOwner: pr.head.repo.owner.login,
+      prRepo: pr.head.repo.name,
+      prBranchRef: pr.head.ref,
+      prNumber: pr.number,
+      prDescription: pr.body,
+      prLink: pr.html_url,
+    }
+
+    console.log(data);
     return {
       owner: pr.base.repo.owner.login,
       repo: pr.base.repo.name,
@@ -181,7 +195,7 @@ export const postPRComment = async (
   errorInput,
   getErrorComment
 ) => {
-  
+
   const comment = getErrorComment(errorInput);
 
   if (comment) {
@@ -258,7 +272,7 @@ export const createOrUpdateFile = async (
       branch: branchRef,
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
-  } catch (error) {    
+  } catch (error) {
     if (!sha) {
       throw new CreateChangesetFileError();
     } else {
