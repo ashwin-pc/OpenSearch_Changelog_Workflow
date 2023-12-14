@@ -231,6 +231,7 @@ export const createOrUpdateFile = async (
   message,
   branchRef
 ) => {
+  console.log("Inside createOrUpdateFile");
   // File's SHA to check if file exists
   let sha;
   // Attempt to retrieve the file's SHA to check if it exists
@@ -243,6 +244,7 @@ export const createOrUpdateFile = async (
     });
     sha = response.data.sha;
   } catch (error) {
+    console.log("Inside createOrUpdateFile catch");
     if (error.status === 404) {
       console.log("Changeset file not found. Proceeding to create a new one.");
     } else {

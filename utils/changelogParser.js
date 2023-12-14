@@ -13,6 +13,7 @@ import {
  * @returns {Object} An object with the updated parsing state and the processed line (null for ignored lines, trimmed otherwise).
  */
 export const processLine = (line, state) => {
+  console.log("Inside processLine");
   // Check for the start of a comment block
   if (line.includes("<!--"))
     return {
@@ -47,6 +48,7 @@ export const processLine = (line, state) => {
  * @return {string[]} An array of changelog entry strings.
  */
 export const extractChangelogEntries = (prDescription, processLine) => {
+  console.log("Inside extractChangelogEntries");
   // Match the changelog section using the defined regex
   const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
   // Output -> Array of length 2:
