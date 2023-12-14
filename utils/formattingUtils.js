@@ -31,6 +31,7 @@ import {
  * @throws {ChangelogEntryMissingHyphenError} When the changelog entry does not match the expected format.
  */
 export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
+  console.log("Inside prepareChangelogEntry");
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
     const [, prefix, text] = match;
