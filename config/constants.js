@@ -81,7 +81,7 @@ export const MAX_ENTRY_LENGTH = 100;
  * It is expected to be set as an environment variable.
  * @type {string}
  */
-export const OPENSEARCH_TOKEN = process.env.INPUT_TOKEN;
+export const GITHUB_TOKEN = process.env.INPUT_TOKEN;
 
 /**
  * The file path where the changeset will be stored or updated.
