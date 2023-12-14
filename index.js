@@ -1,7 +1,7 @@
 import github from "@actions/github";
 import {
   CHANGESET_PATH,
-  OPENSEARCH_TOKEN,
+  GITHUB_TOKEN,
   FAILED_CHANGESET_LABEL,
 } from "./config/constants.js";
 import {
