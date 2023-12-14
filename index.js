@@ -64,6 +64,8 @@ async function run() {
     console.log("prNumber: ", prNumber);
     console.log("prLink:", prLink);
     console.log("branchRef:", branchRef);
+    console.log("github_token:", GITHUB_TOKEN)
+    console.log("changeset_token:", CHANGESET_TOKEN)
     console.log("-----------------------------------");
 
     // Create an array of changelog entry strings from the PR description
