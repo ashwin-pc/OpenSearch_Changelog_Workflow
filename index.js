@@ -2,6 +2,7 @@ import github from "@actions/github";
 import {
   CHANGESET_PATH,
   GITHUB_TOKEN,
+  CHANGESET_TOKEN,
   FAILED_CHANGESET_LABEL,
 } from "./config/constants.js";
 import {
@@ -27,6 +28,7 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
+  const octokitChangeset = github.getOctokit(CHANGESET_TOKEN);
   // Initial variables for storing extracted PR data
   let owner,
     repo,
@@ -104,7 +106,7 @@ async function run() {
 
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
-      octokit,
+      octokitChangeset,
       prOwner,
       prRepo,
       changesetFilePath,

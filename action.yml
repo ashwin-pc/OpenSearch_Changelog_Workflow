@@ -4,6 +4,9 @@ inputs:
   token:
     description: "GitHub token for authentication"
     required: true
+  changeset_token:
+    description: "Personalized PAT token for creating changeset files"
+    required: true
   changeset_path:
     description: "Path where the changeset files will be added"
     # required: true
