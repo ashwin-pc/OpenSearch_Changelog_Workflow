@@ -48,7 +48,6 @@ export const processLine = (line, state) => {
  * @return {string[]} An array of changelog entry strings.
  */
 export const extractChangelogEntries = (prDescription, processLine) => {
-  console.log("Inside extractChangelogEntries");
   // Match the changelog section using the defined regex
   const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
   // Output -> Array of length 2:

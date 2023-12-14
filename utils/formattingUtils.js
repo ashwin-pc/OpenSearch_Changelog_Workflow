@@ -31,25 +31,20 @@ import {
  * @throws {ChangelogEntryMissingHyphenError} When the changelog entry does not match the expected format.
  */
 export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
-  console.log("Inside prepareChangelogEntry");
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
-    console.log("We have a match!");
     const [, prefix, text] = match;
     const trimmedText = text ? text.trim() : "";
     if (prefix === "skip") {
       return ["", "skip"];
     } else {
       if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())){
-        console.log("Prefix is not valid!")
         throw new InvalidPrefixError(prefix);
       }
       else if (!text) {
-        console.log("Text is empty!")
         throw new EmptyEntryDescriptionError(prefix);
       } 
       else if (trimmedText.length > MAX_ENTRY_LENGTH) {
-        console.log("Text is too long!")
         throw new EntryTooLongError(text.length);
       }
     }
@@ -59,7 +54,6 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
     const formattedChangelogEntry = `- ${capitalizedText} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   } else {
-    console.log("Changelog entry missing hyphen!");
     throw new ChangelogEntryMissingHyphenError();
   }
 };
@@ -77,14 +71,6 @@ export const prepareChangelogEntriesMap = (
   prLink,
   prepareChangelogEntry
 ) => {
-  console.log("Inside prepareChangelogEntriesMap");
-  console.log(`
-  Arguments passed to prepareChangelogEntriesMap:
-  entries: ${entries}
-  prNumber: ${prNumber}
-  prLink: ${prLink}
-  prepareChangelogEntry: ${prepareChangelogEntry}
-  `)
   return entries
     .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
@@ -104,7 +90,6 @@ export const prepareChangelogEntriesMap = (
  * @returns {string} The content for the changeset file.
  */
 export const prepareChangesetEntriesContent = (changelogEntriesMap) => {
-  console.log("Inside prepareChangesetEntriesContent");
   return Object.entries(changelogEntriesMap)
     .map(([prefix, entries]) => {
       return `${prefix}:\n${entries.join("\n")}`;

@@ -20,9 +20,6 @@ export const extractPullRequestData = () => {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
     const pr = context.payload.pull_request;
-    console.log("-------- PR DATA -----------");
-    console.log("pr: ", pr);
-    console.log("----------------------------");
 
     console.log(
       `Extracting data for PR #${pr.number} in ${pr.base.repo.owner.login}/${pr.base.repo.name}`
@@ -134,7 +131,6 @@ export const handleSkipOption = async (
   prNumber,
   updateLabel
 ) => {
-  console.log("Inside handleSkipOption");
   if (entryMap && Object.keys(entryMap).includes("skip")) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
@@ -185,16 +181,7 @@ export const postPRComment = async (
   errorInput,
   getErrorComment
 ) => {
-  console.log("Inside postPRComment");
-  console.log(`
-  Arguments passed to postPRComment:
-  octokit: ${octokit.rest.issues};
-  owner: ${owner}
-  repo: ${repo}
-  prNumber: ${prNumber}
-  errorInput: ${errorInput}
-  getErrorComment: ${getErrorComment}
-  `)
+  
   const comment = getErrorComment(errorInput);
 
   if (comment) {
@@ -240,7 +227,6 @@ export const createOrUpdateFile = async (
   message,
   branchRef
 ) => {
-  console.log("Inside createOrUpdateFile");
   // File's SHA to check if file exists
   let sha;
   // Attempt to retrieve the file's SHA to check if it exists
@@ -253,7 +239,6 @@ export const createOrUpdateFile = async (
     });
     sha = response.data.sha;
   } catch (error) {
-    console.log("Inside createOrUpdateFile catch");
     if (error.status === 404) {
       console.log("Changeset file not found. Proceeding to create a new one.");
     } else {
@@ -273,22 +258,7 @@ export const createOrUpdateFile = async (
       branch: branchRef,
     });
     console.log(`File: ${path} ${sha ? "updated" : "created"} successfully.`);
-  } catch (error) {
-
-    console.log(" ---------------- DETAILS -----------------");
-    console.log("owner:", owner);
-    console.log("repo:", repo);
-    console.log("path:", path);
-    console.log("message:", message);
-    console.log("content:", content);
-    console.log("sha:", sha);
-    console.log("branchRef:", branchRef);
-    console.log(" ------------------------------------------");
-
-    console.log(" ---------------- ERROR -------------------");
-    console.log(error);
-    console.log(" ------------------------------------------");
-    
+  } catch (error) {    
     if (!sha) {
       throw new CreateChangesetFileError();
     } else {

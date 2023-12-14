@@ -69,7 +69,7 @@ async function run() {
       prDescription,
       processLine
     );
-    console.log("Finished with extractChangelogEntries");
+
     // Create a map of changeset entries organized by category
     const changelogEntriesMap = prepareChangelogEntriesMap(
       changelogEntries,
@@ -77,7 +77,7 @@ async function run() {
       prLink,
       prepareChangelogEntry
     );
-    console.log("Finished with prepareChangelogEntriesMap");
+
     // Check if the "skip" option is present in the entry map and respond accordingly
     const isSkipOptionPresent = await handleSkipOption(
       octokit,
@@ -87,7 +87,7 @@ async function run() {
       prNumber,
       updatePRLabel
     );
-    console.log("Finished with handleSkipOption");
+    
     // Skip changeset file creation if the "skip" label was added to the PR
     if (isSkipOptionPresent) {
       console.log("Skipping changeset creation because of 'skip' option.");
@@ -101,7 +101,7 @@ async function run() {
     const changesetFileName = `${prNumber}.yml`;
     const changesetFilePath = `${CHANGESET_PATH}/${changesetFileName}`;
     const message = `Add changeset for PR #${prNumber}`;
-    console.log("Finished with prepareChangesetEntriesContent");
+    
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
       octokit,
