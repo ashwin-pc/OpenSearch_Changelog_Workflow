@@ -68,6 +68,13 @@ export const prepareChangelogEntriesMap = (
   prepareChangelogEntry
 ) => {
   console.log("Inside prepareChangelogEntriesMap");
+  console.log(`
+  Arguments passed to prepareChangelogEntriesMap:
+  entries: ${entries}
+  prNumber: ${prNumber}
+  prLink: ${prLink}
+  prepareChangelogEntry: ${prepareChangelogEntry}
+  `)
   return entries
     .map((entry) => prepareChangelogEntry(entry, prNumber, prLink))
     .reduce((acc, [entry, prefix]) => {
