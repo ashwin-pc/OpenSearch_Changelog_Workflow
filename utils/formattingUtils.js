@@ -34,16 +34,24 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
   console.log("Inside prepareChangelogEntry");
   const match = changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX);
   if (match) {
+    console.log("We have a match!");
     const [, prefix, text] = match;
     const trimmedText = text ? text.trim() : "";
     if (prefix === "skip") {
       return ["", "skip"];
     } else {
-      if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase()))
+      if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())){
+        console.log("Prefix is not valid!")
         throw new InvalidPrefixError(prefix);
-      else if (!text) throw new EmptyEntryDescriptionError(prefix);
-      else if (trimmedText.length > MAX_ENTRY_LENGTH)
+      }
+      else if (!text) {
+        console.log("Text is empty!")
+        throw new EmptyEntryDescriptionError(prefix);
+      } 
+      else if (trimmedText.length > MAX_ENTRY_LENGTH) {
+        console.log("Text is too long!")
         throw new EntryTooLongError(text.length);
+      }
     }
     // Capitalize the first letter of the changelog description, if it isn't already capitalized
     const capitalizedText =
@@ -51,6 +59,7 @@ export const prepareChangelogEntry = (changelogEntry, prNumber, prLink) => {
     const formattedChangelogEntry = `- ${capitalizedText} ([#${prNumber}](${prLink}))`;
     return [formattedChangelogEntry, prefix];
   } else {
+    console.log("Changelog entry missing hyphen!");
     throw new ChangelogEntryMissingHyphenError();
   }
 };
