@@ -1,7 +1,7 @@
 import github from "@actions/github";
 import {
   CHANGESET_PATH,
-  GITHUB_TOKEN,
+  OPENSEARCH_TOKEN,
   FAILED_CHANGESET_LABEL,
 } from "./config/constants.js";
 import {
@@ -26,7 +26,7 @@ import {
  */
 async function run() {
   // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+  const octokit = github.getOctokit(OPENSEARCH_TOKEN);
   console.log("___________________________________");
   console.log("octokit", octokit);
   console.log("___________________________________");
