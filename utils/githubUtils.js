@@ -26,20 +26,6 @@ export const extractPullRequestData = () => {
     );
 
     // Return relevant PR data including user's username
-
-    const data = {
-      owner: pr.base.repo.owner.login,
-      repo: pr.base.repo.name,
-      branchRef: pr.base.ref,
-      prOwner: pr.head.repo.owner.login,
-      prRepo: pr.head.repo.name,
-      prBranchRef: pr.head.ref,
-      prNumber: pr.number,
-      prDescription: pr.body,
-      prLink: pr.html_url,
-    }
-
-    console.log(data);
     return {
       owner: pr.base.repo.owner.login,
       repo: pr.base.repo.name,
@@ -77,7 +63,6 @@ export const updatePRLabel = async (
   label,
   addLabel
 ) => {
-
   try {
     // Get the current labels on the pull request
     const { data: currentLabels } = await octokit.rest.issues.listLabelsOnIssue(
@@ -89,9 +74,7 @@ export const updatePRLabel = async (
     );
 
     // Check to see if the label is already on the pull request
-    const labelExists = currentLabels.some(
-      (element) => element.name === label
-    );
+    const labelExists = currentLabels.some((element) => element.name === label);
 
     if (addLabel && !labelExists) {
       // Add the label to the pull request
@@ -195,7 +178,6 @@ export const postPRComment = async (
   errorInput,
   getErrorComment
 ) => {
-
   const comment = getErrorComment(errorInput);
 
   if (comment) {
