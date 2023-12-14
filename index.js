@@ -30,6 +30,10 @@ async function run() {
   console.log("___________________________________");
   console.log("octokit", octokit);
   console.log("___________________________________");
+
+  console.log("___________GITHUB_TOKEN___________ ");
+  console.log("token", GITHUB_TOKEN);
+  console.log("___________________________________");
   // Initial variables for storing extracted PR data
   let owner,
     repo,
