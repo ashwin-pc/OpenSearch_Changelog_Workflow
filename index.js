@@ -63,7 +63,7 @@ async function run() {
     console.log("prLink:", prLink);
     console.log("branchRef:", branchRef);
     console.log("-----------------------------------");
-    
+
     // Create an array of changelog entry strings from the PR description
     const changelogEntries = extractChangelogEntries(
       prDescription,
@@ -112,33 +112,33 @@ async function run() {
       message,
       branchRef,
     );
-    await updatePRLabel(
-      octokit,
-      owner,
-      repo,
-      prNumber,
-      FAILED_CHANGESET_LABEL,
-      false
-    );
+    // await updatePRLabel(
+    //   octokit,
+    //   owner,
+    //   repo,
+    //   prNumber,
+    //   FAILED_CHANGESET_LABEL,
+    //   false
+    // );
   } catch (error) {
-    if (owner && repo && prNumber) {
-      await postPRComment(
-        octokit,
-        owner,
-        repo,
-        prNumber,
-        error,
-        getErrorComment
-      );
-      await updatePRLabel(
-        octokit,
-        owner,
-        repo,
-        prNumber,
-        FAILED_CHANGESET_LABEL,
-        true
-      );
-    }
+    // if (owner && repo && prNumber) {
+    //   await postPRComment(
+    //     octokit,
+    //     owner,
+    //     repo,
+    //     prNumber,
+    //     error,
+    //     getErrorComment
+    //   );
+    //   await updatePRLabel(
+    //     octokit,
+    //     owner,
+    //     repo,
+    //     prNumber,
+    //     FAILED_CHANGESET_LABEL,
+    //     true
+    //   );
+    // }
     console.error(error);
     throw error;
   }
