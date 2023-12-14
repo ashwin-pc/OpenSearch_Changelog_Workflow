@@ -13,7 +13,6 @@ import {
  * @returns {Object} An object with the updated parsing state and the processed line (null for ignored lines, trimmed otherwise).
  */
 export const processLine = (line, state) => {
-  console.log("Inside processLine");
   // Check for the start of a comment block
   if (line.includes("<!--"))
     return {
