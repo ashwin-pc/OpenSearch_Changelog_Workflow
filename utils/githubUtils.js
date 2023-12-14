@@ -134,6 +134,7 @@ export const handleSkipOption = async (
   prNumber,
   updateLabel
 ) => {
+  console.log("Inside handleSkipOption");
   if (entryMap && Object.keys(entryMap).includes("skip")) {
     // Check if "skip" is the only prefix in the changeset entries
     if (Object.keys(entryMap).length > 1) {
@@ -184,6 +185,7 @@ export const postPRComment = async (
   errorInput,
   getErrorComment
 ) => {
+  console.log("Inside postPRComment");
   const comment = getErrorComment(errorInput);
 
   if (comment) {
