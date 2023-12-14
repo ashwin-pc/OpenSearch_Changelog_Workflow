@@ -188,7 +188,7 @@ export const postPRComment = async (
   console.log("Inside postPRComment");
   console.log(`
   Arguments passed to postPRComment:
-  octokit: ${octokit}
+  octokit: ${JSON.stringify.octokit}
   owner: ${owner}
   repo: ${repo}
   prNumber: ${prNumber}
