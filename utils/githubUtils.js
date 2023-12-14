@@ -19,10 +19,10 @@ export const extractPullRequestData = () => {
   try {
     // Retrieve context data from the GitHub action environment
     const context = github.context;
-    console.log("___________________________________");
-    console.log("context", context);
-    console.log("___________________________________");
     const pr = context.payload.pull_request;
+    console.log("-------- PR DATA -----------");
+    console.log("pr: ", pr);
+    console.log("----------------------------");
 
     console.log(
       `Extracting data for PR #${pr.number} in ${pr.base.repo.owner.login}/${pr.base.repo.name}`
