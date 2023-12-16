@@ -238,6 +238,9 @@ export const createOrUpdateFile = async (
     if (error.status === 404) {
       console.log("Changeset file not found. Proceeding to create a new one.");
     } else {
+      console.log(" ---------------- ERROR -------------------");
+      console.log(error);
+      console.log(" ------------------------------------------");
       throw new GetGithubContentError();
     }
   }
