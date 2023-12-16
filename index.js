@@ -109,7 +109,7 @@ async function run() {
 
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
-      octokit,
+      octokitChangeset,
       prOwner,
       prRepo,
       changesetFilePath,
