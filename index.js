@@ -2,7 +2,6 @@ import github from "@actions/github";
 import {
   CHANGESET_PATH,
   GITHUB_TOKEN,
-  CHANGESET_TOKEN,
   FAILED_CHANGESET_LABEL,
 } from "./config/constants.js";
 import {
@@ -28,8 +27,7 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = github.getOctokit(GITHUB_TOKEN);
-  console.log(CHANGESET_TOKEN)
-  const octokitChangeset = github.getOctokit(CHANGESET_TOKEN);
+
   // Initial variables for storing extracted PR data
   let owner,
     repo,
@@ -65,8 +63,6 @@ async function run() {
     console.log("prNumber: ", prNumber);
     console.log("prLink:", prLink);
     console.log("branchRef:", branchRef);
-    console.log("github_token:", GITHUB_TOKEN)
-    console.log("changeset_token:", CHANGESET_TOKEN)
     console.log("-----------------------------------");
 
     // Create an array of changelog entry strings from the PR description
@@ -109,7 +105,7 @@ async function run() {
 
     // Create or update the changeset file using Github API
     await createOrUpdateFile(
-      octokitChangeset,
+      octokit,
       prOwner,
       prRepo,
       changesetFilePath,
@@ -117,33 +113,33 @@ async function run() {
       message,
       prBranchRef,
     );
-    // await updatePRLabel(
-    //   octokit,
-    //   owner,
-    //   repo,
-    //   prNumber,
-    //   FAILED_CHANGESET_LABEL,
-    //   false
-    // );
+    await updatePRLabel(
+      octokit,
+      owner,
+      repo,
+      prNumber,
+      FAILED_CHANGESET_LABEL,
+      false
+    );
   } catch (error) {
-    // if (owner && repo && prNumber) {
-    //   await postPRComment(
-    //     octokit,
-    //     owner,
-    //     repo,
-    //     prNumber,
-    //     error,
-    //     getErrorComment
-    //   );
-    //   await updatePRLabel(
-    //     octokit,
-    //     owner,
-    //     repo,
-    //     prNumber,
-    //     FAILED_CHANGESET_LABEL,
-    //     true
-    //   );
-    // }
+    if (owner && repo && prNumber) {
+      await postPRComment(
+        octokit,
+        owner,
+        repo,
+        prNumber,
+        error,
+        getErrorComment
+      );
+      await updatePRLabel(
+        octokit,
+        owner,
+        repo,
+        prNumber,
+        FAILED_CHANGESET_LABEL,
+        true
+      );
+    }
     console.error(error);
     throw error;
   }

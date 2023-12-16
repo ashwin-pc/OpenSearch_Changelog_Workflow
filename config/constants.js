@@ -84,13 +84,6 @@ export const MAX_ENTRY_LENGTH = 100;
 export const GITHUB_TOKEN = process.env.INPUT_TOKEN;
 
 /**
- * Personalized PAT tojen used to create or update the changeset file.
- * It is expected to be set as an environment variable.
- * @type {string}
- */
-export const CHANGESET_TOKEN = process.env.INPUT_CHANGESET_TOKEN;
-
-/**
  * The file path where the changeset will be stored or updated.
  * This path is read from an environment variable.
  * @type {string}
