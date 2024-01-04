@@ -48,7 +48,7 @@ async function run() {
       prNumber,
       prDescription,
       prLink,
-    } = extractPullRequestData(payload.pull_request));
+    } = extractPullRequestData());
 
     // Step 1 - Parse changelog entries and validate
     const changelogEntries = extractChangelogEntries(

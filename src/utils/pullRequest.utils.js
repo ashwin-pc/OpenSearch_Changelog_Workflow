@@ -1,10 +1,12 @@
+import github from "@actions/github";
+
 /**
  * Extracts relevant data from a GitHub Pull Request provided as a payload. This function
  * is typically used within the context of a GitHub Action to process pull request information.
  *
  * @param {Object} pr_payload - The payload object from a GitHub pull request event.
  *
- * @returns {Object} An object containing essential pull request details such as base repository owner, base 
+ * @returns {Object} An object containing essential pull request details such as base repository owner, base
  * repository name, base branch reference, head repository owner, head repository name, head branch reference,
  * pull request number, pull request description, and pull request link.
  *
@@ -12,7 +14,8 @@
  * `PullRequestDataExtractionError` is thrown. This helps in isolating issues specific to data extraction
  * process in the action's workflow.
  */
-export const extractPullRequestData = (pr_payload) => {
+export const extractPullRequestData = () => {
+  const pr_payload = github.context.payload.pull_request;
   try {
     console.log(
       `Extracting data for PR #${pr_payload.number} in ${pr_payload.base.repo.owner.login}/${pr_payload.base.repo.name}`
