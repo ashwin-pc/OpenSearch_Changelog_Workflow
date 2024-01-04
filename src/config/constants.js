@@ -90,7 +90,7 @@ export const MAX_ENTRY_LENGTH = 100;
  * The GitHub Token - GHA Reusable Workflow.
  * @type {string}
  */
-export const GITHUB_TOKEN = process.env.INPUT_GITHUB_TOKEN;
+export const GITHUB_TOKEN = process.env.INPUT_TOKEN;
 
 /**
  * The file path where the changeset files will be stored or updated.
