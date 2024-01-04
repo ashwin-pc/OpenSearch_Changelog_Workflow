@@ -25,8 +25,7 @@ import {
 
 async function run() {
   // Initialize Octokit client with the GitHub token
-  const octokit = github.getOctokit(GITHUB_TOKEN);
-
+  const octokit = authServices.getOcktokitClient();
   let baseOwner,
     baseRepo,
     baseBranch,
@@ -68,7 +67,7 @@ async function run() {
       await addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
-      await deleteFileByPathInForkedRepo(
+      await forkedFileServices.deleteFileByPathInForkedRepo(
         headOwner,
         headRepo,
         headBranch,
@@ -77,7 +76,7 @@ async function run() {
       );
 
       // Clear 'failed changeset' label if exists
-      await removeLabel(
+      await labelServices.removeLabel(
         octokit,
         baseOwner,
         baseRepo,
@@ -90,17 +89,19 @@ async function run() {
     // Step 3 - Add or update the changeset file in head repo
 
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-    await createOrUpdateFileInForkedRepoByPath(
+    const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
+    await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
       headOwner,
       headRepo,
       headBranch,
       `${CHANGESET_PATH}/${prNumber}.yml`,
-      changesetFileContent
+      changesetFileContent,
+      commitMessage
     );
 
     // Step 4 - Remove "Skip-Changelog" and "failed changeset" labels if they exist
-    await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
-    await removeLabel(
+    await labelServices.removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    await labelServices.removeLabel(
       octokit,
       baseOwner,
       baseRepo,
@@ -112,7 +113,7 @@ async function run() {
 
     // Delete changeset file if one was previously created
     const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    await deleteFileByPathInForkedRepo(
+    await forkedFileServices.deleteFileByPathInForkedRepo(
       headOwner,
       headRepo,
       headBranch,
@@ -122,7 +123,7 @@ async function run() {
 
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
     // Add error comment to PR
-    await postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
+    await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
     // Add failed changeset label
     await addLabel(
       octokit,
