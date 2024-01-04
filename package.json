@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@actions/github": "^6.0.0",
-    "@octokit/rest": "^20.0.2",
     "axios": "^1.6.4",
     "dotenv": "^16.3.1",
     "octokit": "^3.1.2"

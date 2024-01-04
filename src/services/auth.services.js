@@ -1,5 +1,5 @@
 
-import { Octokit } from "@octokit/rest";
+import github from "@actions/github";
 import{
   GITHUB_TOKEN,
 } from '../config/constants.js';
@@ -15,7 +15,7 @@ import{
  */
 const getOcktokitClient = async () => {
   try {
-    const octokit = new Octokit({ auth: `token ${GITHUB_TOKEN}` });
+    const octokit = github.getOctokit(GITHUB_TOKEN);
     return octokit;
   } catch (error) {
     console.error('Error getting ocktokit client:', error.message);
