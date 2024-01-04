@@ -1,5 +1,5 @@
 
-import { github } from "@actions/github";
+import * as github from "@actions/github";
 import{
   GITHUB_TOKEN,
 } from '../config/constants.js';
