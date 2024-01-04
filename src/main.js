@@ -67,7 +67,7 @@ async function run() {
       await addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
-      await forkedFileServices.deleteFileByPathInForkedRepo(
+      await forkedFileServices.deleteFileInForkedRepoByPath(
         headOwner,
         headRepo,
         headBranch,
@@ -113,7 +113,7 @@ async function run() {
 
     // Delete changeset file if one was previously created
     const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    await forkedFileServices.deleteFileByPathInForkedRepo(
+    await forkedFileServices.deleteFileInForkedRepoByPath(
       headOwner,
       headRepo,
       headBranch,
