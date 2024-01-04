@@ -101,18 +101,25 @@ export const createOrUpdateFileInForkedRepoByPath = async (
   repo,
   branch,
   path,
-  content
+  content,
+  message
 ) => {
   try {
-    const { data } = await axios.post(`${GITHUB_APP_BASE_URL}/files`, {
-      owner: owner,
-      repo: repo,
-      ref: branch,
-      path: path,
-      content: content,
-    });
+    const encodedContent = Buffer.from(content).toString("base64");
+    await axios.post(
+      `${GITHUB_APP_BASE_URL}/files`,
+      { content: encodedContent, message: message },
+      {
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: path,
+        },
+      }
+    );
     // Log the commit message for the created or updated file in forked repo
-    console.log(data.commitMessage);
+    console.log(message);
   } catch (error) {
     console.error(
       `Error creating or updating file in forked repo ${owner}/${branch}:`,
@@ -136,17 +143,21 @@ export const deleteFileInForkedRepoByPath = async (
   owner,
   repo,
   branch,
-  path
+  path,
+  message
 ) => {
   try {
-    const { data } = await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
-      owner: owner,
-      repo: repo,
-      ref: branch,
-      path: path,
+    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
+      params: {
+        owner: owner,
+        repo: repo,
+        branch: branch,
+        path: path,
+        message: message,
+      },
     });
     // Log the commit message for the deleted file in forked repo
-    console.log(data.commitMessage);
+    console.log(message);
   } catch (error) {
     console.error(
       `Error deleting file in forked repo ${owner}/${branch}:`,
@@ -166,20 +177,17 @@ export const deleteFileInForkedRepoByPath = async (
  * @returns {Promise<void>} A Promise that resolves when all files are deleted.
  * @throws {Error} - If an error occurs while deleting all files.
  */
-export async function deleteAllFilesByPath(
-  owner,
-  repo,
-  branch,
-  directoryPath,
-) {
+export async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: directoryPath,
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: directoryPath,
+        },
       }
     );
     // Log the commit message for the deleted file in forked repo

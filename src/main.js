@@ -5,13 +5,11 @@ import {
 } from "./config/constants.js";
 
 import {
-  getFileByPath,
-  createOrUpdateFileByPath,
-  deleteFileByPath,
+  createOrUpdateFileInForkedRepoByPath,
+  deleteFileInForkedRepoByPath,
   addLabel,
   removeLabel,
   postComment,
-  getOcktokitClient,
 } from "./services/index.js";
 
 import {
@@ -36,7 +34,7 @@ async function run() {
     headBranch,
     prNumber,
     prDescription,
-    prLink,
+    prLink;
 
   try {
     // Step 0 - Extract information from the payload
@@ -68,14 +66,12 @@ async function run() {
     if (isSkipEntry(changesetEntriesMap)) {
       await addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
 
-      // Delete changeset file if one was previously created
-      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+      // Delete of changeset file in forked repo if one was previously created
       await deleteFileByPathInForkedRepo(
         headOwner,
         headRepo,
         headBranch,
-        `${CHANGESET_PATH}/${prNumber}.yml`,
-        commitMessage
+        `${CHANGESET_PATH}/${prNumber}.yml`
       );
 
       // Clear 'failed changeset' label if exists
@@ -92,17 +88,12 @@ async function run() {
     // Step 3 - Add or update the changeset file in head repo
 
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-    const commitMessage = (changesetFileSha) =>
-      `Changeset file for PR #${prNumber} ${
-        changesetFileSha ? "updated" : "created"
-      }`;
-    await createOrUpdateFileByPathInForkedRepo(
+    await createOrUpdateFileInForkedRepoByPath(
       headOwner,
       headRepo,
       headBranch,
       `${CHANGESET_PATH}/${prNumber}.yml`,
-      changesetFileContent,
-      commitMessage
+      changesetFileContent
     );
 
     // Step 4 - Remove "Skip-Changelog" and "failed changeset" labels if they exist
