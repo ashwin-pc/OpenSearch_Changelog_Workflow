@@ -1,8 +1,7 @@
 
-import { App } from 'octokit';
+import { github } from "@actions/github";
 import{
-  GITHUB_APP_IDENTIFIER,
-  GITHUB_APP_PRIVATE_KEY,
+  GITHUB_TOKEN,
 } from '../config/constants.js';
 /**
  * Creates an authenticated Octokit instance for a given GitHub App installation.
@@ -14,19 +13,16 @@ import{
  * @returns {Promise<Octokit>} A Promise that resolves to an authenticated Octokit instance.
  * @throws {Error} - If an error occurs while obtaining the installation ID.
  */
-export const getOcktokitClient = async (owner, repo) => {
+const getOcktokitClient = async () => {
   try {
-    const ghApp = new App({
-      appId: GITHUB_APP_IDENTIFIER,
-      privateKey: GITHUB_APP_PRIVATE_KEY,
-    });
-    const { data: installation } = await ghApp.octokit.request(
-      `GET /repos/{owner}/{repo}/installation`,
-      { owner, repo }
-    );
-    return ghApp.getInstallationOctokit(installation.id);
+    const octokit = github.getOctokit(GITHUB_TOKEN);
+    return octokit;
   } catch (error) {
-    console.error('Error in getOcktokitClient:', error.message);
+    console.error('Error getting ocktokit client:', error.message);
     throw error; // Re-throw the error to propagate it to the caller.
   }
+};
+
+export const authServices = {
+  getOcktokitClient,
 };

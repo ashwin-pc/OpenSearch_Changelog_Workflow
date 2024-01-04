@@ -2,7 +2,7 @@ import axios from "axios";
 import { GITHUB_APP_BASE_URL } from "../config/constants.js";
 
 /**
- * Get a file in a given path in a GitHub repository.
+ * Get a file in a given path in a forked GitHub repository.
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
@@ -11,7 +11,7 @@ import { GITHUB_APP_BASE_URL } from "../config/constants.js";
  * @returns {Promise<object>} - An object containing the file details.
  * @throws {Error} - If an error occurs while fetching the file.
  */
-export const getFileFromForkedRepoByPath = async (
+const getFileFromForkedRepoByPath = async (
   owner,
   repo,
   branch,
@@ -49,7 +49,7 @@ export const getFileFromForkedRepoByPath = async (
 };
 
 /**
- * Gets all files in a given directory in the GitHub repository.
+ * Gets all files in a given directory in a forked GitHub repository.
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
@@ -60,7 +60,7 @@ export const getFileFromForkedRepoByPath = async (
  *
  */
 
-export const getAllFilesFromForkedRepoByPath = async (
+const getAllFilesFromForkedRepoByPath = async (
   owner,
   repo,
   branch,
@@ -86,7 +86,7 @@ export const getAllFilesFromForkedRepoByPath = async (
 };
 
 /**
- * Creates or updates a new file in the GitHub repository.
+ * Creates or updates a new file in a forked repository.
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
@@ -96,7 +96,7 @@ export const getAllFilesFromForkedRepoByPath = async (
  * @returns {Promise<object>} - An object containing the created or updated file details.
  * @throws {Error} - If an error occurs while creating or updating the file.
  */
-export const createOrUpdateFileInForkedRepoByPath = async (
+const createOrUpdateFileInForkedRepoByPath = async (
   owner,
   repo,
   branch,
@@ -118,7 +118,7 @@ export const createOrUpdateFileInForkedRepoByPath = async (
         },
       }
     );
-    // Log the commit message for the created or updated file in forked repo
+    // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
     console.error(
@@ -130,7 +130,7 @@ export const createOrUpdateFileInForkedRepoByPath = async (
 };
 
 /**
- * Deletes a file from the GitHub repository.
+ * Deletes a file from a forked GitHub repository.
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
@@ -139,7 +139,7 @@ export const createOrUpdateFileInForkedRepoByPath = async (
  * @returns {Promise<void>} A Promise that resolves when the file is deleted.
  * @throws {Error} - If an error occurs while deleting the file.
  */
-export const deleteFileInForkedRepoByPath = async (
+const deleteFileInForkedRepoByPath = async (
   owner,
   repo,
   branch,
@@ -168,7 +168,7 @@ export const deleteFileInForkedRepoByPath = async (
 };
 
 /**
- * Deletes all files in a given directory in the GitHub repository.
+ * Deletes all files in a given directory in a forked GitHub repository.
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
@@ -177,7 +177,7 @@ export const deleteFileInForkedRepoByPath = async (
  * @returns {Promise<void>} A Promise that resolves when all files are deleted.
  * @throws {Error} - If an error occurs while deleting all files.
  */
-export async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
+async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
@@ -196,4 +196,12 @@ export async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     console.error("Error deleting file:", error.message);
     throw error;
   }
+}
+
+export const forkedFileServices = {
+  getFileFromForkedRepoByPath,
+  getAllFilesFromForkedRepoByPath,
+  createOrUpdateFileInForkedRepoByPath,
+  deleteFileInForkedRepoByPath,
+  deleteAllFilesByPath,
 }

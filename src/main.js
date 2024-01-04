@@ -1,3 +1,5 @@
+
+
 import {
   CHANGESET_PATH,
   FAILED_CHANGESET_LABEL,
@@ -5,11 +7,10 @@ import {
 } from "./config/constants.js";
 
 import {
-  createOrUpdateFileInForkedRepoByPath,
-  deleteFileInForkedRepoByPath,
-  addLabel,
-  removeLabel,
-  postComment,
+  forkedFileServices,
+  labelServices,
+  commentServices,
+  authServices
 } from "./services/index.js";
 
 import {
@@ -65,13 +66,14 @@ async function run() {
 
     if (isSkipEntry(changesetEntriesMap)) {
       await addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
-
+      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
       await deleteFileByPathInForkedRepo(
         headOwner,
         headRepo,
         headBranch,
-        `${CHANGESET_PATH}/${prNumber}.yml`
+        `${CHANGESET_PATH}/${prNumber}.yml`,
+        commitMessage
       );
 
       // Clear 'failed changeset' label if exists
