@@ -26,6 +26,7 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOcktokitClient();
+  const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
     baseRepo,
     baseBranch,
@@ -71,7 +72,7 @@ async function run() {
         headOwner,
         headRepo,
         headBranch,
-        `${CHANGESET_PATH}/${prNumber}.yml`,
+        changesetFilePath(prNumber),
         commitMessage
       );
 
@@ -94,7 +95,7 @@ async function run() {
       headOwner,
       headRepo,
       headBranch,
-      `${CHANGESET_PATH}/${prNumber}.yml`,
+      changesetFilePath(prNumber),
       changesetFileContent,
       commitMessage
     );
@@ -109,7 +110,7 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-    const changesetFilePath = `${CHANGESET_PATH}/${prNumber}.yml`;
+
 
     // Delete changeset file if one was previously created
     const commitMessage = `Changeset file for PR #${prNumber} deleted`;
@@ -117,7 +118,7 @@ async function run() {
       headOwner,
       headRepo,
       headBranch,
-      changesetFilePath,
+      changesetFilePath(prNumber),
       commitMessage
     );
 
