@@ -111,30 +111,30 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-    console.log(error)
-    // // Delete changeset file if one was previously created
-    // const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    // await forkedFileServices.deleteFileInForkedRepoByPath(
-    //   headOwner,
-    //   headRepo,
-    //   headBranch,
-    //   changesetFilePath(prNumber),
-    //   commitMessage
-    // );
 
-    // const errorComment = formatPostComment({ input: error, type: "ERROR" });
-    // // Add error comment to PR
-    // await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
-    // // Add failed changeset label
-    // await addLabel(
-    //   octokit,
-    //   baseOwner,
-    //   baseRepo,
-    //   prNumber,
-    //   FAILED_CHANGESET_LABEL
-    // );
-    // // Clear skip label if exists
-    // await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    // Delete changeset file if one was previously created
+    const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+    await forkedFileServices.deleteFileInForkedRepoByPath(
+      headOwner,
+      headRepo,
+      headBranch,
+      changesetFilePath(prNumber),
+      commitMessage
+    );
+
+    const errorComment = formatPostComment({ input: error, type: "ERROR" });
+    // Add error comment to PR
+    await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
+    // Add failed changeset label
+    await addLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      FAILED_CHANGESET_LABEL
+    );
+    // Clear skip label if exists
+    await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
   }
 }
 
