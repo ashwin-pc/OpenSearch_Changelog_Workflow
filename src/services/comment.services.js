@@ -10,7 +10,7 @@
  * @throws {Error} - If an error occurs while posting the comment.
  */
 async function postComment(octokit, owner, repo, issueOrPullRequestNumber, comment) {
-  // try {
+  try {
     // Create the comment on the issue or pull request
     await octokit.rest.issues.createComment({
       owner,
@@ -20,10 +20,10 @@ async function postComment(octokit, owner, repo, issueOrPullRequestNumber, comme
     });
 
     console.log(`Comment posted successfully on Issue/PR #${issueOrPullRequestNumber}`);
-  // } catch (error) {
-  //   console.error("Error posting comment:", error.message);
-  //   throw error;
-  // }
+  } catch (error) {
+    console.error("Error posting comment:", error.message);
+    throw error;
+  }
 }
 
 export const commentServices = {
