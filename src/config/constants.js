@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-export const GITHUB_APP_DOMAIN = "https://4f07-190-171-165-241.ngrok-free.app";
+export const GITHUB_APP_DOMAIN =  "https://4f07-190-171-165-241.ngrok-free.app";
 export const API_PATH_SUFFIX = "/api/v1";
 export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
 

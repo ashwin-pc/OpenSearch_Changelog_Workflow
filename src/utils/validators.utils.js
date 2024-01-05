@@ -71,3 +71,8 @@ export const isSkipEntry = (entryMap) => {
     return false;
   }
 };
+
+
+export const isGitHubAppInstalledInForkedRepo = async (owner, repo) => {
+  
+};
