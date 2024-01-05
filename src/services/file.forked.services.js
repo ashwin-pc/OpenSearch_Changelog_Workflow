@@ -126,12 +126,11 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    console.error(
-      `Error creating or updating file in forked repo ${owner}/${branch}:`,
-      error.message
-    );
-    console.log(error)
-    throw error.status === 403 || error.status === 401
+    const errorMessage = error.response?.data?.message || error.message;
+    console.error(`Error in ${owner}/${branch}:`, errorMessage);
+
+    const status = error.response?.status;
+    throw status === 403 || status === 401
       ? new GitHubAppSuspendedOrNotInstalledError()
       : new CreateOrUpdateContentError();
   }
