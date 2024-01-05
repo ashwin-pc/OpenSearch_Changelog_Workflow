@@ -89,7 +89,7 @@ export const removeLabel = async (
   issueOrPullRequestNumber,
   label
 ) => {
-  try {
+  //try {
     // Remove the label from the issue or pull request
     await octokit.rest.issues.removeLabel({
       owner,
@@ -101,14 +101,14 @@ export const removeLabel = async (
     console.log(
       `Label "${label}" removed from Issue/PR #${issueOrPullRequestNumber}`
     );
-  } catch (error) {
-    if (error.status === 404) {
-      console.log(`Label "${label}" not found. No need to remove label.`);
-      return;
-    }
-    console.error("Error removing label:", error.message);
-    throw error;
-  }
+  // } catch (error) {
+  //   if (error.status === 404) {
+  //     console.log(`Label "${label}" not found. No need to remove label.`);
+  //     return;
+  //   }
+  //   console.error("Error removing label:", error.message);
+  //   throw error;
+  // }
 };
 
 export const labelServices = {
