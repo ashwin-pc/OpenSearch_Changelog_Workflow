@@ -1,12 +1,12 @@
 /**
  * Represents an error during the retrieval of content from a GitHub repository.
  */
-export class GetGithubContentError extends Error {
+export class GetContentError extends Error {
   /**
-   * Constructs the GetGithubContentError instance.
-   * @param {string} [message="Error retrieving content from GitHub"] - Custom error message.
+   * Constructs the GetContentError instance.
+   * @param {string} [message="Error retrieving content from repository"] - Custom error message.
    */
-  constructor(message = "Error retrieving content from GitHub repository") {
+  constructor(message = "Error retrieving content from repository") {
     super(message);
     this.name = this.constructor.name;
     /**
@@ -18,14 +18,14 @@ export class GetGithubContentError extends Error {
 }
 
 /**
- * Represents an error during the creation of a file in a GitHub repository.
+ * Represents an error during the creation of content in a GitHub repository.
  */
-export class CreateFileError extends Error {
+export class CreateOrUpdateContentError extends Error {
   /**
-   * Constructs the CreateChangesetFileError instance.
-   * @param {string} [message="Error creating file in repository"] - Custom error message.
+   * Constructs the CreateContentError instance.
+   * @param {string} [message="Error creating or updating content in repository"] - Custom error message.
    */
-  constructor(message = "Error creating file in repository") {
+  constructor(message = "Error creating or updating content in repository") {
     super(message);
     this.name = this.constructor.name;
     /**
@@ -37,33 +37,14 @@ export class CreateFileError extends Error {
 }
 
 /**
- * Represents an error during the update of a file in a GitHub repository.
+ * Represents an error during the deletion of content in a GitHub repository.
  */
-export class UpdateFileError extends Error {
+export class DeleteContentError extends Error {
   /**
-   * Constructs the UpdateFileError instance.
-   * @param {string} [message="Error updating file in repository"] - Custom error message.
+   * Constructs the DeleteContentError instance.
+   * @param {string} [message="Error deleting content in repository"] - Custom error message.
    */
-  constructor(message = "Error updating file in repository") {
-    super(message);
-    this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
-    this.shouldResultInPRComment = false;
-  }
-}
-
-/**
- * Represents an error during the deletion of a file in a GitHub repository.
- */
-export class DeleteFileError extends Error {
-  /**
-   * Constructs the DeleteFileError instance.
-   * @param {string} [message="Error deleting file in repository"] - Custom error message.
-   */
-  constructor(message = "Error deleting file in repository") {
+  constructor(message = "Error deleting content in repository") {
     super(message);
     this.name = this.constructor.name;
     /**
