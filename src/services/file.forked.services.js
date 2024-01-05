@@ -142,18 +142,15 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    await axios.delete(
-      `${GITHUB_APP_BASE_URL}/files`,
-      { message: message },
-      {
-        params: {
-          owner: owner,
-          repo: repo,
-          branch: branch,
-          path: path,
-        },
-      }
-    );
+    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
+      data: { message: message },
+      params: {
+        owner: owner,
+        repo: repo,
+        branch: branch,
+        path: path,
+      },
+    });
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
@@ -179,13 +176,13 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
-      { message: message },
       {
+        data: { message: message },
         params: {
           owner: owner,
           repo: repo,
           branch: branch,
-          path: directoryPath,
+          path: path,
         },
       }
     );
