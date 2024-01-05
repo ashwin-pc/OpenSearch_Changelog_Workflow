@@ -123,6 +123,7 @@ async function run() {
   } catch (error) {
 
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
+    console.log(errorComment)
 
     // Add error comment to PR
     await commentServices.postComment(
