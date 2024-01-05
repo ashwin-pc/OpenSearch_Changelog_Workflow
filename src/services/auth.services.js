@@ -13,7 +13,7 @@ import{
  * @returns {Promise<Octokit>} A Promise that resolves to an authenticated Octokit instance.
  * @throws {Error} - If an error occurs while obtaining the installation ID.
  */
-const getOcktokitClient = async () => {
+const getOcktokitClient = () => {
   try {
     const octokit = github.getOctokit(GITHUB_TOKEN);
     return octokit;

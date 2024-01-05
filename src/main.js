@@ -26,7 +26,7 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOcktokitClient();
-  console.log(octokit.rest);
+
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
     baseRepo,
@@ -112,31 +112,29 @@ async function run() {
     );
   } catch (error) {
 
-    console.log(error)
-    throw error;
-    // // Delete changeset file if one was previously created
-    // const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    // await forkedFileServices.deleteFileInForkedRepoByPath(
-    //   headOwner,
-    //   headRepo,
-    //   headBranch,
-    //   changesetFilePath(prNumber),
-    //   commitMessage
-    // );
+    // Delete changeset file if one was previously created
+    const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+    await forkedFileServices.deleteFileInForkedRepoByPath(
+      headOwner,
+      headRepo,
+      headBranch,
+      changesetFilePath(prNumber),
+      commitMessage
+    );
 
-    // const errorComment = formatPostComment({ input: error, type: "ERROR" });
-    // // Add error comment to PR
-    // await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
-    // // Add failed changeset label
-    // await addLabel(
-    //   octokit,
-    //   baseOwner,
-    //   baseRepo,
-    //   prNumber,
-    //   FAILED_CHANGESET_LABEL
-    // );
-    // // Clear skip label if exists
-    // await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    const errorComment = formatPostComment({ input: error, type: "ERROR" });
+    // Add error comment to PR
+    await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
+    // Add failed changeset label
+    await addLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      FAILED_CHANGESET_LABEL
+    );
+    // Clear skip label if exists
+    await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
   }
 }
 
