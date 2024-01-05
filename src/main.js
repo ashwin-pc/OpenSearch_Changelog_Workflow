@@ -66,7 +66,7 @@ async function run() {
     // Step 2 - Handle "skip" option
 
     if (isSkipEntry(changesetEntriesMap)) {
-      await addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+      await labelServices.addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
       await forkedFileServices.deleteFileInForkedRepoByPath(
