@@ -1,13 +1,19 @@
-
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 // Load environment variables from .env file
 dotenv.config();
 
-
 export const GITHUB_APP_DOMAIN = "https://4f07-190-171-165-241.ngrok-free.app";
 export const API_PATH_SUFFIX = "/api/v1";
 export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
+
+export const GITHUB_APP_NAME = "Auto Changeset Commmit App";
+export const GITHUB_APP_INSTALLATION_LINK =
+  "https://github.com/apps/opensearch-bot";
+export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME =
+  "OpenSeach Auto Changeset and Release Notes Tool";
+export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS =
+  "https://github.com/BigSamu/OpenSearch_Parse_Changelog_Action";
 
 /**
  * ****************************************************
@@ -99,13 +105,13 @@ export const GITHUB_TOKEN = process.env.INPUT_TOKEN;
 export const CHANGESET_PATH = "changelogs/fragments";
 
 /**
-* The label that will be added to the PR if the "skip" option is used.
-* @type {string}
-*/
+ * The label that will be added to the PR if the "skip" option is used.
+ * @type {string}
+ */
 export const SKIP_LABEL = "Skip-Changelog";
 
 /**
-* The label that will be added to the PR if the process fails.
-* @type {string}
-*/
+ * The label that will be added to the PR if the process fails.
+ * @type {string}
+ */
 export const FAILED_CHANGESET_LABEL = "failed changeset";
