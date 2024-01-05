@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-export const GITHUB_APP_DOMAIN =  "https://4f07-190-171-165-241.ngrok-free.app";
+export const GITHUB_APP_DOMAIN = "https://open-search-changeset-bot.vercel.app";
 export const API_PATH_SUFFIX = "/api/v1";
 export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
 
 export const GITHUB_APP_NAME = "Auto Changeset Commmit App";
 export const GITHUB_APP_INSTALLATION_LINK =
-  "https://github.com/apps/opensearch-bot";
+  "https://github.com/apps/opensearch-changeset-bot";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME =
   "OpenSeach Auto Changeset and Release Notes Tool";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS =
@@ -115,4 +115,3 @@ export const SKIP_LABEL = "Skip-Changelog";
  * @type {string}
  */
 export const FAILED_CHANGESET_LABEL = "failed changeset";
-
