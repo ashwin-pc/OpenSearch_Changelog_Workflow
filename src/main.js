@@ -123,44 +123,43 @@ async function run() {
   } catch (error) {
 
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
-    console.log(error)
 
-    // // Add error comment to PR
-    // await commentServices.postComment(
-    //   octokit,
-    //   baseOwner,
-    //   baseRepo,
-    //   prNumber,
-    //   errorComment
-    // );
-    // // Add failed changeset label
-    // await labelServices.addLabel(
-    //   octokit,
-    //   baseOwner,
-    //   baseRepo,
-    //   prNumber,
-    //   FAILED_CHANGESET_LABEL
-    // );
-    // // Clear skip label if exists
-    // await labelServices.removeLabel(
-    //   octokit,
-    //   baseOwner,
-    //   baseRepo,
-    //   prNumber,
-    //   SKIP_LABEL
-    // );
+    // Add error comment to PR
+    await commentServices.postComment(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      errorComment
+    );
+    // Add failed changeset label
+    await labelServices.addLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      FAILED_CHANGESET_LABEL
+    );
+    // Clear skip label if exists
+    await labelServices.removeLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      SKIP_LABEL
+    );
 
-    // // Delete changeset file if one was previously created
-    // if (error.name !== "GitHubAppSuspendedOrNotInstalledError") {
-    //   const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    //   await forkedFileServices.deleteFileInForkedRepoByPath(
-    //     headOwner,
-    //     headRepo,
-    //     headBranch,
-    //     changesetFilePath(prNumber),
-    //     commitMessage
-    //   );
-    // }
+    // Delete changeset file if one was previously created
+    if (error.name !== "GitHubAppSuspendedOrNotInstalledError") {
+      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+      await forkedFileServices.deleteFileInForkedRepoByPath(
+        headOwner,
+        headRepo,
+        headBranch,
+        changesetFilePath(prNumber),
+        commitMessage
+      );
+    }
 
     throw new Error("Changeset creation workflow failed.");
   }
