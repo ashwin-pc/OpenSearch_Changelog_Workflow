@@ -1,5 +1,3 @@
-
-
 import {
   CHANGESET_PATH,
   FAILED_CHANGESET_LABEL,
@@ -10,7 +8,7 @@ import {
   forkedFileServices,
   labelServices,
   commentServices,
-  authServices
+  authServices,
 } from "./services/index.js";
 
 import {
@@ -66,7 +64,13 @@ async function run() {
     // Step 2 - Handle "skip" option
 
     if (isSkipEntry(changesetEntriesMap)) {
-      await labelServices.addLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+      await labelServices.addLabel(
+        octokit,
+        baseOwner,
+        baseRepo,
+        prNumber,
+        SKIP_LABEL
+      );
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
       await forkedFileServices.deleteFileInForkedRepoByPath(
@@ -102,7 +106,13 @@ async function run() {
     );
 
     // Step 4 - Remove "Skip-Changelog" and "failed changeset" labels if they exist
-    await labelServices.removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    await labelServices.removeLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      SKIP_LABEL
+    );
     await labelServices.removeLabel(
       octokit,
       baseOwner,
@@ -111,21 +121,28 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-
     // Delete changeset file if one was previously created
-    const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    await forkedFileServices.deleteFileInForkedRepoByPath(
-      headOwner,
-      headRepo,
-      headBranch,
-      changesetFilePath(prNumber),
-      commitMessage
-    );
+    if (error.status !== 403) {
+      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+      await forkedFileServices.deleteFileInForkedRepoByPath(
+        headOwner,
+        headRepo,
+        headBranch,
+        changesetFilePath(prNumber),
+        commitMessage
+      );
+    }
 
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
-    console.log(errorComment)
+
     // Add error comment to PR
-    await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
+    await commentServices.postComment(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      errorComment
+    );
     // Add failed changeset label
     await labelServices.addLabel(
       octokit,
@@ -135,7 +152,13 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
     // Clear skip label if exists
-    await labelServices.removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    await labelServices.removeLabel(
+      octokit,
+      baseOwner,
+      baseRepo,
+      prNumber,
+      SKIP_LABEL
+    );
     throw new Error("Changeset creation workflow failed.");
   }
 }
