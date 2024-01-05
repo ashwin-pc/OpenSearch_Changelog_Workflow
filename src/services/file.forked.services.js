@@ -130,6 +130,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
       `Error creating or updating file in forked repo ${owner}/${branch}:`,
       error.message
     );
+    console.log(error)
     throw error.status === 403 || error.status === 401
       ? new GitHubAppSuspendedOrNotInstalledError()
       : new CreateOrUpdateContentError();
