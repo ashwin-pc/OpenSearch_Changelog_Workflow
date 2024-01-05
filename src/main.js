@@ -135,6 +135,7 @@ async function run() {
     );
     // Clear skip label if exists
     await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    throw error;
   }
 }
 
