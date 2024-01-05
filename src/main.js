@@ -123,6 +123,7 @@ async function run() {
     );
 
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
+    console.log(errorComment)
     // Add error comment to PR
     await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
     // Add failed changeset label
@@ -135,7 +136,7 @@ async function run() {
     );
     // Clear skip label if exists
     await labelServices.removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
-    throw error;
+    throw new Error("Changeset creation workflow failed.");
   }
 }
 
