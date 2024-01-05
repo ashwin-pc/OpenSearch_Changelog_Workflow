@@ -126,7 +126,7 @@ async function run() {
     // Add error comment to PR
     await commentServices.postComment(octokit, baseOwner, baseRepo, prNumber, errorComment);
     // Add failed changeset label
-    await addLabel(
+    await labelServices.addLabel(
       octokit,
       baseOwner,
       baseRepo,
@@ -134,7 +134,7 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
     // Clear skip label if exists
-    await removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
+    await labelServices.removeLabel(octokit, baseOwner, baseRepo, prNumber, SKIP_LABEL);
     throw error;
   }
 }
