@@ -11,12 +11,7 @@ import { GITHUB_APP_BASE_URL } from "../config/constants.js";
  * @returns {Promise<object>} - An object containing the file details.
  * @throws {Error} - If an error occurs while fetching the file.
  */
-const getFileFromForkedRepoByPath = async (
-  owner,
-  repo,
-  branch,
-  path
-) => {
+const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
       params: {
@@ -147,15 +142,18 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: path,
-        message: message,
-      },
-    });
+    await axios.delete(
+      `${GITHUB_APP_BASE_URL}/files`,
+      { message: message },
+      {
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: path,
+        },
+      }
+    );
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
@@ -181,6 +179,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
+      { message: message },
       {
         params: {
           owner: owner,
@@ -204,4 +203,4 @@ export const forkedFileServices = {
   createOrUpdateFileInForkedRepoByPath,
   deleteFileInForkedRepoByPath,
   deleteAllFilesByPath,
-}
+};
