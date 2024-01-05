@@ -121,7 +121,7 @@ async function run() {
     //   changesetFilePath(prNumber),
     //   commitMessage
     // );
-
+    console.log(error);
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
