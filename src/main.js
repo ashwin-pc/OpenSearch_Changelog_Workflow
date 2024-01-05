@@ -26,6 +26,7 @@ import {
 async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOcktokitClient();
+  console.log(octokit);
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
     baseRepo,
@@ -112,6 +113,7 @@ async function run() {
   } catch (error) {
 
     console.log(error)
+    throw error;
     // // Delete changeset file if one was previously created
     // const commitMessage = `Changeset file for PR #${prNumber} deleted`;
     // await forkedFileServices.deleteFileInForkedRepoByPath(
