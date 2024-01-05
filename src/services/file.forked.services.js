@@ -1,5 +1,11 @@
 import axios from "axios";
 import { GITHUB_APP_BASE_URL } from "../config/constants.js";
+import {
+  GitHubAppSuspendedOrNotInstalledError,
+  GetContentError,
+  CreateOrUpdateContentError,
+  DeleteContentError,
+} from "../errors/index.js";
 
 /**
  * Get a file in a given path in a forked GitHub repository.
@@ -38,7 +44,10 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
         `Error fetching file from forked repo ${owner}/${branch}:`,
         error.message
       );
-      throw error;
+      if (error.status === 403 || error.status === 401) {
+        throw new GitHubAppSuspendedOrNotInstalledError;
+      }
+      throw GetContentError;
     }
   }
 };
@@ -76,7 +85,10 @@ const getAllFilesFromForkedRepoByPath = async (
       `Error fetching directory contents from forked repo ${owner}/${branch}:`,
       error.message
     );
-    throw error;
+    if (error.status === 403 || error.status === 401) {
+      throw new GitHubAppSuspendedOrNotInstalledError;
+    }
+    throw GetContentError;
   }
 };
 
@@ -120,7 +132,10 @@ const createOrUpdateFileInForkedRepoByPath = async (
       `Error creating or updating file in forked repo ${owner}/${branch}:`,
       error.message
     );
-    throw error;
+    if (error.status === 403 || error.status === 401) {
+      throw new GitHubAppSuspendedOrNotInstalledError;
+    }
+    throw CreateOrUpdateContentError;
   }
 };
 
@@ -158,7 +173,10 @@ const deleteFileInForkedRepoByPath = async (
       `Error deleting file in forked repo ${owner}/${branch}:`,
       error.message
     );
-    throw error;
+    if (error.status === 403 || error.status === 401) {
+      throw new GitHubAppSuspendedOrNotInstalledError;
+    }
+    throw DeleteContentError;
   }
 };
 
@@ -190,7 +208,10 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     console.log(data.commitMessage);
   } catch (error) {
     console.error("Error deleting file:", error.message);
-    throw error;
+    if (error.status === 403 || error.status === 401) {
+      throw new GitHubAppSuspendedOrNotInstalledError;
+    }
+    throw DeleteContentError;
   }
 }
 
