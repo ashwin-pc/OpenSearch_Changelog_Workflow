@@ -1,4 +1,4 @@
-#### Overview
+# Overview
 This is a template of script that automates the release note generation process. Running the script will:
  - Extract information from the changeset files in the `changelogs/fragments` directory
  - Perform basic validations to ensure proper fragment format
@@ -12,7 +12,7 @@ When a new product release is ready for general availability, OpenSearch maintai
  yarn release_note:generate
 ```
 
-#### Workflow Flowchart
+# Workflow Flowchart
 
 The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax, illustrates the logic this workflow follows.
 
@@ -36,7 +36,7 @@ graph TD
     M -- No --> G
 ```
 
-#### Modifying the script
+# Modifying the script
 Should you wish to modify the script for your repository. It is pretty straightforward. Below are some common areas to look:
 - change file paths & locations --> modify the const paths in generate_release_note_helper.ts
     ```typescript
