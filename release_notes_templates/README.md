@@ -35,7 +35,28 @@ graph TD
     M -- Yes --> N(delete temp folder and fragment files)
     M -- No --> G
 ```
+# Using the Script in Your Own Repository
 
+Make sure you have your changeset files under the `changelogs/fragments` directory ready before using the script.
+
+To use the Release-note script, you will need to set it up in your own repository. Here is an [example PR](https://github.com/MadaniKK/OpenSearch-Dashboards/pull/3/files) setting the script up in [Opensearch-Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards)
+
+## Here is a step-by-step walk through
+
+1. Modify `package.json`
+   add this line at the end of `"scripts":{ }`
+   ```json
+    "release_note:generate": "scripts/use_node scripts/ generate_release_note"
+   ```
+2. Add `generate_release_note.ts` and `generate_release_note.ts` to `./src/dev` directory
+
+3. Add `generate_release_note.js` to `./scripts` directory
+
+4. To run the script, open the terminal and run:
+   ```bash
+    yarn release_note:generate
+   ```
+   
 # Modifying the script
 Should you wish to modify the script for your repository. It is pretty straightforward. Below are some common areas to look:
 - change file paths & locations --> modify the const paths in generate_release_note_helper.ts
