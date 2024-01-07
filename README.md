@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# OpenSearch Create Changeset Action
+# OpenSearch Changelog Workflow
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
