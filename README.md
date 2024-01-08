@@ -1,3 +1,5 @@
+<a name="back-to-top"></a>
+
 <!-- omit in toc -->
 # OpenSearch Changelog Workflow
 
@@ -5,14 +7,14 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
 ![Coverage Badge](./badges/coverage.svg)
 
-This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the changelog and release notes process, the details of which are available below.
+This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Changelog and Release Notes Process**, the details of which are available below.
 
 <!-- omit in toc -->
 # Revised Changelog and Release Notes Process
 
 - [Introduction](#introduction)
-- [Process Overview](#process-overview)
 - [Benefits of the New Process](#benefits-of-the-new-process)
+- [Process Overview](#process-overview)
 - [Process Details](#process-details)
   - [1. Creating a New `changelogs` Directory](#1-creating-a-new-changelogs-directory)
   - [2. Adding a "Changelog" Section to the PR Description Template](#2-adding-a-changelog-section-to-the-pr-description-template)
@@ -25,15 +27,31 @@ This GitHub Actions workflow automates the management of changelog entries for p
   - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
 - [Conclusion](#conclusion)
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## Introduction
 
 On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing CHANGELOGs, and release notes during GA of the product, for all OpenSearch project repositories."
 
 On May 4, 2023, a working group voted unanimously to move forward with the "Automation" variation of [Ashwin Chandran's proposal](https://github.com/opensearch-project/.github/issues/156). This proposal has now been implemented, and the details of the new changelog and release notes process are set out below.
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+## Benefits of the New Process
+
+The new changelog and release notes process improves both contributor experience as well as the efficiency of product development and release.
+
+Previously, when a contributor opened a PR, they would be prompted to indicate whether or not they had manually added an entry to the changelog. However, they could not add an entry to the changelog without having a PR number to reference.
+
+This resulted in an inefficient two-step process, in which contributors had to (1) open a PR with their committed code and, once they had the PR number to reference in the changelog, (2) add an entry to the changelog, which then required pushing a new commit to their PR.
+
+Additionally, when a new product version was scheduled for general availability release, release notes and changelog updates had to be prepared manually. This was a time-consuming process. Automating the generation of release notes and changelog entries streamlines this process and gives valuable time back to contributors and code maintainers, improving the overall experience of working in OpenSearch's repositories.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## Process Overview
 
-The updated changelog and release notes process involves four primary changes in the repository:
+The updated **Changelog and Release Notes Process** involves four primary changes in the repository:
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
@@ -45,15 +63,7 @@ The updated changelog and release notes process involves four primary changes in
 
 Details on each of these changes are available in the "[Process Details](#process-details)" section below.
 
-## Benefits of the New Process
-
-The new changelog and release notes process improves both contributor experience as well as the efficiency of product development and release.
-
-Previously, when a contributor opened a PR, they would be prompted to indicate whether or not they had manually added an entry to the changelog. However, they could not add an entry to the changelog without having a PR number to reference.
-
-This resulted in an inefficient two-step process, in which contributors had to (1) open a PR with their committed code and, once they had the PR number to reference in the changelog, (2) add an entry to the changelog, which then required pushing a new commit to their PR.
-
-Additionally, when a new product version was scheduled for general availability release, release notes and changelog updates had to be prepared manually. This was a time-consuming process. Automating the generation of release notes and changelog entries streamlines this process and gives valuable time back to contributors and code maintainers, improving the overall experience of working in OpenSearch's repositories.
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Process Details
 
@@ -66,6 +76,8 @@ To centralize information pertinent to the new changelog process, a new `changel
 It also houses the `fragments` subdirectory, which includes changeset files in `.yml` format that have been generated from merged PRs. (Only one changeset file is generated per PR.)
 
 Changeset files are named with the PR number they correspond to. (E.g., `5218.yml`.)
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 2. Adding a "Changelog" Section to the PR Description Template
 
@@ -121,6 +133,7 @@ feat: Adds a new feature
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 3. Using a GitHub Actions Workflow to Generate Changeset Files
 
@@ -303,6 +316,7 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
     style Q fill:#fb923c,color:#0f172a
     style N fill:#4ade80,color:#0f172a
 ```
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 4. Implementing a Release Notes Generation Script
 
@@ -318,6 +332,10 @@ This command executes a script that performs the following actions:
 - Create a release notes document to accompany the new release
 - Delete the changeset files from the `changelogs/fragments` directory
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## Conclusion
 
 This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve this process, please let us know!
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
