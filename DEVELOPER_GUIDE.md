@@ -1,5 +1,6 @@
-<!-- omit in toc -->
+<a name="back-to-top"></a>
 
+<!-- omit in toc -->
 # Developer Guide
 
 For contribuiting in this automated **Changelog and Realease Notes Process**, please review sections below
@@ -11,9 +12,13 @@ For contribuiting in this automated **Changelog and Realease Notes Process**, pl
 - [1. Getting Started Guide](#1-getting-started)
 -
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## 1. Getting Started
 
 The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## 2. Key Technologies
 
@@ -25,7 +30,11 @@ To effectively contribute in the automated **Changelog and Realease Notes Proces
 ![GitHub Badge](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=fff&style=for-the-badge)
 ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge)
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## 3. Prerequisites
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## 4. Overall Process Overview
 
@@ -37,11 +46,15 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
   - Update of RELEASE_NOTES.md and CHANGELOG.md files
   - Clean up of changesets files ([pull_request_number].yml) in `changelogs/fragments` folder).
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ### 4.1 Github Runner Instance for Reusable Workflow Action
 
 [Explanation + UML sequence Diagram]
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 4.2 Express.js Application for Github App Bridge Service
 
@@ -49,9 +62,13 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ### 4.3 Forked OpenSearch Repository for Realease Notes Script
 
 [Explanation + UML sequence Diagram]
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
 
@@ -59,12 +76,16 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Realease Notes Process** and the OpenSearch forked repo you want to run the automated process
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## 5.1 Github dummy Account and OpenSearch Repo
 
 - (We suppose you have a forked version of an OpenSearch repo in your primary Github account)
 - Create a dummy Github Account
 - Fork and clone your current OpenSearch Repo under your primary Github Account into your dummy Github account
 - etc ...
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 5.2 Reusable Workflow Action
 
@@ -74,6 +95,8 @@ For contributing, please read each of the sections below. There are several step
 - Install dependencies
 - etc ...
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ### 5.3 Github App Bridge Service
 
 [Explanation for setting up development environment for contributing in this context]
@@ -82,6 +105,8 @@ For contributing, please read each of the sections below. There are several step
 - Install dependencies
 - etc ...
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ### 5.4 Realease Notes Script
 
 [Explanation for setting up development environment for contributing in this context]
@@ -89,11 +114,13 @@ For contributing, please read each of the sections below. There are several step
 - In OpenSearch forked repo create script files
 - etc ...
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## 6. Code Guidelines
 
 ### 6.1 General
 
-#### 6.2 Filenames
+#### 6.1.1 Filenames
 
 All filenames should use `dot.case`.
 
@@ -101,12 +128,16 @@ All filenames should use `dot.case`.
 
 **Wrong:** `src/services/posts/post_services.js`
 
-#### 6.2 Do not comment out code
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+#### 6.1.2 Do not comment out code
 
 We use a version management system. If a line of code is no longer needed,
 remove it, don't simply comment it out.
 
-#### 6.3 Prettier and linting
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+#### 6.1.3 Prettier and linting
 
 All JavaScript code (check `.eslintrc.js`) in [Reusanle Workflow Action](#52-reusable-workflow-action) and [Github App Bridge Service](#53-github-app-bridge-service) is using Prettier to format code. You
 can run `node script/eslint --fix` to fix linting issues and apply Prettier formatting.
@@ -118,11 +149,15 @@ Consider every linting rule and every Prettier rule to be also part of our devel
 and disable them only in exceptional cases and ideally leave a comment why they are
 disabled at that specific place.
 
-### JavaScript
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+### 2. JavaScript
 
 The following developer guide rules apply for working with JavaScript files.
 
-#### Prefer modern JavaScript syntax
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+#### 2.1.2 Prefer modern JavaScript syntax
 
 You should prefer modern language features in a lot of cases, e.g.:
 
@@ -132,6 +167,7 @@ You should prefer modern language features in a lot of cases, e.g.:
 - Prefer template strings over string concatenation
 - Prefer the spread operator for copying arrays (`[...arr]`) over `arr.slice()`
 - Use optional chaining (`?.`) and nullish Coalescing (`??`) over `lodash.get` (and similar utilities)
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### Avoid mutability and state
 
