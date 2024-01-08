@@ -27,9 +27,9 @@ To effectively contribute in the automated **Changelog and Realease Notes Proces
 
 The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
 
-- **Github Runner Instance for Workflow Action** -> used to parse and check changelog entries on PR description or manual created changesets files (i.e fragments).
-- **Express.js Application for Github App**-> For hosting service of Github App in charge of commiting new files on the contributor's repo (Forked OpenSearch Repo). This option is available when a contributor prefers to have an automated tool for creating changesets files.
-- **Forked OpenSearch Repository for Realease Notes Script** -> in charge of running realise notes process, which consist in:
+- **Github Runner Instance for Workflow Action** → used to parse and check changelog entries on PR description or manual created changesets files (i.e fragments).
+- **Express.js Application for Github App** → For hosting service of Github App in charge of commiting new files on the contributor's repo (Forked OpenSearch Repo). This option is available when a contributor prefers to have an automated tool for creating changesets files.
+- **Forked OpenSearch Repository for Realease Notes Script** → in charge of running realise notes process, which consist in:
   - Update of RELEASE_NOTES.md and  CHANGELOG.md files
   - Clean up of changesets files ([pull_request_number].yml) in `changelogs/fragments` folder).
 
