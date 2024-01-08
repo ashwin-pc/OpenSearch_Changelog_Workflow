@@ -2,7 +2,7 @@
 
 # Developer Guide
 
-For contribuiting in this automated workflow, please review sections below
+For contribuiting in this automated **Changelog and Realease Notes Process**, please review sections below
 
 <!-- omit in toc -->
 
