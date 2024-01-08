@@ -43,7 +43,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 [Explanation + UML sequence Diagram]
 
-![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+<img src="./assets/sequence_diagram_example.png" alt="uml_diagram" width="500" height="auto"/>
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -51,7 +51,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 [Explanation + UML sequence Diagram]
 
-![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+<img src="./assets/sequence_diagram_example.png" alt="uml_diagram" width="500" height="auto"/>
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -59,7 +59,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 [Explanation + UML sequence Diagram]
 
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+<img src="./assets/sequence_diagram_example.png" alt="uml_diagram" width="500" height="auto"/>
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
 
