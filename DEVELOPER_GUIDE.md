@@ -1,6 +1,6 @@
 <!-- omit in toc -->
 
-# OpenSearch Automated Changelog and Relase Notes Process - Developer Guide
+# Changelog and Relase Notes Process - Developer Guide
 
 For contribuiting in this automated workflow, please review sections below
 
