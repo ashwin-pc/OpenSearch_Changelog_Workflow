@@ -128,4 +128,4 @@ For contributing, please read each of the sections below. There are several step
 
 ## 6. Code Guidelines
 
-Please refer to [Code Guidelines](./CODE_GUIDELINES.md) document for more details about coding conventions for this project.
+Please refer to [Code Guidelines](./COheDE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
