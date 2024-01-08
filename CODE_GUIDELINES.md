@@ -5,38 +5,6 @@
 # Code Guidelines
 <!-- prettier-ignore-end -->
 
-<!-- prettier-ignore-start -->
-<!-- omit in toc -->
-# Table of Contents
-<!-- prettier-ignore-end -->
-
-- [General](#general)
-  - [Filenames](#filenames)
-  - [Do not comment out code](#do-not-comment-out-code)
-  - [Prettier and linting](#prettier-and-linting)
-- [JavaScript](#javascript)
-  - [Prefer modern JavaScript syntax](#prefer-modern-javascript-syntax)
-  - [Avoid mutability and state](#avoid-mutability-and-state)
-  - [Avoid `any` whenever possible](#avoid-any-whenever-possible)
-  - [Avoid non-null assertions](#avoid-non-null-assertions)
-  - [Return/throw early from functions](#returnthrow-early-from-functions)
-  - [Use object destructuring](#use-object-destructuring)
-  - [Use array destructuring](#use-array-destructuring)
-  - [Avoid magic numbers/strings](#avoid-magic-numbersstrings)
-  - [Use native ES2015 module syntax](#use-native-es2015-module-syntax)
-  - [Import only top-level modules](#import-only-top-level-modules)
-  - [Avoid global definitions](#avoid-global-definitions)
-  - [Use ternary operators only for small, simple code](#use-ternary-operators-only-for-small-simple-code)
-  - [Use descriptive conditions](#use-descriptive-conditions)
-  - [Name regular expressions](#name-regular-expressions)
-  - [Write small functions](#write-small-functions)
-  - [Use "rest" syntax rather than built-in `arguments`](#use-rest-syntax-rather-than-built-in-arguments)
-  - [Use default argument syntax](#use-default-argument-syntax)
-  - [Use thunks to create closures, where possible](#use-thunks-to-create-closures-where-possible)
-  - [Use slashes for comments](#use-slashes-for-comments)
-  - [Use getters but not setters](#use-getters-but-not-setters)
-  - [Attribution](#attribution)
-
 ### General
 
 #### Filenames
