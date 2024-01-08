@@ -123,6 +123,6 @@ For contributing, please read each of the sections below. There are several step
 
 ## 5. Code Guidelines
 
-Please refer to the [Code Guidelines](./COheDE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
+Please refer to the [Code Guidelines](./CODE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
