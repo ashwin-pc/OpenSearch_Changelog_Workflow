@@ -37,13 +37,21 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 [Explanation + UML sequence Diagram]
 
+![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+
 ### 4.2 Express.js Application for Github App Bridge Service
 
 [Explanation + UML sequence Diagram]
 
+![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+
+
 ### 4.3 Forked OpenSearch Repository for Realease Notes Script
 
 [Explanation + UML sequence Diagram]
+
+![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+
 
 ## 5. Getting Started
 
