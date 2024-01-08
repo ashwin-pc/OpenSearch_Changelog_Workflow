@@ -26,6 +26,7 @@ This GitHub Actions workflow automates the management of changelog entries for p
     - [Workflow Flowchart](#workflow-flowchart)
   - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
 - [Conclusion](#conclusion)
+- [License](#license)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -339,3 +340,7 @@ This command executes a script that performs the following actions:
 This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve this process, please let us know!
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE.txt).
