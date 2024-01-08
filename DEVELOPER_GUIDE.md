@@ -16,14 +16,14 @@ This guide is for any developer who wants a running local development environmen
   - [1.1 Github Runner Instance for Reusable Workflow Action](#11-github-runner-instance-for-reusable-workflow-action)
   - [1.2 Express.js Application for Github App Bridge Service](#12-expressjs-application-for-github-app-bridge-service)
   - [1.3 Forked OpenSearch Repository for Realease Notes Script](#13-forked-opensearch-repository-for-realease-notes-script)
-  - [1.4 Key Technologies](#14-key-technologies)
-- [2. Prerequisites](#2-prerequisites)
-- [3. Setting Up Development Environments](#3-setting-up-development-environments)
-  - [3.1 Github dummy Account and OpenSearch Repo](#31-github-dummy-account-and-opensearch-repo)
-  - [3.2 Reusable Workflow Action](#32-reusable-workflow-action)
-  - [3.3 Github App Bridge Service](#33-github-app-bridge-service)
-  - [3.4 Realease Notes Script](#34-realease-notes-script)
-- [4. Code Guidelines](#4-code-guidelines)
+  - [2. Key Technologies](#2-key-technologies)
+- [3. Prerequisites](#3-prerequisites)
+- [4. Setting Up Development Environments](#4-setting-up-development-environments)
+  - [4.1 Github dummy Account and OpenSearch Repo](#41-github-dummy-account-and-opensearch-repo)
+  - [4.2 Reusable Workflow Action](#42-reusable-workflow-action)
+  - [4.3 Github App Bridge Service](#43-github-app-bridge-service)
+  - [4.4 Realease Notes Script](#44-realease-notes-script)
+- [5. Code Guidelines](#5-code-guidelines)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -61,9 +61,9 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <img src="./assets/sequence_diagram_example.png" alt="uml_diagram" width="500" height="auto"/>
 
-![UML_DIAGRAM](./assets/sequence_diagram_example.png)
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.4 Key Technologies
+### 2. Key Technologies
 
 To effectively contribute in the automated **Changelog and Realease Notes Process** you should be familiar with Nodejs, JavaScript, Expressjs, Github Actions and Github API. Also depending on the OpenSearch repo you are working with, you also need to be familiar with the language that it is being used there to develop and run the Relase Notes script process.
 
@@ -75,15 +75,15 @@ To effectively contribute in the automated **Changelog and Realease Notes Proces
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 2. Prerequisites
+## 3. Prerequisites
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 3. Setting Up Development Environments
+## 4. Setting Up Development Environments
 
 For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Realease Notes Process** and the OpenSearch forked repo you want to run the automated process.
 
-### 3.1 Github dummy Account and OpenSearch Repo
+### 4.1 Github dummy Account and OpenSearch Repo
 
 - (We suppose you have a forked version of an OpenSearch repo in your primary Github account)
 - Create a dummy Github Account
@@ -92,7 +92,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 3.2 Reusable Workflow Action
+### 4.2 Reusable Workflow Action
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -102,7 +102,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 3.3 Github App Bridge Service
+### 4.3 Github App Bridge Service
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -112,7 +112,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 3.4 Realease Notes Script
+### 4.4 Realease Notes Script
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -121,7 +121,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 4. Code Guidelines
+## 5. Code Guidelines
 
 Please refer to the [Code Guidelines](./COheDE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
 
