@@ -78,7 +78,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 5.1 Github dummy Account and OpenSearch Repo
+### 5.1 Github dummy Account and OpenSearch Repo
 
 - (We suppose you have a forked version of an OpenSearch repo in your primary Github account)
 - Create a dummy Github Account
