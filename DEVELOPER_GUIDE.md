@@ -9,9 +9,14 @@ This guide is for any developer who wants a running local development environmen
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
-# Table of Contents
+## Table of Contents
 <!-- prettier-ignore-end -->
 
+- [1. Process Overview](#1-process-overview)
+  - [1.1 Github Runner Instance for Reusable Workflow Action](#11-github-runner-instance-for-reusable-workflow-action)
+  - [1.2 Express.js Application for Github App Bridge Service](#12-expressjs-application-for-github-app-bridge-service)
+  - [1.3 Forked OpenSearch Repository for Realease Notes Script](#13-forked-opensearch-repository-for-realease-notes-script)
+  - [1.4 Key Technologies](#14-key-technologies)
 - [2. Prerequisites](#2-prerequisites)
 - [3. Setting Up Development Environments](#3-setting-up-development-environments)
   - [3.1 Github dummy Account and OpenSearch Repo](#31-github-dummy-account-and-opensearch-repo)
@@ -22,7 +27,7 @@ This guide is for any developer who wants a running local development environmen
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1. Overall Process Overview
+## 1. Process Overview
 
 The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
 
