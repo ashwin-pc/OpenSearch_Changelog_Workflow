@@ -3,9 +3,9 @@
 # Code Guidelines
 <!-- prettier-ignore-end -->
 
-### General
+## General
 
-#### Filenames
+### Filenames
 
 All filenames should use `camelCase` for compound names and `dot.case` for clasification of type of file.
 
@@ -13,12 +13,12 @@ All filenames should use `camelCase` for compound names and `dot.case` for clasi
 
 **Wrong:** `src/utils/pullRequests/pullRequests.utils.js`
 
-#### Do not comment out code
+### Do not comment out code
 
 We use a version management system. If a line of code is no longer needed,
 remove it, don't simply comment it out.
 
-#### Prettier and linting
+### Prettier and linting
 
 All JavaScript code (check `.eslintrc.js`) in [Reusanle Workflow Action](#52-reusable-workflow-action) and [Github App Bridge Service](#53-github-app-bridge-service) is using Prettier to format code. You
 can run `node script/eslint --fix` to fix linting issues and apply Prettier formatting.
@@ -30,11 +30,11 @@ Consider every linting rule and every Prettier rule to be also part of our devel
 and disable them only in exceptional cases and ideally leave a comment why they are
 disabled at that specific place.
 
-### JavaScript
+## JavaScript
 
 The following developer guide rules apply for working with JavaScript files.
 
-#### Prefer modern JavaScript syntax
+### Prefer modern JavaScript syntax
 
 You should prefer modern language features in a lot of cases, e.g.:
 
@@ -45,7 +45,7 @@ You should prefer modern language features in a lot of cases, e.g.:
 - Prefer the spread operator for copying arrays (`[...arr]`) over `arr.slice()`
 - Use optional chaining (`?.`) and nullish Coalescing (`??`) over `lodash.get` (and similar utilities)
 
-#### Avoid mutability and state
+### Avoid mutability and state
 
 Wherever possible, do not rely on mutable state. This means you should not
 reassign variables, modify object properties, or push values to arrays.
@@ -65,7 +65,7 @@ function addBar(foos, foo) {
 }
 ```
 
-#### Avoid `any` whenever possible
+### Avoid `any` whenever possible
 
 Since TypeScript 3.0 and the introduction of the
 [`unknown` type](https://mariusschulz.com/blog/the-unknown-type-in-typescript) there are rarely any
@@ -79,7 +79,7 @@ If you’re not having `any` in your plugin or are starting a new plugin, you sh
 [`@typescript-eslint/no-explicit-any`](https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-explicit-any.md)
 linting rule for your plugin via the [`.eslintrc.js`](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/master/.eslintrc.js) config.
 
-#### Avoid non-null assertions
+### Avoid non-null assertions
 
 You should try avoiding non-null assertions (`!.`) wherever possible. By using them you tell
 TypeScript, that something is not null even though by it’s type it could be. Usage of non-null
@@ -98,7 +98,7 @@ If you’re not using non-null assertions in your plugin or are starting a new p
 [`@typescript-eslint/no-non-null-assertion`](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-non-null-assertion.md)
 linting rule for you plugin in the [`.eslintrc.js`](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/.eslintrc.js) config.
 
-#### Return/throw early from functions
+### Return/throw early from functions
 
 To avoid deep nesting of if-statements, always return a function's value as early
 as possible. And where possible, do any assertions first:
@@ -131,7 +131,7 @@ function doStuff(val) {
 }
 ```
 
-#### Use object destructuring
+### Use object destructuring
 
 This helps avoid temporary references and helps prevent typo-related bugs.
 
@@ -155,7 +155,7 @@ function fullName(user) {
 }
 ```
 
-#### Use array destructuring
+### Use array destructuring
 
 Directly accessing array values via index should be avoided, but if it is
 necessary, use array destructuring:
@@ -171,7 +171,7 @@ const first = arr[0];
 const second = arr[1];
 ```
 
-#### Avoid magic numbers/strings
+### Avoid magic numbers/strings
 
 These are numbers (or other values) simply used in line in your code. _Do not
 use these_, give them a variable name so they can be understood and changed
@@ -191,7 +191,7 @@ if (width < 300) {
 }
 ```
 
-#### Use native ES2015 module syntax
+### Use native ES2015 module syntax
 
 Module dependencies should be written using native ES2015 syntax wherever
 possible (which is almost everywhere):
@@ -217,7 +217,7 @@ file that does not pass run through webpack, then use CommonJS modules.
 In those even rarer cases where you're writing client-side code that does not
 run through webpack, then do not use a module loader at all.
 
-#### Import only top-level modules
+### Import only top-level modules
 
 The files inside a module are implementation details of that module. They
 should never be imported directly. Instead, you must only import the top-level
@@ -243,12 +243,12 @@ import inFoo from "foo/child";
 import inSibling from "../foo/child";
 ```
 
-#### Avoid global definitions
+### Avoid global definitions
 
 Don't do this. Everything should be wrapped in a module that can be depended on
 by other modules. Even things as simple as a single value should be a module.
 
-#### Use ternary operators only for small, simple code
+### Use ternary operators only for small, simple code
 
 And _never_ use multiple ternaries together, because they make it more
 difficult to reason about how different values flow through the conditions
@@ -262,7 +262,7 @@ const foo = a === b ? 1 : 2;
 const foo = a === b ? 1 : a === c ? 2 : 3;
 ```
 
-#### Use descriptive conditions
+### Use descriptive conditions
 
 Any non-trivial conditions should be converted to functions or assigned to
 descriptively named variables. By breaking up logic into smaller,
@@ -295,7 +295,7 @@ if (thing instanceof Shape && !(thing instanceof Square)) {
 }
 ```
 
-#### Name regular expressions
+### Name regular expressions
 
 ```js
 // good
@@ -311,13 +311,13 @@ if (password.length >= 4 && /^(?=.*\d).{4,}$/.test(password)) {
 }
 ```
 
-#### Write small functions
+### Write small functions
 
 Keep your functions short. A good function fits on a slide that the people in
 the last row of a big room can comfortably read. So don't count on them having
 perfect vision and limit yourself to ~15 lines of code per function.
 
-#### Use "rest" syntax rather than built-in `arguments`
+### Use "rest" syntax rather than built-in `arguments`
 
 For expressiveness sake, and so you can be mix dynamic and explicit arguments.
 
@@ -334,7 +334,7 @@ function something(foo) {
 }
 ```
 
-#### Use default argument syntax
+### Use default argument syntax
 
 Always use the default argument syntax for optional arguments.
 
@@ -367,7 +367,7 @@ function foo(options = {}, bar) {
 }
 ```
 
-#### Use thunks to create closures, where possible
+### Use thunks to create closures, where possible
 
 For trivial examples (like the one that follows), thunks will seem like
 overkill, but they encourage isolating the implementation details of a closure
@@ -393,7 +393,7 @@ setTimeout(() => {
 }, 1000);
 ```
 
-#### Use slashes for comments
+### Use slashes for comments
 
 Use slashes for both single line and multi line comments. Try to write
 comments that explain higher level mechanisms or clarify difficult
@@ -445,7 +445,7 @@ if (isSessionValid) {
 }
 ```
 
-#### Use getters but not setters
+### Use getters but not setters
 
 Feel free to use getters that are free from [side effects][sideeffect], like
 providing a length property for a collection class.
@@ -454,7 +454,7 @@ Do not use setters, they cause more problems than they can solve.
 
 [sideeffect]: http://en.wikipedia.org/wiki/Side_effect_(computer_science)
 
-#### Attribution
+### Attribution
 
 Parts of the JavaScript developer guide were initially forked from the
 [node style guide](https://github.com/felixge/node-style-guide) created by [Felix Geisendörfer](http://felixge.de/) which is
