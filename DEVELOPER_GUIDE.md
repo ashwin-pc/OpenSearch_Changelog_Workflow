@@ -98,7 +98,7 @@ remove it, don't simply comment it out.
 
 #### 6.3 Prettier and linting
 
-All JavaScript code (check `.eslintrc.js`) in [Reusanle Workflow Action](###5.2 Reusable Workflow Action) and [Github App Bridge Service](###5.3 Github App Bridge Service) is using Prettier to format code. You
+All JavaScript code (check `.eslintrc.js`) in [Reusanle Workflow Action](#52-reusable-workflow-action) and [Github App Bridge Service](#53-github-app-bridge-service) is using Prettier to format code. You
 can run `node script/eslint --fix` to fix linting issues and apply Prettier formatting.
 We recommend you to enable running ESLint via your IDE.
 
