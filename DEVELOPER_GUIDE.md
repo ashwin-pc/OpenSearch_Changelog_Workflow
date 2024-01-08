@@ -1,52 +1,28 @@
 <a name="back-to-top"></a>
 
+<!-- prettier-ignore-start -->
 <!-- omit in toc -->
 # Developer Guide
+<!-- prettier-ignore-end -->
 
-For contribuiting in this automated **Changelog and Realease Notes Process**, please review sections below
+This guide is for any developer who wants a running local development environment for contribuiting in this automated **Changelog and Realease Notes Process**. If you're planning to collaborate (e.i. adding features, fixing bugs, etc) to this repository or related ones make sure to also read the [contributing guide](CONTRIBUTING.md).
 
+<!-- prettier-ignore-start -->
 <!-- omit in toc -->
-## Table of Contents
+# Table of Contents
+<!-- prettier-ignore-end -->
 
-- [1. Getting Started](#1-getting-started)
-- [2. Key Technologies](#2-key-technologies)
-- [3. Prerequisites](#3-prerequisites)
-- [4. Overall Process Overview](#4-overall-process-overview)
-  - [4.1 Github Runner Instance for Reusable Workflow Action](#41-github-runner-instance-for-reusable-workflow-action)
-  - [4.2 Express.js Application for Github App Bridge Service](#42-expressjs-application-for-github-app-bridge-service)
-  - [4.3 Forked OpenSearch Repository for Realease Notes Script](#43-forked-opensearch-repository-for-realease-notes-script)
-- [5. Getting Started](#5-getting-started)
-  - [5.1 Github dummy Account and OpenSearch Repo](#51-github-dummy-account-and-opensearch-repo)
-  - [5.2 Reusable Workflow Action](#52-reusable-workflow-action)
-  - [5.3 Github App Bridge Service](#53-github-app-bridge-service)
-  - [5.4 Realease Notes Script](#54-realease-notes-script)
-- [6. Code Guidelines](#6-code-guidelines)
+- [2. Prerequisites](#2-prerequisites)
+- [3. Setting Up Development Environments](#3-setting-up-development-environments)
+  - [3.1 Github dummy Account and OpenSearch Repo](#31-github-dummy-account-and-opensearch-repo)
+  - [3.2 Reusable Workflow Action](#32-reusable-workflow-action)
+  - [3.3 Github App Bridge Service](#33-github-app-bridge-service)
+  - [3.4 Realease Notes Script](#34-realease-notes-script)
+- [4. Code Guidelines](#4-code-guidelines)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1. Getting Started
-
-The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
-
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
-## 2. Key Technologies
-
-To effectively contribute in the automated **Changelog and Realease Notes Process** you should be familiar with Nodejs, JavaScript, Expressjs, Github Actions and Github API. Also depending on the OpenSearch repo you are working with, you also need to be familiar with the language that it is being used there to develop and run the Relase Notes script process.
-
-![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)
-![Node.js Badge](https://img.shields.io/badge/Node.js-393?logo=nodedotjs&logoColor=fff&style=for-the-badge)
-![Express Badge](https://img.shields.io/badge/Express-000?logo=express&logoColor=fff&style=for-the-badge)
-![GitHub Badge](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=fff&style=for-the-badge)
-![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge)
-
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
-## 3. Prerequisites
-
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
-## 4. Overall Process Overview
+### 1. Overall Process Overview
 
 The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
 
@@ -58,7 +34,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 4.1 Github Runner Instance for Reusable Workflow Action
+### 1.1 Github Runner Instance for Reusable Workflow Action
 
 [Explanation + UML sequence Diagram]
 
@@ -66,7 +42,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 4.2 Express.js Application for Github App Bridge Service
+### 1.2 Express.js Application for Github App Bridge Service
 
 [Explanation + UML sequence Diagram]
 
@@ -74,7 +50,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 4.3 Forked OpenSearch Repository for Realease Notes Script
+### 1.3 Forked OpenSearch Repository for Realease Notes Script
 
 [Explanation + UML sequence Diagram]
 
@@ -82,13 +58,27 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
 
-## 5. Getting Started
+### 1.4 Key Technologies
 
-For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Realease Notes Process** and the OpenSearch forked repo you want to run the automated process
+To effectively contribute in the automated **Changelog and Realease Notes Process** you should be familiar with Nodejs, JavaScript, Expressjs, Github Actions and Github API. Also depending on the OpenSearch repo you are working with, you also need to be familiar with the language that it is being used there to develop and run the Relase Notes script process.
+
+![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)
+![Node.js Badge](https://img.shields.io/badge/Node.js-393?logo=nodedotjs&logoColor=fff&style=for-the-badge)
+![Express Badge](https://img.shields.io/badge/Express-000?logo=express&logoColor=fff&style=for-the-badge)
+![GitHub Badge](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=fff&style=for-the-badge)
+![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 5.1 Github dummy Account and OpenSearch Repo
+## 2. Prerequisites
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+## 3. Setting Up Development Environments
+
+For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Realease Notes Process** and the OpenSearch forked repo you want to run the automated process.
+
+### 3.1 Github dummy Account and OpenSearch Repo
 
 - (We suppose you have a forked version of an OpenSearch repo in your primary Github account)
 - Create a dummy Github Account
@@ -97,7 +87,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 5.2 Reusable Workflow Action
+### 3.2 Reusable Workflow Action
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -107,7 +97,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 5.3 Github App Bridge Service
+### 3.3 Github App Bridge Service
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -117,7 +107,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 5.4 Realease Notes Script
+### 3.4 Realease Notes Script
 
 [Explanation for setting up development environment for contributing in this context]
 
@@ -126,6 +116,8 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 6. Code Guidelines
+## 4. Code Guidelines
 
-Please refer to [Code Guidelines](./COheDE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
+Please refer to the [Code Guidelines](./COheDE_GUIDELINES.md) document for more reference about the code conventions followed in this project.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
