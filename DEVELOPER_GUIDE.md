@@ -20,6 +20,7 @@ For contribuiting in this automated **Changelog and Realease Notes Process**, pl
   - [5.2 Reusable Workflow Action](#52-reusable-workflow-action)
   - [5.3 Github App Bridge Service](#53-github-app-bridge-service)
   - [5.4 Realease Notes Script](#54-realease-notes-script)
+- [6. Code Guidelines](#6-code-guidelines)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -124,3 +125,7 @@ For contributing, please read each of the sections below. There are several step
 - etc ...
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+## 6. Code Guidelines
+
+Please refer to [Code Guidelines](./CODE_GUIDELINES.md) document for more details about coding conventions for this project.
