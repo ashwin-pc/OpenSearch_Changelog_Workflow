@@ -1,13 +1,17 @@
 <!-- omit in toc -->
-# OpenSearch Changelog Workflow
+
+# OpenSearch Automated Changelog and Relase Notes Process - Developer Guide
 
 For contribuiting in this automated workflow, please review sections below
 
-
 <!-- omit in toc -->
+
 # Table of Contents
 
-## 1. Getting started guide
+- [1. Getting Started Guide](#1-getting-started)
+-
+
+## 1. Getting Started
 
 The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
 
@@ -30,7 +34,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 - **Github Runner Instance for Workflow Action** → used to parse and check changelog entries on PR description or manual created changesets files (i.e fragments).
 - **Express.js Application for Github App** → For hosting service of Github App in charge of commiting new files on the contributor's repo (Forked OpenSearch Repo). This option is available when a contributor prefers to have an automated tool for creating changesets files.
 - **Forked OpenSearch Repository for Realease Notes Script** → in charge of running realise notes process, which consist in:
-  - Update of RELEASE_NOTES.md and  CHANGELOG.md files
+  - Update of RELEASE_NOTES.md and CHANGELOG.md files
   - Clean up of changesets files ([pull_request_number].yml) in `changelogs/fragments` folder).
 
 ### 4.1 Github Runner Instance for Reusable Workflow Action
@@ -45,13 +49,11 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
 
-
 ### 4.3 Forked OpenSearch Repository for Realease Notes Script
 
 [Explanation + UML sequence Diagram]
 
 ![UML_DIAGRAM](./assets/sequence_diagram_example.png)
-
 
 ## 5. Getting Started
 
@@ -140,13 +142,13 @@ Instead, create new variables, and shallow copies of objects and arrays:
 ```js
 // good
 function addBar(foos, foo) {
-  const newFoo = { ...foo, name: 'bar' };
+  const newFoo = { ...foo, name: "bar" };
   return [...foos, newFoo];
 }
 
 // bad
 function addBar(foos, foo) {
-  foo.name = 'bar';
+  foo.name = "bar";
   foos.push(foo);
 }
 ```
@@ -193,7 +195,7 @@ as possible. And where possible, do any assertions first:
 // good
 function doStuff(val) {
   if (val > 100) {
-    throw new Error('Too big');
+    throw new Error("Too big");
   }
 
   if (val < 0) {
@@ -209,7 +211,7 @@ function doStuff(val) {
     if (val < 100) {
       // ... stuff
     } else {
-      throw new Error('Too big');
+      throw new Error("Too big");
     }
   } else {
     return false;
@@ -318,15 +320,15 @@ modules.
 
 ```js
 // good
-import foo from 'foo';
-import child from './child';
-import parent from '../';
-import ancestor from '../../../';
-import sibling from '../foo';
+import foo from "foo";
+import child from "./child";
+import parent from "../";
+import ancestor from "../../../";
+import sibling from "../foo";
 
 // bad
-import inFoo from 'foo/child';
-import inSibling from '../foo/child';
+import inFoo from "foo/child";
+import inSibling from "../foo/child";
 ```
 
 #### Avoid global definitions
@@ -388,12 +390,12 @@ if (thing instanceof Shape && !(thing instanceof Square)) {
 const validPassword = /^(?=.*\d).{4,}$/;
 
 if (password.length >= 4 && validPassword.test(password)) {
-  console.log('password is valid');
+  console.log("password is valid");
 }
 
 // bad
 if (password.length >= 4 && /^(?=.*\d).{4,}$/.test(password)) {
-  console.log('losing');
+  console.log("losing");
 }
 ```
 
