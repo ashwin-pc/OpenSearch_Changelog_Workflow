@@ -1,5 +1,3 @@
-<a name="back-to-top"></a>
-
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
 # Code Guidelines
@@ -15,14 +13,10 @@ All filenames should use `camelCase` for compound names and `dot.case` for clasi
 
 **Wrong:** `src/utils/pullRequests/pullRequests.utils.js`
 
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
 #### Do not comment out code
 
 We use a version management system. If a line of code is no longer needed,
 remove it, don't simply comment it out.
-
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### Prettier and linting
 
@@ -36,13 +30,9 @@ Consider every linting rule and every Prettier rule to be also part of our devel
 and disable them only in exceptional cases and ideally leave a comment why they are
 disabled at that specific place.
 
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
 ### JavaScript
 
 The following developer guide rules apply for working with JavaScript files.
-
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### Prefer modern JavaScript syntax
 
@@ -54,7 +44,6 @@ You should prefer modern language features in a lot of cases, e.g.:
 - Prefer template strings over string concatenation
 - Prefer the spread operator for copying arrays (`[...arr]`) over `arr.slice()`
 - Use optional chaining (`?.`) and nullish Coalescing (`??`) over `lodash.get` (and similar utilities)
-<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### Avoid mutability and state
 
