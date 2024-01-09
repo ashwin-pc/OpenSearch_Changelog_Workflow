@@ -18,7 +18,7 @@ import {
   SectionKey,
   releaseNotesDirPath,
   filePath,
-} from './generate_release_note_helper';
+} from './generateReleaseNoteHelper';
 
 // Function to add content after the 'Unreleased' section in the changelog
 function addContentAfterUnreleased(path: string, newContent: string): void {
