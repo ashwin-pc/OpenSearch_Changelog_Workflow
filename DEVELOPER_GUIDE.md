@@ -5,7 +5,7 @@
 # Developer Guide
 <!-- prettier-ignore-end -->
 
-This guide is for any developer who wants a running local development environment for contribuiting in this automated **Changelog and Realease Notes Process**. If you're planning to collaborate (e.i. adding features, fixing bugs, etc) to this repository or related ones make sure to also read the [contributing guide](CONTRIBUTING.md).
+This guide is for any developer who wants to set up a running local development environment for contributing to this **Automated Changelog and Release Notes Process**. We welcome contributions of all types (e.g., documentation improvements, bug fixes, new features); however, before you open a pull request, we ask that you please consult the [contributing guide](CONTRIBUTING.md).
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -13,33 +13,38 @@ This guide is for any developer who wants a running local development environmen
 <!-- prettier-ignore-end -->
 
 - [1. Process Overview](#1-process-overview)
-  - [1.1 Github Runner Instance for Reusable Workflow Action](#11-github-runner-instance-for-reusable-workflow-action)
-  - [1.2 Express.js Application for Github App Bridge Service](#12-expressjs-application-for-github-app-bridge-service)
-  - [1.3 Forked OpenSearch Repository for Realease Notes Script](#13-forked-opensearch-repository-for-realease-notes-script)
+  - [1.1 Reusable GitHub Action](#11-reusable-github-action)
+  - [1.2 Github App](#12-github-app)
+  - [1.3 Release Notes Script](#13-release-notes-script)
   - [2. Key Technologies](#2-key-technologies)
 - [3. Prerequisites](#3-prerequisites)
-- [4. Setting Up Development Environments](#4-setting-up-development-environments)
-  - [4.1 Github dummy Account and OpenSearch Repo](#41-github-dummy-account-and-opensearch-repo)
+- [4. Setting Up Your Development Environment](#4-setting-up-your-development-environment)
+  - [4.1 Github Dummy Account and OpenSearch Repo](#41-github-dummy-account-and-opensearch-repo)
   - [4.2 Reusable Workflow Action](#42-reusable-workflow-action)
   - [4.3 Github App Bridge Service](#43-github-app-bridge-service)
-  - [4.4 Realease Notes Script](#44-realease-notes-script)
+  - [4.4 Release Notes Script](#44-release-notes-script)
 - [5. Code Guidelines](#5-code-guidelines)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## 1. Process Overview
 
-The new **Changelog and Realease Notes Process** consist in different Node.js code snippets or applications that run on different contexts:
+This **Automated Changelog and Release Notes Process** involves several components operating in different contexts, each with specific aims:
 
-- **Github Runner Instance for Workflow Action** → used to parse and check changelog entries on PR description or manual created changesets files (i.e fragments).
-- **Express.js Application for Github App** → For hosting service of Github App in charge of commiting new files on the contributor's repo (Forked OpenSearch Repo). This option is available when a contributor prefers to have an automated tool for creating changesets files.
-- **Forked OpenSearch Repository for Realease Notes Script** → in charge of running realise notes process, which consist in:
-  - Update of RELEASE_NOTES.md and CHANGELOG.md files
-  - Clean up of changesets files ([pull_request_number].yml) in `changelogs/fragments` folder).
+- **Reusable GitHub Action** → Triggered by pull requests originating from forked repositories. The action parses and checks either:
+  - Changelog entries entered in the "Changelog" section of the PR description
+  OR
+  - Manually-created changeset files (i.e., fragments).
+
+- **Github App** → If an OpenSearch contributor wants to automate the process of generating their changeset files, they can install the `OpenSearch-Changeset-Bot` on their forked OpenSearch repository. The bot is a GitHub App built using `Express.js`. It listens for HTTP requests coming from the reusable GitHub Action, performs CRUD operations on changeset files, and commits those files to contributors' open PRs.
+
+- **Automated Release Notes Script** → This script can be adapted by OpenSearch repositories to suit their needs and language of choice. It reads the files held in the `changelogs/fragments` directory and performs two primary actions:
+  - Updating the CHANGELOG.md document with the changes introduced in the latest version release
+  - Generating a release notes document
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.1 Github Runner Instance for Reusable Workflow Action
+### 1.1 Reusable GitHub Action
 
 [Explanation + UML sequence Diagram]
 
@@ -47,7 +52,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.2 Express.js Application for Github App Bridge Service
+### 1.2 Github App
 
 [Explanation + UML sequence Diagram]
 
@@ -55,7 +60,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.3 Forked OpenSearch Repository for Realease Notes Script
+### 1.3 Release Notes Script
 
 [Explanation + UML sequence Diagram]
 
@@ -65,7 +70,7 @@ The new **Changelog and Realease Notes Process** consist in different Node.js co
 
 ### 2. Key Technologies
 
-To effectively contribute in the automated **Changelog and Realease Notes Process** you should be familiar with Nodejs, JavaScript, Expressjs, Github Actions and Github API. Also depending on the OpenSearch repo you are working with, you also need to be familiar with the language that it is being used there to develop and run the Relase Notes script process.
+To effectively contribute to the **Automated Changelog and Release Notes Process** you should be familiar with JavaScript, Node.js, Express.js, Github Actions, and the Github API. Depending on the OpenSearch repository you are working with, you should also be familiar with the whatever language has been chosen to implement the release notes script with.
 
 ![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)
 ![Node.js Badge](https://img.shields.io/badge/Node.js-393?logo=nodedotjs&logoColor=fff&style=for-the-badge)
@@ -79,11 +84,11 @@ To effectively contribute in the automated **Changelog and Realease Notes Proces
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 4. Setting Up Development Environments
+## 4. Setting Up Your Development Environment
 
-For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Realease Notes Process** and the OpenSearch forked repo you want to run the automated process.
+For contributing, please read each of the sections below. There are several steps to setup the development environments for the different running contexts of the **Changelog and Release Notes Process** and the OpenSearch forked repo you want to run the automated process.
 
-### 4.1 Github dummy Account and OpenSearch Repo
+### 4.1 Github Dummy Account and OpenSearch Repo
 
 - (We suppose you have a forked version of an OpenSearch repo in your primary Github account)
 - Create a dummy Github Account
@@ -112,7 +117,7 @@ For contributing, please read each of the sections below. There are several step
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 4.4 Realease Notes Script
+### 4.4 Release Notes Script
 
 [Explanation for setting up development environment for contributing in this context]
 
