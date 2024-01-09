@@ -16,7 +16,7 @@
 - [Review Process](#review-process)
 
 ## Introduction
-As part of OpenSearch, this **Automated Changelog and Release Notes Process** is a community project that is built and maintained by people just like you. We're glad you're interested in helping out. There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
+As part of OpenSearch, this automated **Changelog and Release Notes Process** is a community project that is built and maintained by people just like you. We're glad you're interested in helping out. There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
 
 ## First Things First
 

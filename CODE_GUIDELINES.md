@@ -34,7 +34,7 @@ disabled at that specific place.
 
 The following developer guide rules apply for working with JavaScript files.
 
-### Prefer modern JavaScript syntax
+**###** Prefer modern JavaScript syntax
 
 You should prefer modern language features in a lot of cases, e.g.:
 
