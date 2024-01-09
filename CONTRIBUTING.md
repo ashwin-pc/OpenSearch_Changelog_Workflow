@@ -50,7 +50,7 @@ If you've thought of a way that this **Automated Changelog and Release Notes Pro
 
 ### Documentation Changes
 
-If you would like to contribute to the documentation for this **Automated Changelog and Release Notes Process**, please [open an issue](https://github.com/BigSamu/OpenSearch_Parse_Changelog_Action/issues/new) in this repository. If you would like to contribute to OpenSearch documentation, please do so in the [documentation-website](https://github.com/opensearch-project/documentation-website) repository.
+If you would like to contribute to the documentation for this **Automated Changelog and Release Notes Process**, please [open an issue](https://github.com/BigSamu/OpenSearch_Parse_Changelog_Action/issues/new) in this repository.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
