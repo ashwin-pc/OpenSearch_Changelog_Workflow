@@ -26,7 +26,6 @@ This GitHub Actions workflow automates the management of changelog entries for p
     - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
     - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
-    - [Overview](#overview)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
   - [Changelog Process](#changelog-process-2)
@@ -34,7 +33,6 @@ This GitHub Actions workflow automates the management of changelog entries for p
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
   - [Release Notes Process](#release-notes-process-2)
-    - [Implementing a Release Notes Generation Script](#implementing-a-release-notes-generation-script)
 - [Contributing](#contributing)
 - [License](#license)
 - [Need Help?](#need-help)
@@ -73,7 +71,6 @@ In the figure below, a diagram flow from the entire **Changelog Process** is dep
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
-### Release Notes Process
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
@@ -81,9 +78,12 @@ In the figure below, a diagram flow from the entire **Changelog Process** is dep
 
 3. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved.
 
-4. Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
+   
+### Release Notes Process
 
-Details on each of these changes are available in the "[Process Details](#process-details)" section below.
+[COMPLETE RILEY AND WILL]
+
+Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -168,8 +168,6 @@ feat: Adds a new feature
 
 #### Using a GitHub Actions Workflow to Generate Changeset Files
 
-#### Overview
-
 Whenever a contributor opens a PR or edits an existing PR, a GitHub Actions workflow is triggered that extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
 
 If a contributor has entered valid changelog entries (see formatting requirements in previous section above), the workflow will categorize these entries and either create or update a `.yml` changeset file in the `changelogs/fragments` directory of the repository.
@@ -198,7 +196,7 @@ Contributors can then address the error and update their PR, which will trigger 
 
 ### Release Notes Process
 
-COMPLETE
+[COMPLETE RILEY AND WILL]
 
 ## Usage
 
@@ -358,7 +356,7 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
 
 ### Release Notes Process
 
-#### Implementing a Release Notes Generation Script
+[COMPLETE RILEY AND WILL]
 
 When a new product release is ready for general availability, OpenSearch maintainers can run the following script command from the command line:
 
