@@ -77,7 +77,7 @@ A complete flow diagram from the entire **Changelog Process** is depicted in the
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
-In the diagram, two GitHub Repositories, two External Services, and one GitHub App conform the core functionality of this automated process.
+In the diagram, two GitHub Repositories, two External Services, and one GitHub App conform the core functionality of this automated subprocess.
 
 - **Github Repositories**
   - **OpenSearch Upstream Repository** → base repository of an OpenSearch library where a contributor opens a PR (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
@@ -93,9 +93,18 @@ In the diagram, two GitHub Repositories, two External Services, and one GitHub A
 - **GitHub App**
   - **OpenSearch Changelog Bot** → GitHub App required for getting contributor's permissions to act on his behalf when committing changeset files on his forked repository. Installed in **Contributor Forked Repository** and used only for automatic approach for creating or updating changeset files. Installation link [here](https://github.com/apps/opensearch-changeset-bot).
 
-The process consists on two main sub-procedures:
-- **Changelog Parsing**: this first sub-procedure performs the parsing of the changelog section of the PR description. The process checks first if **OpenSearch Changelog Bot** is installed. If that is the case, then an automatic approach is followed for creating a chageset file. The result has 3 options: (1) 
-- **Changeset Creation/Update**
+As illustrated in the diagram presented three main jobs encompass the interaction of the elements described before:
+
+- **Changelog Parsing** → this first job parses the changelog section of the PR description. The job checks if the **OpenSearch Changelog Bot** is installed in the **Contributor Forked Repository**. If that is the case, an automatic approach is followed to create a changeset file. If not, then a manual one is used instead.
+
+  The result of the parsing action  - supposing that an automatic approach is followed - can consist of three outputs:
+
+  1. **Parsing Failed** → entry parsing in changelog section of PR description fails due to a formatting error. For instance, a wrong entry prefix (i.e. `- tes` instead of `- test`). More details at [SECTION](link)
+  2. **Parsing Succeeded** → parsing is successful and **Automatic Changeset Creation/Update** job is initiated.
+  3. **Skip Entry** → a skip entry is found in changelog section (i.e. `- skip`). No changeset is required. The end of the entire process is reached.
+
+- **Automatic Changeset Creation/Update** → This second job is initiated after a successful parsing of the changelog section. The **OpenSearch Changelog PR Bridge** service is called, and it retrieves permissions granted by a contributor - through **OpenSearch Changelog Bot** - for the automatic creation or update of changeset files.
+- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repo. In this case, the contributor must manually add or edit changeset files. After each commit of these files, the **OpenSearch Changelog Workflow** is called to check the internal formatting of the changelogs in these files. The check, in this case has two outputs: **Parsing Failed** and **Parsing Succeeded**. The logic of each of them is the same as explained for the **Changelog Parsing** job.
 
 
 
