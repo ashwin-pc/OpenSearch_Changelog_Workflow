@@ -9,7 +9,7 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
 ![Coverage Badge](./badges/coverage.svg)
 
-This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Automated Changelog and Release Notes Process**, the details of which are available below.
+This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Changelog and Release Notes Process**, the details of which are available below.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -19,21 +19,21 @@ This GitHub Actions workflow automates the management of changelog entries for p
 - [Introduction](#introduction)
 - [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
 - [Process Overview](#process-overview)
-  - [Automated Changelog Process](#automated-changelog-process)
-  - [Automated Release Notes Process](#automated-release-notes-process)
+  - [Changelog Process](#changelog-process)
+  - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
-  - [Automated Changelog Process](#automated-changelog-process-1)
+  - [Changelog Process](#changelog-process-1)
     - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
     - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
     - [Overview](#overview)
-  - [Automated Release Notes Process](#automated-release-notes-process-1)
+  - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
-  - [Automated Changelog Process](#automated-changelog-process-2)
+  - [Changelog Process](#changelog-process-2)
     - [Workflow Details](#workflow-details)
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
-  - [Automated Release Notes Process](#automated-release-notes-process-2)
+  - [Release Notes Process](#release-notes-process-2)
     - [Implementing a Release Notes Generation Script](#implementing-a-release-notes-generation-script)
 - [Contributing](#contributing)
 - [License](#license)
@@ -51,7 +51,7 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 ## Benefits of the New Automated Process
 
-The new **Automated Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and release of nee versions.
+The new **Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and release of nee versions.
 
 When a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, without having a pull request number before opening their PR, they cannot add this entry on their initial commit, introducing a two-step process.
 
@@ -65,15 +65,15 @@ Automating the generation of changelog and release notes streamlines both of the
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the **Automated Changelog Process**, (2) and the second one for the **Automated Release Notes Process**. Details of both of them are introduced in the next subsections.
+The **Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the **Changelog Process**, (2) and the second one for the **Release Notes Process**. Details of both of them are introduced in the next subsections.
 
-### Automated Changelog Process
+### Changelog Process
 
-In the figure below, a diagram flow from the entire **Automated Changelog Process** is depicted.
+In the figure below, a diagram flow from the entire **Changelog Process** is depicted.
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
-### Automated Release Notes Process
+### Release Notes Process
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
@@ -91,7 +91,7 @@ Details on each of these changes are available in the "[Process Details](#proces
 
 This section discusses in greater detail the four primary changes listed in the "[Process Overview](#process-overview)" section above.
 
-### Automated Changelog Process
+### Changelog Process
 
 #### Creating a New `changelogs` Directory
 
@@ -196,13 +196,13 @@ If the workflow encounters an error (e.g., an empty "Changelog" section or an in
 
 Contributors can then address the error and update their PR, which will trigger the workflow to run again.
 
-### Automated Release Notes Process
+### Release Notes Process
 
 COMPLETE
 
 ## Usage
 
-### Automated Changelog Process
+### Changelog Process
 
 Here's an example of how to use this action in a workflow file:
 
@@ -356,7 +356,7 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### Automated Release Notes Process
+### Release Notes Process
 
 #### Implementing a Release Notes Generation Script
 
