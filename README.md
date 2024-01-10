@@ -59,15 +59,15 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 ## Benefits of the Automated Process
 
-The new **Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and release of nee versions.
+The **Automated Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and the release of new versions.
 
-When a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, without having a pull request number before opening their PR, they cannot add this entry on their initial commit, introducing a two-step process.
+Before this automated process was adopted, whenever a contributor opened a new PR, they were prompted to indicate whether or not they had manually added an entry to the CHANGELOG.md file. However, since a changelog entry required a PR number as a reference, contributors had to first open a PR first, grab the PR number, and then add a second commit to their open PR with the changelog entry for their changes.
 
-This two-step process resulted in hurdles, where contributors had to (1) open a PR with their initial committed code and (2) add a new entry, once having a PR number, to the CHANGELOG.md file, pushing a second commit. This action not only introduces inefficiencies but also opens the chance for merge conflicts when two or more contributors update the CHANGELOG.md file after opening a PR. If they are not synchronized, conflicting entries - in terms of their incorporation order - may appear in the CHANGELOG.md file, thus requiring manual resolutions to solve the problem.
+In addition to being inefficient, this two-step process also created an opportunity for merge conflicts. If two or more contributors updated the CHANGELOG.md file in their PRs, and those updates were not synchronized with one another, the order of entries in the changelog would be inaccurate, requiring manual intervention to sort things out.
 
-On the other hand, when a new product version is scheduled for GA release, release notes and changelog updates must be prepared manually, resulting in additional time-consuming tasks that incorporate more bottlenecks in this operation.
+Likewise, when a new product version was scheduled for GA release, release notes and changelog updates had to be prepared manually. This process was both time consuming and labor intensive.
 
-Automating the generation of changelog and release notes streamlines both of these nonautomatic operative procedures, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories.
+Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
