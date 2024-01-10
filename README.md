@@ -99,12 +99,12 @@ As illustrated in the diagram presented three main jobs encompass the interactio
 
   The result of the parsing action  - supposing that an automatic approach is followed - can consist of three outputs:
 
-  1. **Parsing Failed** → entry parsing in changelog section of PR description fails due to a formatting error. For instance, a wrong entry prefix (i.e. `- tes` instead of `- test`). More details at [SECTION](link)
+  1. **Parsing Failed** → entry parsing in changelog section of PR description fails due to a formatting error. For instance, a wrong entry prefix (i.e., `- tes`` instead of `- test`). More details at [SECTION](link)
   2. **Parsing Succeeded** → parsing is successful and **Automatic Changeset Creation/Update** job is initiated.
-  3. **Skip Entry** → a skip entry is found in changelog section (i.e. `- skip`). No changeset is required. The end of the entire process is reached.
+  3. **Skip Entry** → a skip entry is found in changelog section (i.e.,` skip`). No changeset is required. The end of the entire process is reached.
 
 - **Automatic Changeset Creation/Update** → This second job is initiated after a successful parsing of the changelog section. The **OpenSearch Changelog PR Bridge** service is called, and it retrieves permissions granted by a contributor - through **OpenSearch Changelog Bot** - for the automatic creation or update of changeset files.
-- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repo. In this case, the contributor must manually add or edit changeset files. After each commit of these files, the **OpenSearch Changelog Workflow** is called to check the internal formatting of the changelogs in these files. The check, in this case has two outputs: **Parsing Failed** and **Parsing Succeeded**. The logic of each of them is the same as explained for the **Changelog Parsing** job.
+- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repo. In this case, the contributor must manually add or edit changeset files. After each commit of these files, the **OpenSearch Changelog Workflow** is called to check the internal formatting of the changeset files. In this case, the procedure has two outputs: **Parsing Failed**, and **Parsing Succeeded**. Each logic is the same as for the **Changelog Parsing** job.
 
 
 
