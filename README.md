@@ -9,7 +9,12 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
 ![Coverage Badge](./badges/coverage.svg)
 
-This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Changelog and Release Notes Process**, the details of which are available below.
+## Introduction
+This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by the OpenSearch-Dashboards repository. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository. Optionally, the Action also communicates with a separate GitHub App that contributors can install on their forks in order to create this changeset file automatically and commit it to the open pull request.
+
+This repository also provides templates for a script that can be used to automatically update the repository's changelog and prepare a release notes document when a new version is scheduled for release.
+
+For more details about the GitHub Action, the release notes script, and the **Automated Changelog and Release Notes Process** as a whole, please consult the information below.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -17,7 +22,8 @@ This GitHub Actions workflow automates the management of changelog entries for p
 <!-- prettier-ignore-end -->
 
 - [Introduction](#introduction)
-- [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
+- [Background of the Automated Process](#background-of-the-automated-process)
+- [Benefits of the Automated Process](#benefits-of-the-automated-process)
 - [Process Overview](#process-overview)
   - [Changelog Process](#changelog-process)
   - [Release Notes Process](#release-notes-process)
@@ -39,7 +45,7 @@ This GitHub Actions workflow automates the management of changelog entries for p
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Introduction
+## Background of the Automated Process
 
 On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing CHANGELOGs, and release notes during General Availability (GA) of the product, for all OpenSearch project repositories."
 
@@ -47,7 +53,7 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Benefits of the New Automated Process
+## Benefits of the Automated Process
 
 The new **Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and release of nee versions.
 
