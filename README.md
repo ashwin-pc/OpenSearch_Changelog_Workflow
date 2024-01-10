@@ -1,6 +1,7 @@
 <a name="back-to-top"></a>
 
 <!-- omit in toc -->
+
 # OpenSearch Changelog Workflow
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
@@ -10,25 +11,28 @@
 This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Automated Changelog and Release Notes Process**, the details of which are available below.
 
 <!-- omit in toc -->
+
 # Table of Contents
 
-- [Introduction](#introduction)
-- [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
-- [Process Overview](#process-overview)
-  - [Changelog Process](#changelog-process)
-  - [Release Notes Prcess](#release-notes-prcess)
-- [Process Details](#process-details)
-  - [1. Creating a New `changelogs` Directory](#1-creating-a-new-changelogs-directory)
-  - [2. Adding a "Changelog" Section to the PR Description Template](#2-adding-a-changelog-section-to-the-pr-description-template)
-  - [3. Using a GitHub Actions Workflow to Generate Changeset Files](#3-using-a-github-actions-workflow-to-generate-changeset-files)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Workflow Details](#workflow-details)
-    - [Formatting Requirements](#formatting-requirements)
-    - [Workflow Flowchart](#workflow-flowchart)
-  - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
-- [Conclusion](#conclusion)
-- [License](#license)
+- [OpenSearch Changelog Workflow](#opensearch-changelog-workflow)
+- [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
+  - [Process Overview](#process-overview)
+    - [Automated Changelog Process](#automated-changelog-process)
+    - [Release Notes Prcess](#release-notes-prcess)
+  - [Process Details](#process-details)
+    - [1. Creating a New `changelogs` Directory](#1-creating-a-new-changelogs-directory)
+    - [2. Adding a "Changelog" Section to the PR Description Template](#2-adding-a-changelog-section-to-the-pr-description-template)
+    - [3. Using a GitHub Actions Workflow to Generate Changeset Files](#3-using-a-github-actions-workflow-to-generate-changeset-files)
+      - [Overview](#overview)
+      - [Usage](#usage)
+      - [Workflow Details](#workflow-details)
+      - [Formatting Requirements](#formatting-requirements)
+      - [Workflow Flowchart](#workflow-flowchart)
+    - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
+  - [Conclusion](#conclusion)
+  - [License](#license)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -56,10 +60,13 @@ Automating the generation of changelog and release notes streamlines both of the
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the Changelog Process, (2) and the second one for the Release Notes Process. Details of both of them are introduced below.
+The **Automated Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the **Automated Changelog Process**, (2) and the second one for the **Automated Release Notes Process**. Details of both of them are introduced in the next subsections.
 
-### Changelog Process
+### Automated Changelog Process
 
+In the figure below, a diagram flow from the entire **Automated Changelog Process** is depicted.
+
+![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
 ### Release Notes Prcess
 
@@ -94,6 +101,7 @@ Changeset files are named with the PR number they correspond to. (E.g., `5218.ym
 The PR template has been updated with a new "Changelog" section. The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
 
 Below are the formatting standards for changelog entries:
+
 - Each entry line must begin with a hyphen (-) in the Markdown source file.
 - Contributors must categorize their changes by using one of the following prefixes, followed by a colon.
   - `breaking`
@@ -110,10 +118,11 @@ Below are the formatting standards for changelog entries:
   - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
 - After the colon, contributors should provide a concise description of their changes. Descriptions must be 50 characters or less.
 
-Below is an example of a valid entry in the "Changelog" section of the PR description. (Contributors can add more than one entry if they are contributing more than one type of change in their PR. They do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add to their PR lie *outside* of the comment block.)
+Below is an example of a valid entry in the "Changelog" section of the PR description. (Contributors can add more than one entry if they are contributing more than one type of change in their PR. They do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add to their PR lie _outside_ of the comment block.)
 
 ```markdown
 ## Changelog
+
 <!-- Default comment block giving formatting instructions for changeloo entries -->
 
 - feat: Adds a new feature
@@ -127,22 +136,27 @@ Below are examples of invalid entries:
 - skip
 - feat: Adds a new feature
 ```
+
 ```
 // Missing a hyphen
 feat: Adds a new feature
 ```
+
 ```
 // Invalid category prefix
 - new: Adds something new
 ```
+
 ```
 // Missing description
 - feat
 ```
+
 ```
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
+
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 3. Using a GitHub Actions Workflow to Generate Changeset Files
@@ -326,6 +340,7 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
     style Q fill:#fb923c,color:#0f172a
     style N fill:#4ade80,color:#0f172a
 ```
+
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### 4. Implementing a Release Notes Generation Script
@@ -335,7 +350,9 @@ When a new product release is ready for general availability, OpenSearch maintai
 ```bash
 yarn release_note:generate
 ```
+
 This command executes a script that performs the following actions:
+
 - Extract information from the changeset files in the `changelogs/fragments` directory
 - Map the changelog entries in these files to their appropriate changelog section headings
 - Generate the changelog section for the new release and add it to the top of the changelog
