@@ -110,7 +110,7 @@ As illustrated in the diagram presented three main jobs encompass the interactio
 
 ---
 
-REQUIRED BY JONNATHON DESCRIPTION BELOW
+¿REQUIRED BY JONNATHON DESCRIPTION BELOW?
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
