@@ -15,6 +15,8 @@ This GitHub Actions workflow automates the management of changelog entries for p
 - [Introduction](#introduction)
 - [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
 - [Process Overview](#process-overview)
+  - [Changelog Process](#changelog-process)
+  - [Release Notes Prcess](#release-notes-prcess)
 - [Process Details](#process-details)
   - [1. Creating a New `changelogs` Directory](#1-creating-a-new-changelogs-directory)
   - [2. Adding a "Changelog" Section to the PR Description Template](#2-adding-a-changelog-section-to-the-pr-description-template)
@@ -54,7 +56,12 @@ Automating the generation of changelog and release notes streamlines both of the
 
 ## Process Overview
 
-The updated **Changelog and Release Notes Process** involves four primary changes in the repository:
+The **Automated Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the Changelog Process, (2) and the second one for the Release Notes Process. Details of both of them are introduced below.
+
+### Changelog Process
+
+
+### Release Notes Prcess
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
