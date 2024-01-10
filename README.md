@@ -5,7 +5,7 @@
 # OpenSearch Changelog Workflow
 <!-- prettier-ignore-end -->
 
-![MIT License](https://img.shields.io/badge/license-MIT-blue)
+![Apache 2.0 License](https://img.shields.io/github/license/saltstack/salt)
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
 ![Coverage Badge](./badges/coverage.svg)
 
