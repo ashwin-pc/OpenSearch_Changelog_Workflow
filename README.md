@@ -2,7 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
-# OpenSearch Changelog Workflow
+# OpenSearch Automated Changelog and Release Notes Process
 <!-- prettier-ignore-end -->
 
 ![Apache 2.0 License](https://img.shields.io/github/license/saltstack/salt)
