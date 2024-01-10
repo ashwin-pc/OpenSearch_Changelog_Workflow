@@ -32,8 +32,9 @@ This guide is for any developer who wants to set up a running local development 
 This **Automated Changelog and Release Notes Process** involves several components operating in different contexts, each with specific aims:
 
 - **Reusable GitHub Action** → Triggered by pull requests originating from forked repositories. The action parses and checks either:
+
   - Changelog entries entered in the "Changelog" section of the PR description
-  OR
+    OR
   - Manually-created changeset files (i.e., fragments).
 
 - **Github App** → If an OpenSearch contributor wants to automate the process of generating their changeset files, they can install the `OpenSearch-Changeset-Bot` on their forked OpenSearch repository. The bot is a GitHub App built using `Express.js`. It listens for HTTP requests coming from the reusable GitHub Action, performs CRUD operations on changeset files, and commits those files to contributors' open PRs.

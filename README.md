@@ -1,8 +1,9 @@
 <a name="back-to-top"></a>
 
+<!-- prettier-ignore-start -->
 <!-- omit in toc -->
-
 # OpenSearch Changelog Workflow
+<!-- prettier-ignore-end -->
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
@@ -10,34 +11,33 @@
 
 This GitHub Actions workflow automates the management of changelog entries for pull requests in OpenSearch repositories. It is part of a broader update to the **Automated Changelog and Release Notes Process**, the details of which are available below.
 
+<!-- prettier-ignore-start -->
 <!-- omit in toc -->
+## Table of Contents
+<!-- prettier-ignore-end -->
 
-# Table of Contents
-
-- [OpenSearch Changelog Workflow](#opensearch-changelog-workflow)
-- [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
-  - [Process Overview](#process-overview)
-    - [Automated Changelog Process](#automated-changelog-process)
-    - [Automated Release Notes Process](#automated-release-notes-process)
-  - [Getting Started](#getting-started)
-    - [Automated Changelog Process](#automated-changelog-process-1)
-      - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
-      - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
-      - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
-      - [Overview](#overview)
-    - [Automated Release Notes Process](#automated-release-notes-process-1)
-  - [Usage](#usage)
-    - [Automated Changelog Process](#automated-changelog-process-2)
-      - [Workflow Details](#workflow-details)
-      - [Formatting Requirements](#formatting-requirements)
-      - [Workflow Flowchart](#workflow-flowchart)
-    - [Automated Release Notes Process](#automated-release-notes-process-2)
-      - [Implementing a Release Notes Generation Script](#implementing-a-release-notes-generation-script)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Need Help?](#need-help)
+- [Introduction](#introduction)
+- [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
+- [Process Overview](#process-overview)
+  - [Automated Changelog Process](#automated-changelog-process)
+  - [Automated Release Notes Process](#automated-release-notes-process)
+- [Getting Started](#getting-started)
+  - [Automated Changelog Process](#automated-changelog-process-1)
+    - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
+    - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
+    - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
+    - [Overview](#overview)
+  - [Automated Release Notes Process](#automated-release-notes-process-1)
+- [Usage](#usage)
+  - [Automated Changelog Process](#automated-changelog-process-2)
+    - [Workflow Details](#workflow-details)
+    - [Formatting Requirements](#formatting-requirements)
+    - [Workflow Flowchart](#workflow-flowchart)
+  - [Automated Release Notes Process](#automated-release-notes-process-2)
+    - [Implementing a Release Notes Generation Script](#implementing-a-release-notes-generation-script)
+- [Contributing](#contributing)
+- [License](#license)
+- [Need Help?](#need-help)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -375,7 +375,6 @@ This command executes a script that performs the following actions:
 - Delete the changeset files from the `changelogs/fragments` directory
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
-
 
 ## Contributing
 
