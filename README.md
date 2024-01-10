@@ -69,7 +69,7 @@ Automating the generation of changelog and release notes streamlines both of the
 
 ## Process Overview
 
-The **Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first one for the **Changelog Process**, (2) and the second one for the **Release Notes Process**. Details of both of them are introduced in the next subsections.
+The **Changelog and Release Notes Process** acts in two separate and independent compartments: (1) the first, the **Changelog Process**, (2) and the second, the **Release Notes Process**. Details of both of them are introduced in the next subsections.
 
 ### Changelog Process
 
@@ -84,7 +84,7 @@ In the figure below, a diagram flow from the entire **Changelog Process** is dep
 
 3. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved.
 
-   
+
 ### Release Notes Process
 
 [COMPLETE RILEY AND WILL]
@@ -376,7 +376,7 @@ This command executes a script that performs the following actions:
 - Map the changelog entries in these files to their appropriate changelog section headings
 - Generate the changelog section for the new release and add it to the top of the changelog
 - Create a release notes document to accompany the new release
-- Delete the changeset files from the `changelogs/fragments` directory
+- Del**ete the ch**angeset files from the `changelogs/fragments` directory
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
