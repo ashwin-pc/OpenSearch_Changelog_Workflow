@@ -83,13 +83,18 @@ In the diagram, two GitHub Repositories, two External Services, and one GitHub A
   - **OpenSearch Upstream Repository** → base repository of an OpenSearch library where a contributor opens a PR (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
   - **Contributor Forked Repository** → forked repository of an upstream OpenSearch library where a contributor suggests changes by opening a PR.
 - **External Services**
-  - **OpenSearch Changelog Workflow** → GitHub reusable workflow triggered upon the creation or edit of a PR. Acts only in the **OpenSearch Upstream Repository** and it is charge of parsing changelog section, post comments and add labels in PR and communicate with **OpenSearch Changelog PR Bridge**.
-  - **OpenSearch Changelog PR Bridge** →
+  - **OpenSearch Changelog Workflow** → GitHub reusable workflow triggered upon the creation or edit of a PR. Acts only in the **OpenSearch Upstream Repository** and it is in charge of:
+    1. Check and parse entries in changelog section of PR description.
+    2. Post comments and add or remove labels in PR.
+    3. Communicate with **OpenSearch Changelog PR Bridge** for automatic creation/update of chnageset files.
+    4. Check format for manual creation or update of changeset files.
+
+  - **OpenSearch Changelog PR Bridge** → Express.js application for **OpenSearch Changelog Bot**. In charge of committing changeset files when automatic option is selected. Acts only in **Contributor Forked Repository** and required **OpenSearch Changelog Bot** app installed. More details in [here](https://github.com/BigSamu/OpenSearch_Changeset_Bot).
 - **GitHub App**
-  - **OpenSearch Changelog Bot** →
+  - **OpenSearch Changelog Bot** → GitHub App required for getting contributor's permissions to act on his behalf when committing changeset files on his forked repository. Installed in **Contributor Forked Repository** and used only for automatic approach for creating or updating changeset files. Installation link [here](https://github.com/apps/opensearch-changeset-bot).
 
 The process consists on two main sub-procedures:
-- **Changelog Parsing**: this first sub-procedure is in charge of parsing the changelog section of the PR description. The automated process checks first if
+- **Changelog Parsing**: this first sub-procedure performs the parsing of the changelog section of the PR description. The process checks first if **OpenSearch Changelog Bot** is installed. If that is the case, then an automatic approach is followed for creating a chageset file. The result has 3 options: (1) 
 - **Changeset Creation/Update**
 
 
