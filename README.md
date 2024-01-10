@@ -78,6 +78,13 @@ In the figure below, a diagram flow from the entire **Changelog Process** is dep
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
 
+
+
+
+---
+
+REQUIRED BY JONNATHON DESCRIPTION BELOW
+
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
 2. Adding a "Changelog" section to the PR template, with instructions for how contributors can add valid changelog entries to this section.
