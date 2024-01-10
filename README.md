@@ -9,10 +9,15 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/BigSamu/OpenSearch_Change_Set_Create_Action)
 ![Coverage Badge](./badges/coverage.svg)
 
+<!-- prettier-ignore-start -->
+<!-- omit in toc -->
 ## Introduction
-This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by the OpenSearch-Dashboards repository. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository. Optionally, the Action also communicates with a separate GitHub App that contributors can install on their forks in order to create this changeset file automatically and commit it to the open pull request.
+<!-- prettier-ignore-end -->
+This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by OpenSearch-Dashboards. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository. 
 
-This repository also provides templates for a script that can be used to automatically update the repository's changelog and prepare a release notes document when a new version is scheduled for release.
+The Action also communicates with a separate GitHub App that contributors can install on their forks in order to create this changeset file automatically and commit it to the open pull request.
+
+This repository also provides templates for a script that can be used to automatically update a changelog and prepare a release notes document when a new version is scheduled for release.
 
 For more details about the GitHub Action, the release notes script, and the **Automated Changelog and Release Notes Process** as a whole, please consult the information below.
 
@@ -21,7 +26,6 @@ For more details about the GitHub Action, the release notes script, and the **Au
 ## Table of Contents
 <!-- prettier-ignore-end -->
 
-- [Introduction](#introduction)
 - [Background of the Automated Process](#background-of-the-automated-process)
 - [Benefits of the Automated Process](#benefits-of-the-automated-process)
 - [Process Overview](#process-overview)
