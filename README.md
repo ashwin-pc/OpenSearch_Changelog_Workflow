@@ -20,19 +20,24 @@ This GitHub Actions workflow automates the management of changelog entries for p
   - [Benefits of the New Automated Process](#benefits-of-the-new-automated-process)
   - [Process Overview](#process-overview)
     - [Automated Changelog Process](#automated-changelog-process)
-    - [Release Notes Prcess](#release-notes-prcess)
-  - [Process Details](#process-details)
-    - [1. Creating a New `changelogs` Directory](#1-creating-a-new-changelogs-directory)
-    - [2. Adding a "Changelog" Section to the PR Description Template](#2-adding-a-changelog-section-to-the-pr-description-template)
-    - [3. Using a GitHub Actions Workflow to Generate Changeset Files](#3-using-a-github-actions-workflow-to-generate-changeset-files)
+    - [Automated Release Notes Process](#automated-release-notes-process)
+  - [Getting Started](#getting-started)
+    - [Automated Changelog Process](#automated-changelog-process-1)
+      - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
+      - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
+      - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
       - [Overview](#overview)
-      - [Usage](#usage)
+    - [Automated Release Notes Process](#automated-release-notes-process-1)
+  - [Usage](#usage)
+    - [Automated Changelog Process](#automated-changelog-process-2)
       - [Workflow Details](#workflow-details)
       - [Formatting Requirements](#formatting-requirements)
       - [Workflow Flowchart](#workflow-flowchart)
-    - [4. Implementing a Release Notes Generation Script](#4-implementing-a-release-notes-generation-script)
-  - [Conclusion](#conclusion)
+    - [Automated Release Notes Process](#automated-release-notes-process-2)
+      - [Implementing a Release Notes Generation Script](#implementing-a-release-notes-generation-script)
+  - [Contributing](#contributing)
   - [License](#license)
+  - [Need Help?](#need-help)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -68,7 +73,7 @@ In the figure below, a diagram flow from the entire **Automated Changelog Proces
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
-### Release Notes Prcess
+### Automated Release Notes Process
 
 1. Creating a new `changelogs` directory in the root folder of the repository.
 
@@ -82,11 +87,13 @@ Details on each of these changes are available in the "[Process Details](#proces
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Process Details
+## Getting Started
 
 This section discusses in greater detail the four primary changes listed in the "[Process Overview](#process-overview)" section above.
 
-### 1. Creating a New `changelogs` Directory
+### Automated Changelog Process
+
+#### Creating a New `changelogs` Directory
 
 To centralize information pertinent to the new changelog process, a new `changelogs` directory has been added to the root of the repository. This directory is the new location for `CHANGELOG.md`.
 
@@ -96,7 +103,7 @@ Changeset files are named with the PR number they correspond to. (E.g., `5218.ym
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 2. Adding a "Changelog" Section to the PR Description Template
+#### Adding a "Changelog" Section to the PR Description Template
 
 The PR template has been updated with a new "Changelog" section. The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
 
@@ -159,7 +166,7 @@ feat: Adds a new feature
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 3. Using a GitHub Actions Workflow to Generate Changeset Files
+#### Using a GitHub Actions Workflow to Generate Changeset Files
 
 #### Overview
 
@@ -189,7 +196,13 @@ If the workflow encounters an error (e.g., an empty "Changelog" section or an in
 
 Contributors can then address the error and update their PR, which will trigger the workflow to run again.
 
-#### Usage
+### Automated Release Notes Process
+
+COMPLETE
+
+## Usage
+
+### Automated Changelog Process
 
 Here's an example of how to use this action in a workflow file:
 
@@ -343,7 +356,9 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 4. Implementing a Release Notes Generation Script
+### Automated Release Notes Process
+
+#### Implementing a Release Notes Generation Script
 
 When a new product release is ready for general availability, OpenSearch maintainers can run the following script command from the command line:
 
@@ -361,12 +376,17 @@ This command executes a script that performs the following actions:
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Conclusion
+
+## Contributing
 
 This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve this process, please let us know!
+
+Add Link Developer Guide
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## License
 
 This project is licensed under the [MIT License](./LICENSE.txt).
+
+## Need Help?
