@@ -2,7 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
-# OpenSearch Changelog Workflow
+# OpenSearch Changelog Workflow and Release Notes Script
 <!-- prettier-ignore-end -->
 
 ![Apache 2.0 License](https://img.shields.io/github/license/saltstack/salt)
@@ -14,7 +14,7 @@
 ## Introduction
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up this new procedure, aimed at streamlining contributions for any OpenSearch repo, and also guidelines for contributing to it.
+This repository contains the details and source code for the** OpenSearch Changelog Workflow** and **OpenSearch Release Notes Script** procesess, part of the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up these new procedures aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute.
 
 For more details about the **Automated Changelog and Release Notes Process** as a whole, please consult the following sections.
 
