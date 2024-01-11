@@ -73,7 +73,7 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-The **Changelog and Release Notes Process** act in two separate and independent compartments: (1) the first one, the **Changelog Process**, (2) and the second, the **Release Notes Process**. Details of both of them are introduced in the following subsections.
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections.
 
 ### Changelog Process
 
