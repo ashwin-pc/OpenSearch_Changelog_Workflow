@@ -73,11 +73,11 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections.
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement this process in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
 
 ### Changelog Process
 
-A complete flow diagram from the entire **Changelog Process** is depicted in the figure below.
+The following flow diagram depicts the entire **Automated Changelog Process** from start to finish.
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
