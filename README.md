@@ -6,18 +6,17 @@
 <!-- prettier-ignore-end -->
 
 ![Apache 2.0 License](https://img.shields.io/github/license/saltstack/salt)
+
 <!-- ![Coverage Badge](./badges/coverage.svg) -->
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
 ## Introduction
 <!-- prettier-ignore-end -->
+
 This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch](https://opensearch.org/) Project. It presents detailed information on how to set up this new procedure, aimed at streamlining contributions for any OpenSearch repo, and also guidelines for contributing to it.
 
-
-For more details of the **Automated Changelog and Release Notes Process** as a whole, please consult the sections below.
-
-
+For more details about the **Automated Changelog and Release Notes Process** as a whole, please consult the following sections.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -73,8 +72,6 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-
-
 The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**.
 
 The first process is comprised by a Github Reusable Action - a workflow itself - that checks the validity of a new added or edited changeset file. For these checks, two distinct approaches can be used for the fragment files: automatic or manual.
@@ -96,18 +93,22 @@ The following flow diagram depicts the entire **Automated Changelog Process** fr
 As the diagram illustrates, the **Automated Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
 
 - **Github Repositories**
+
   - **OpenSearch Upstream Repository** → This is the base repository where a contributor's open pull request resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
 
   - **Contributor Forked Repository** → The head repository where the contributor's pull request originates from. It contains the changes the contributor is asking to be merged into the base repository.
 
 - **External Services**
+
   - **OpenSearch Changelog Workflow** → GitHub reusable Action workflow triggered whenever a PR is opened or edited. This workflow acts only in the **OpenSearch Upstream Repository** and carries out the following actions:
+
     - Check and parse contributor entries in the `## Changelog` section of the PR description.
     - Post comments and add or remove labels on PRs.
     - Communicate with **OpenSearch Changelog PR Bridge** to automatically create, update, or delete changeset files.
     - If a contributor has manually added or updated a changeset file, validate the format of the file.
 
   - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the backbone of the **OpenSearch Changelog Bot** (the name of the **GitHub App** referred to above).
+
     - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**.
 
     - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file.
@@ -144,7 +145,6 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 2. Adding a "Changelog" section to the PR template, with instructions for how contributors can add valid changelog entries to this section.
 
 3. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved.
-
 
 ### Release Notes Process
 
