@@ -12,13 +12,11 @@
 <!-- omit in toc -->
 ## Introduction
 <!-- prettier-ignore-end -->
-This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by OpenSearch-Dashboards. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository.
-
-The Action also communicates with a separate GitHub App that contributors can install on their forks in order to create this changeset file automatically and commit it to the open pull request.
-
-This repository also provides templates for a script that can be used to automatically update a changelog and prepare a release notes document when a new version is scheduled for release.
+This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch](https://opensearch.org/) Project. It presents detailed information on how to set up this new procedure aimed at streamlining contribution for any OpenSearch repo, including guidelines for contributing to it.
 
 For more details about the GitHub Action, the release notes script, and the **Automated Changelog and Release Notes Process** as a whole, please consult the information below.
+
+
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -72,7 +70,17 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
+
+
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**.
+
+The first process is comprised by a Github Reusable Action - a workflow itself - that checks the validity of a new added or edited changeset file. For these checks, two distinct approaches can be used for the fragment files: automatic or manual.
+
+For an automatic approach, the workflow communicates with an external service that can create these changeset files on behalf of a contributor and commit them to the open pull request.
+
+For the second process, this repository also provides templates for a script that can be used to automatically update release notes document when a new version is scheduled for release.
+
+The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
 
 ### Changelog Process
 
