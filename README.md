@@ -72,7 +72,7 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement this process in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**. The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
 
 ### Changelog Process
 
@@ -80,7 +80,7 @@ The following flow diagram depicts the entire **Automated Changelog Process** fr
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
-In the diagram, two GitHub Repositories, two External Services, and one GitHub App conform the core functionality of this automated subprocess.
+As the diagram illustrates, the **Automated Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
 
 - **Github Repositories**
   - **OpenSearch Upstream Repository** → base repository of an OpenSearch library where a contributor opens a PR (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
