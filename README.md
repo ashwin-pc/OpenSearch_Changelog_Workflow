@@ -29,6 +29,8 @@ For more details about the GitHub Action, the release notes script, and the **Au
 - [Benefits of the Automated Process](#benefits-of-the-automated-process)
 - [Process Overview](#process-overview)
   - [Changelog Process](#changelog-process)
+    - [Changelog Process Entities](#changelog-process-entities)
+    - [Changelog Process Jobs](#changelog-process-jobs)
   - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
   - [Changelog Process](#changelog-process-1)
@@ -80,6 +82,8 @@ The following flow diagram depicts the entire **Automated Changelog Process** fr
 
 ![Automated_Changelog_Process](./assets/OpenSearch_Changelog_Workflow.png)
 
+#### Changelog Process Entities
+
 As the diagram illustrates, the **Automated Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
 
 - **Github Repositories**
@@ -102,20 +106,25 @@ As the diagram illustrates, the **Automated Changelog Process** involves interac
 - **GitHub App**
   - **OpenSearch Changelog Bot** → The name of the GitHub App required for obtaining contributors' permissions to act on their behalf and commit changeset files in their forked repository. As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot).
 
-As illustrated in the diagram presented three main jobs encompass the interaction of the elements described before:
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-- **Changelog Parsing** → this first job parses the changelog section of the PR description. The job checks if the **OpenSearch Changelog Bot** is installed in the **Contributor Forked Repository**. If that is the case, an automatic approach is followed to create a changeset file. If not, then a manual one is used instead.
+#### Changelog Process Jobs
 
-  The result of the parsing action  - supposing that an automatic approach is followed - can consist of three outputs:
+As the diagram illustrates, the **Changelog Process** consists of three primary jobs:
 
-  1. **Parsing Failed** → entry parsing in changelog section of PR description fails due to a formatting error. For instance, a wrong entry prefix (i.e., `- tes`` instead of `- test`). More details at [SECTION](link)
-  2. **Parsing Succeeded** → parsing is successful and **Automatic Changeset Creation/Update** job is initiated.
-  3. **Skip Entry** → a skip entry is found in changelog section (i.e.,` skip`). No changeset is required. The end of the entire process is reached.
+- **Changelog Parsing** → The reusable GitHub Action checks first to see if the **OpenSearch Changelog Bot** has been installed in the **Contributor Forked Repository**. If it has been, the Action begins parsing the `## Changelog` section of the open PR description. If the **OpenSearch Changelog Bot** has not been installed, then the contributor is prompted to either install the bot or to manually create and commit a changeset file.
 
-- **Automatic Changeset Creation/Update** → This second job is initiated after a successful parsing of the changelog section. The **OpenSearch Changelog PR Bridge** service is called, and it retrieves permissions granted by a contributor - through **OpenSearch Changelog Bot** - for the automatic creation or update of changeset files.
-- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repo. In this case, the contributor must manually add or edit changeset files. After each commit of these files, the **OpenSearch Changelog Workflow** is called to check the internal formatting of the changeset files. In this case, the procedure has two outputs: **Parsing Failed**, and **Parsing Succeeded**. Each logic is the same as for the **Changelog Parsing** job.
+  Parsing the `## Changelog` section of the open PR description can result in one of three outcomes:
 
+  1. **Parsing Failed** → If one or more entries in the `## Changelog` section are formatted improperly, the process will fail, and a `failed changeset` label will be added to the PR. For more information about formatting requirements, see the [Usage](#usage) section below.
+  2. **Parsing Succeeded** → If the entries in the `## Changelog` section are formatted properly and the Action succeeds in parsing them, the **Automatic Changeset Creation/Update** job is initiated.
+  3. **Skip Entry** → If a contributor's changes do not require a changelog entry (e.g., fixing a small typographical error), they may enter `- skip` in the `## Changelog` section. No changeset file will be created or required, a `Skip-Changelog` label will be added to the PR, and the process will end successfully.
 
+- **Automatic Changeset Creation/Update** → This second job is initiated after the `## Changelog` section has been successfully parsed. The Action calls the **OpenSearch Changelog PR Bridge** service, and it obtains permissions granted by the contributor through the **OpenSearch Changelog Bot** to automatically create or update a changeset file.
+  
+- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repository. In this case, the contributor must manually add or edit a changeset file. After each commit, the **OpenSearch Changelog Workflow** checks the formatting of the changeset file. Two outcomes are possible: **Parsing Failed** and **Parsing Succeeded**. The logic is the same as the **Changelog Parsing** job described above.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ---
 
