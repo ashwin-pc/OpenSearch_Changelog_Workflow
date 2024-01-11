@@ -78,7 +78,7 @@ The first sub-process is conformed by a [Github Action](https://docs.github.com/
 
 For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
-The mechanisms underlying both of these procedures are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
+The following subsections lay out the mechanisms underlying both of these procedures. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
 
 ### Changelog Process
 
