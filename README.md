@@ -419,7 +419,11 @@ This command executes a script that performs the following actions:
 
 ## Contributing
 
-The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite. If you have any suggestions for how we might improve this process or want to contribute to the base code, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
+The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite.
+
+If you have any suggestions for how we might improve this process or want to contribute to the base code, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
+
+Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used. You can refer to the related [CONTRIBUTING.md](https://github.com/BigSamu/OpenSearch_Changeset_Bot/blob/main/README.md) guide of that repo for more details.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
