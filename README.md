@@ -12,7 +12,7 @@
 <!-- omit in toc -->
 ## Introduction
 <!-- prettier-ignore-end -->
-This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by OpenSearch-Dashboards. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository. 
+This repository contains the source code for a reusable GitHub Action that plays a key role in a broader **Automated Changelog and Release Notes Process** adopted by OpenSearch-Dashboards. Specifically, the Action checks to see that a valid changeset file has been added to pull requests opened against an OpenSearch repository.
 
 The Action also communicates with a separate GitHub App that contributors can install on their forks in order to create this changeset file automatically and commit it to the open pull request.
 
@@ -425,14 +425,12 @@ This command executes a script that performs the following actions:
 
 ## Contributing
 
-This automated process for generating changelog entries and release notes is the result of a concerted effort on the part of OpenSearch maintainers and contributors to improve the development experience for all involved. If you have any suggestions for how we might improve this process, please let us know!
-
-Add Link Developer Guide
+The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite. If you have any suggestions for how we might improve this process or want to contribute to the base code, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## License
 
-This project is an open source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
+This project is an open-source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
 
 ## Need Help?
