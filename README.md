@@ -94,7 +94,7 @@ As the diagram illustrates, the **Automated Changelog Process** involves interac
     - Communicate with **OpenSearch Changelog PR Bridge** to automatically create, update, or delete changeset files.
     - If a contributor has manually added or updated a changeset file, validate the format of the file.
 
-  - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the backbone of the **OpenSearch Changelog Bot** (the name of the **GitHub App** referred to above). 
+  - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the backbone of the **OpenSearch Changelog Bot** (the name of the **GitHub App** referred to above).
     - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**.
 
     - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file.
@@ -427,9 +427,9 @@ This command executes a script that performs the following actions:
 
 The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite.
 
-If you have any suggestions for how we might improve this process or want to contribute to the base code, please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
+Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Release** Notes** services are welcome! See our [Developer Guide](./DEVELOPER_GUIDE.md) for instructions on how to set up the project in your local environment and [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
-Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used. You can refer to the related [CONTRIBUTING.md](https://github.com/BigSamu/OpenSearch_Changeset_Bot/blob/main/README.md) guide of that repo for more details.
+**NOTE:** Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
