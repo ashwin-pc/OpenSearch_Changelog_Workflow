@@ -428,6 +428,6 @@ Add Link Developer Guide
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE.txt).
+This project is an open source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
 
 ## Need Help?
