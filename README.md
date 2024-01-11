@@ -14,7 +14,7 @@
 ## Introduction
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for the** OpenSearch Changelog Workflow** and **OpenSearch Release Notes Script** procesess, part of the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up these new procedures aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute.
+This repository contains the details and source code for the **OpenSearch Changelog Workflow** and **OpenSearch Release Notes Script** procesess, part of the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up these new procedures aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute.
 
 For more details about the **Automated Changelog and Release Notes Process** as a whole, please consult the following sections.
 
