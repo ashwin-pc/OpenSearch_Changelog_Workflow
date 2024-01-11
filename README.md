@@ -72,15 +72,13 @@ Automating the changelog and release notes process resolves these complications,
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of operations: (1) the **Changelog Process** and (2) the **Release Notes Process**.
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Process** and (2) the **Release Notes Process**.
 
-The first process is comprised by a Github Reusable Action - a workflow itself - that checks the validity of a new added or edited changeset file. For these checks, two distinct approaches can be used for the fragment files: automatic or manual.
+The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: automatic or manual creation/update of fragments (i.e, changeset files). For an automated approach, the workflow communicates with an external service that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
 
-For an automatic approach, the workflow communicates with an external service that can create these changeset files on behalf of a contributor and commit them to the open pull request.
+For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
-For the second process, this repository also provides templates for a script that can be used to automatically update release notes document when a new version is scheduled for release.
-
-The mechanisms underlying both of these processes are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
+The mechanisms underlying both of these procedures are laid out in the following subsections. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
 
 ### Changelog Process
 
