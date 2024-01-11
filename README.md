@@ -14,7 +14,7 @@
 ## Introduction
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents detailed information on how to set up this new procedure, aimed at streamlining contributions for any OpenSearch repo, and also guidelines for contributing to it.
+This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up this new procedure, aimed at streamlining contributions for any OpenSearch repo, and also guidelines for contributing to it.
 
 For more details about the **Automated Changelog and Release Notes Process** as a whole, please consult the following sections.
 
