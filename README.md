@@ -12,9 +12,10 @@
 <!-- omit in toc -->
 ## Introduction
 <!-- prettier-ignore-end -->
-This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch](https://opensearch.org/) Project. It presents detailed information on how to set up this new procedure aimed at streamlining contribution for any OpenSearch repo, including guidelines for contributing to it.
+This repository contains the details and source code for the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch](https://opensearch.org/) Project. It presents detailed information on how to set up this new procedure, aimed at streamlining contributions for any OpenSearch repo, and also guidelines for contributing to it.
 
-For more details about the GitHub Action, the release notes script, and the **Automated Changelog and Release Notes Process** as a whole, please consult the information below.
+
+For more details of the **Automated Changelog and Release Notes Process** as a whole, please consult the sections below.
 
 
 
@@ -129,7 +130,7 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
   3. **Skip Entry** → If a contributor's changes do not require a changelog entry (e.g., fixing a small typographical error), they may enter `- skip` in the `## Changelog` section. No changeset file will be created or required, a `Skip-Changelog` label will be added to the PR, and the process will end successfully.
 
 - **Automatic Changeset Creation/Update** → This second job is initiated after the `## Changelog` section has been successfully parsed. The Action calls the **OpenSearch Changelog PR Bridge** service, and it obtains permissions granted by the contributor through the **OpenSearch Changelog Bot** to automatically create or update a changeset file.
-  
+
 - **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repository. In this case, the contributor must manually add or edit a changeset file. After each commit, the **OpenSearch Changelog Workflow** checks the formatting of the changeset file. Two outcomes are possible: **Parsing Failed** and **Parsing Succeeded**. The logic is the same as the **Changelog Parsing** job described above.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
