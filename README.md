@@ -84,7 +84,7 @@ The following subsections lay out the mechanisms underlying both of these proced
 
 The following flow diagram depicts the entire **Changelog Process** from start to finish.
 
-![OpenSearch_Changelog_Process](./assets/OpenSearch_Changelog_Process.png)
+![OpenSearch_Changelog_Process](./assets/OpenSearch_Changelog_Process_Diagram.png)
 
 #### Changelog Process Entities
 
