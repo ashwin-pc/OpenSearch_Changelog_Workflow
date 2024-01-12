@@ -74,21 +74,21 @@ Automating the changelog and release notes process resolves these complications,
 
 The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Process** and (2) the **Release Notes Process**.
 
-The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: automatic or manual creation/update of fragments (i.e, changeset files). For an automated approach, the workflow communicates with an external service that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
+The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: automatic or manual creation/update of fragments (i.e, changeset files). For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
 
 For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
-The following subsections lay out the mechanisms underlying both of these procedures. (For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.)
+The following subsections lay out the mechanisms underlying both of these procedures. For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.
 
 ### Changelog Process
 
-The following flow diagram depicts the entire **Automated Changelog Process** from start to finish.
+The following flow diagram depicts the entire **Changelog Process** from start to finish.
 
 ![OpenSearch_Changelog_Process](./assets/OpenSearch_Changelog_Process.png)
 
 #### Changelog Process Entities
 
-As the diagram illustrates, the **Automated Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
+As the diagram illustrates, the **Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
 
 - **Github Repositories**
 
