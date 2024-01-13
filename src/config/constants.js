@@ -7,6 +7,8 @@ export const GITHUB_APP_DOMAIN = process.env.INPUT_GH_APP_DOMAIN;
 export const API_PATH_SUFFIX = "/api/v1";
 export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
 
+export const CHANGELOG_PR_BRIDGE_SECRET_KEY = process.env.INPUT_CHANGELOG_PR_BRIDGE_SECRET_KEY;
+
 export const GITHUB_APP_NAME = "Auto Changeset Commmit App";
 export const GITHUB_APP_INSTALLATION_LINK =
   "https://github.com/apps/opensearch-changeset-bot";
