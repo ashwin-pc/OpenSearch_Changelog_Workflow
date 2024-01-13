@@ -1,5 +1,8 @@
 import axios from "axios";
-import { GITHUB_APP_BASE_URL } from "../config/constants.js";
+import { 
+  GITHUB_APP_BASE_URL,
+  CHANGELOG_PR_BRIDGE_SECRET_KEY, 
+} from "../config/constants.js";
 import {
   GitHubAppSuspendedOrNotInstalledError,
   GetContentError,
@@ -19,14 +22,19 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: path,
-      },
-    });
+    const { data } = await axios.get(
+      `${GITHUB_APP_BASE_URL}/files`, 
+      {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        },
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: path,
+        },
+      });
 
     return {
       name: data.name,
@@ -70,14 +78,19 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: directoryPath,
-      },
-    });
+    const { data } = await axios.get(
+      `${GITHUB_APP_BASE_URL}/directory/files`, 
+      {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        },
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: directoryPath,
+        },
+      });
     return data?.files || [];
   } catch (error) {
     console.error(
@@ -115,6 +128,9 @@ const createOrUpdateFileInForkedRepoByPath = async (
       `${GITHUB_APP_BASE_URL}/files`,
       { content: encodedContent, message: message },
       {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        },
         params: {
           owner: owner,
           repo: repo,
@@ -154,15 +170,20 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
-      data: { message: message },
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: path,
-      },
-    });
+    await axios.delete(
+      `${GITHUB_APP_BASE_URL}/files`, 
+      {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        },
+        data: { message: message },
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: path,
+        },
+      });
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
@@ -191,6 +212,9 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        },
         data: { message: message },
         params: {
           owner: owner,
