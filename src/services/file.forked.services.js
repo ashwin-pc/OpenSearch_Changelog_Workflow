@@ -8,6 +8,8 @@ import {
   GetContentError,
   CreateOrUpdateContentError,
   DeleteContentError,
+  MissingGitHubAppDomainError,
+  MissingChangelogBridgeSecretKeyError,
 } from "../errors/index.js";
 
 /**
@@ -22,6 +24,12 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
+    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+      throw new MissingGitHubAppDomainError();
+    }
+    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+      throw new MissingChangelogBridgeSecretKeyError();
+    }
     const { data } = await axios.get(
       `${GITHUB_APP_BASE_URL}/files`, 
       {
@@ -78,6 +86,12 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
+    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+      throw new MissingGitHubAppDomainError();
+    }
+    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+      throw new MissingChangelogBridgeSecretKeyError();
+    }
     const { data } = await axios.get(
       `${GITHUB_APP_BASE_URL}/directory/files`, 
       {
@@ -123,6 +137,12 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
+    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+      throw new MissingGitHubAppDomainError();
+    }
+    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+      throw new MissingChangelogBridgeSecretKeyError();
+    }
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${GITHUB_APP_BASE_URL}/files`,
@@ -170,6 +190,12 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
+    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+      throw new MissingGitHubAppDomainError();
+    }
+    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+      throw new MissingChangelogBridgeSecretKeyError();
+    }
     await axios.delete(
       `${GITHUB_APP_BASE_URL}/files`, 
       {
@@ -209,6 +235,12 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
+    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+      throw new MissingGitHubAppDomainError();
+    }
+    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+      throw new MissingChangelogBridgeSecretKeyError();
+    }
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {
