@@ -8,6 +8,9 @@ inputs:
     description: "Path where the changeset files will be added"
     # required: true
     default: "changeset/fragments"
+  GH_APP_DOMAIN:
+    description: "GitHub App domain for API calls"
+    required: true
 runs:
   using: "node16"
   main: "src/main.js"
