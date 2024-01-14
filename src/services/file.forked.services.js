@@ -56,9 +56,10 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       console.log(`File '${path}' not found.`);
       return;
     } else {
+      const errorMessage = error.response?.data?.error?.message || error.message;
       console.error(
         `Error fetching file from forked repo ${owner}/${branch}:`,
-        error.message
+        errorMessage
       );
       throw error.status === 403 || error.status === 401
         ? new GitHubAppSuspendedOrNotInstalledError()
@@ -107,9 +108,10 @@ const getAllFilesFromForkedRepoByPath = async (
       });
     return data?.files || [];
   } catch (error) {
+    const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error fetching directory contents from forked repo ${owner}/${branch}:`,
-      error.message
+      errorMessage
     );
     throw error.status === 403 || error.status === 401
       ? new GitHubAppSuspendedOrNotInstalledError()
@@ -162,8 +164,8 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    const errorMessage = error.response?.data?.message || error.message;
-    console.error(`Error in ${owner}/${branch}:`, errorMessage);
+    const errorMessage = error.response?.data?.error?.message || error.message;
+    console.error(`Error creating or updating file in forked repo ${owner}/${branch}:`, errorMessage);
 
     const status = error.response?.status;
     throw status === 403 || status === 401
@@ -213,9 +215,10 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
+    const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error deleting file in forked repo ${owner}/${branch}:`,
-      error.message
+      errorMessage
     );
     throw error.status === 403 || error.status === 401
       ? new GitHubAppSuspendedOrNotInstalledError()
@@ -259,7 +262,8 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-    console.error("Error deleting file:", error.message);
+    const errorMessage = error.response?.data?.error?.message || error.message;
+    console.error("Error deleting file:", errorMessage);
     throw error.status === 403 || error.status === 401
       ? new GitHubAppSuspendedOrNotInstalledError()
       : new CreateOrUpdateContentError();
