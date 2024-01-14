@@ -61,9 +61,10 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
         `Error fetching file from forked repo ${owner}/${branch}:`,
         errorMessage
       );
-      throw error.status === 403 || error.status === 401
-        ? new GitHubAppSuspendedOrNotInstalledError()
-        : new CreateOrUpdateContentError();
+      if (errorMessage.includes("GitHub App")) {
+        throw new GitHubAppSuspendedOrNotInstalledError();
+      }
+      throw new CreateOrUpdateContentError();
     }
   }
 };
@@ -113,9 +114,10 @@ const getAllFilesFromForkedRepoByPath = async (
       `Error fetching directory contents from forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    if (errorMessage.includes("GitHub App")) {
+      throw new GitHubAppSuspendedOrNotInstalledError();
+    }
+    throw new CreateOrUpdateContentError();
   }
 };
 
@@ -167,10 +169,10 @@ const createOrUpdateFileInForkedRepoByPath = async (
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(`Error creating or updating file in forked repo ${owner}/${branch}:`, errorMessage);
 
-    const status = error.response?.status;
-    throw status === 403 || status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    if (errorMessage.includes("GitHub App")) {
+      throw new GitHubAppSuspendedOrNotInstalledError();
+    }
+    throw new CreateOrUpdateContentError();
   }
 };
 
@@ -220,9 +222,10 @@ const deleteFileInForkedRepoByPath = async (
       `Error deleting file in forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    if (errorMessage.includes("GitHub App")) {
+      throw new GitHubAppSuspendedOrNotInstalledError();
+    }
+    throw new CreateOrUpdateContentError();
   }
 };
 
@@ -264,9 +267,10 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   } catch (error) {
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error("Error deleting file:", errorMessage);
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    if (errorMessage.includes("GitHub App")) {
+      throw new GitHubAppSuspendedOrNotInstalledError();
+    }
+    throw new CreateOrUpdateContentError();
   }
 }
 
