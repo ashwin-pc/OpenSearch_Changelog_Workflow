@@ -9,11 +9,11 @@ export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
 
 export const CHANGELOG_PR_BRIDGE_SECRET_KEY = process.env.INPUT_CHANGELOG_PR_BRIDGE_SECRET_KEY;
 
-export const GITHUB_APP_NAME = "Auto Changeset Commmit App";
+export const GITHUB_APP_NAME = "Auto Changeset Commit App";
 export const GITHUB_APP_INSTALLATION_LINK =
   "https://github.com/apps/opensearch-changeset-bot";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME =
-  "OpenSeach Auto Changeset and Release Notes Tool";
+  "OpenSearch Auto Changeset and Release Notes Tool";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS =
   "https://github.com/BigSamu/OpenSearch_Parse_Changelog_Action";
 
