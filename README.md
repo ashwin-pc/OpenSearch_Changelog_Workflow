@@ -25,18 +25,18 @@ This repository contains the details and source code for a new broader **Automat
 - [Current Context](#current-context)
 - [Changesets](#changesets)
 - [Process Overview](#process-overview)
-  - [Changelog Process](#changelog-process)
+  - [Changelog Workflow Process](#changelog-workflow-process)
     - [Changelog Process Entities](#changelog-process-entities)
     - [Changelog Process Jobs](#changelog-process-jobs)
   - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
-  - [Changelog Process](#changelog-process-1)
+  - [Changelog Process](#changelog-process)
     - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
     - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
-  - [Changelog Process](#changelog-process-2)
+  - [Changelog Process](#changelog-process-1)
     - [Workflow Details](#workflow-details)
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
@@ -70,57 +70,59 @@ Automating the changelog and release notes process resolves these complications,
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Changesets
+
 The **Automated Changelog and Release Notes Process** bases its logic in the use of **changeset** or **fragment** files. In the context of this automated solution, **changesets** are atomic pieces of information that store a collection of changelog entries detailing modifications done by a contributor in the source code. This information is stored in a `.yml` file for each PR and contains the following three bits of information:
 
 - **Entry Prefix**: type of change proposed by the contributor. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`,`test`, `skip`.
 - **Entry Description**: detail regarding changes proposed by the contributor.
 - **PR Number and Link**: pull request number identifier and GitHub link related to the set of changes in the contribution.
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ## Process Overview
 
 The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
+
+### Changelog Workflow Process
 
 The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach or a manual one.
 
 For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
 
-For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
+The following flow diagram depicts the entire **Changelog Workflow Process** from start to finish.
 
-The following subsections lay out the mechanisms underlying both of these procedures. For details about how to implement these processes in an OpenSearch repository, see the "[Getting Started](#getting-started)" section further down in this document.
+![OpenSearch_Changelog_Workflow_Process](./assets/OpenSearch_Changelog_Process_Diagram.png)
 
-### Changelog Process
-
-The following flow diagram depicts the entire **Changelog Process** from start to finish.
-
-![OpenSearch_Changelog_Process](./assets/OpenSearch_Changelog_Process_Diagram.png)
+> **NOTE**: Currently the chnagelog process is enforcing an automatic approach. No manual approach is available yet.
 
 #### Changelog Process Entities
 
-As the diagram illustrates, the **Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **external services** (a reusable GitHub Action and an Express.js application), and a **GitHub App**. These components will work together differently depending on whether or not a contributor opts to install the App on their forked repo.
+As the diagram illustrates, the **Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **External Services** (a reusable GitHub Action and an Express.js application), and one **GitHub App**. These components work together differently depending on whether or not a contributor opts to install the App on its forked OpenSearch repo.
 
-- **Github Repositories**
+- **GitHub Repositories**
 
-  - **OpenSearch Upstream Repository** → This is the base repository where a contributor's open pull request resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
-
-  - **Contributor Forked Repository** → The head repository where the contributor's pull request originates from. It contains the changes the contributor is asking to be merged into the base repository.
+  - **OpenSearch Upstream Repository** → This is the base repository where a contributor's PR resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
+  - **Contributor Forked Repository** → The head repository from which the contributor's PR originates. It contains the changes the contributor suggests for a merge into the base repository.
 
 - **External Services**
 
-  - **OpenSearch Changelog Workflow** → GitHub reusable Action workflow triggered whenever a PR is opened or edited. This workflow acts only in the **OpenSearch Upstream Repository** and carries out the following actions:
+  - **OpenSearch Changelog Workflow** → GitHub Action implementing a reusable workflow that triggers whenever a PR is opened or edited. This workflow acts only in the **OpenSearch Upstream Repository** and carries out the following actions:
 
     - Check and parse contributor entries in the `## Changelog` section of the PR description.
     - Post comments and add or remove labels on PRs.
-    - Communicate with **OpenSearch Changelog PR Bridge** to automatically create, update, or delete changeset files.
-    - If a contributor has manually added or updated a changeset file, validate the format of the file.
+    - For an automatic changeset approach, it communicates with **OpenSearch** Changelog PR Bridge\*\* to create, update, or delete changeset files automatically.
+    - For a manual changeset approach, it validates the content of a fragment file created or updated by a contributor.
 
-  - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the backbone of the **OpenSearch Changelog Bot** (the name of the **GitHub App** referred to above).
+  - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the authorized entity for committing changeset files on behalf of the contributor. Only available for an automatic approach for creating or updating fragment files.
 
-    - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**.
+    <!-- - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**.
 
-    - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file.
+    - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file. -->
 
 - **GitHub App**
-  - **OpenSearch Changelog Bot** → The name of the GitHub App required for obtaining contributors' permissions to act on their behalf and commit changeset files in their forked repository. As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot).
+  - **OpenSearch Changelog Bot** → a GitHub App required for a contributor to grant permissions to the **OpenSearch Changelog PR Bridge** service so the latter can act on his behalf.
+
+   <!-- As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot). -->
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -128,33 +130,35 @@ As the diagram illustrates, the **Changelog Process** involves interaction betwe
 
 As the diagram illustrates, the **Changelog Process** consists of three primary jobs:
 
-- **Changelog Parsing** → The reusable GitHub Action checks first to see if the **OpenSearch Changelog Bot** has been installed in the **Contributor Forked Repository**. If it has been, the Action begins parsing the `## Changelog` section of the open PR description. If the **OpenSearch Changelog Bot** has not been installed, then the contributor is prompted to either install the bot or to manually create and commit a changeset file.
+- **Changelog Parsing** → Here, the reusable workflow checks first if the **OpenSearch Changelog Bot** App has been installed in the **Contributor Forked Repository**. If so, the service parses the `## Changelog` section of the open PR description. On the other hand, I=if the **OpenSearch Changelog Bot** App has not been set up, the contributor is prompted to either install the bot or manually commit a changeset file.
 
-  Parsing the `## Changelog` section of the open PR description can result in one of three outcomes:
+  If the automatic approach is followed, the parsing of the `## Changelog` section from the PR will result in one of the following three outputs:
 
-  1. **Parsing Failed** → If one or more entries in the `## Changelog` section are formatted improperly, the process will fail, and a `failed changeset` label will be added to the PR. For more information about formatting requirements, see the [Usage](#usage) section below.
-  2. **Parsing Succeeded** → If the entries in the `## Changelog` section are formatted properly and the Action succeeds in parsing them, the **Automatic Changeset Creation/Update** job is initiated.
-  3. **Skip Entry** → If a contributor's changes do not require a changelog entry (e.g., fixing a small typographical error), they may enter `- skip` in the `## Changelog` section. No changeset file will be created or required, a `Skip-Changelog` label will be added to the PR, and the process will end successfully.
+  1. **Parsing Failed** → If one or more entries in the `## Changelog` section are formatted improperly, the process will post an error comment, and a `failed changeset` label will be added to the PR. Addtionaly any previous existent changeset file from that PR will be removed.
+  2. **Parsing Succeeded** → If the entries in the `## Changelog` section are adequately formatted and the action succeeds in parsing them, then the **Automatic Changeset Creation/Update** job is initiated adn the chnagelog process continue.
+  3. **Skip Entry** → If a contributor adds a `skip` entry (i.e. changes in base code do not require a changelog entry, for instance fixing a minor typographical error),  then no changeset file will be created or existing ones will be deleted. A `Skip-Changelog` label will be added to the PR, and the changelog process will end successfully.
 
-- **Automatic Changeset Creation/Update** → This second job is initiated after the `## Changelog` section has been successfully parsed. The Action calls the **OpenSearch Changelog PR Bridge** service, and it obtains permissions granted by the contributor through the **OpenSearch Changelog Bot** to automatically create or update a changeset file.
+- **Automatic Changeset Creation/Update** → This second job is initiated after the `## Changelog` section from the PR description is successfully parsed. In this job, the **OpenSearch Changelog PR Bridge** service receives a request from the **OpenSearch Changelog Workflow** for committing a changeset file in the **Contributor Forked Repository**. The former obtains the required permissions from the **OpenSearch Changelog Bot** when this is installed in the later repo, thus acting on behalf of the contributor.
 
-- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** app is not installed in the contributor's repository. In this case, the contributor must manually add or edit a changeset file. After each commit, the **OpenSearch Changelog Workflow** checks the formatting of the changeset file. Two outcomes are possible: **Parsing Failed** and **Parsing Succeeded**. The logic is the same as the **Changelog Parsing** job described above.
+- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** App is not installed in the **Contributor Forked Repository**. The contributor must manually add or edit a fragment file in this case. After the contributor commits a fragment file, the **OpenSearch Changelog Workflow** will - on this occasion - check the formatting of the changeset file. In this case. wwo outcomes are possible here:
+
+  1. **Check Failed**: If one or more entries in the fragment file are wrongly formatted, the process will post an error comment and a `failed changeset` label will be added to the PR.
+  2. **Check Succeeded**: If the entries in the fragment file are correctly formatted, the changelog process will finish sucessfully.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
----
 
-¿REQUIRED BY JONNATHON DESCRIPTION BELOW?
+<!-- 1. Creating a new `changelogs` directory in the root folder of the repository.
 
-1. Creating a new `changelogs` directory in the root folder of the repository.
+1. Adding a "Changelog" section to the PR template, with instructions for how contributors can add valid changelog entries to this section.
 
-2. Adding a "Changelog" section to the PR template, with instructions for how contributors can add valid changelog entries to this section.
-
-3. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved.
+2. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved. -->
 
 ### Release Notes Process
 
 [COMPLETE RILEY AND WILL]
+
+For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
 Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
 
