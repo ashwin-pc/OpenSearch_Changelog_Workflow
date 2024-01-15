@@ -58,11 +58,11 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 The **Automated Changelog and Release Notes Process** presented here improves both contributor experience as well as the efficiency of product development and the release of new versions for any OpenSeearch library.
 
-Currently, whenever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, since any changelog entry entered requires a PR number as a reference, contributors had to open a PR first, grab its number, and then add a second commit to include these new changes.
+Whenever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, since any changelog entry entered requires a PR number as a reference, contributors had to open a PR first, grab its number, and then add a second commit to include these new changes.
 
-In addition to the aforementioned inefficiency, this two-step process also creates an opportunity for merge conflicts. If two or more contributors update the CHANGELOG.md file in their respective PRs, and those updates are not synchronized, the order of the changelog entries may introduce conflicts for the same prefix (i.e. `feat`), requiring manual intervention to sort things out.
+In addition to the inefficiency above, this two-step process also creates an opportunity for merge conflicts. Suppose two or more contributors update the CHANGELOG.md file in their respective PRs, and updates are not synchronized. In that case, changelog entries may introduce error conflicts for the same prefix (i.e., `feat`) due to the order they are being added, requiring manual intervention to sort things out, which is tedious.
 
-In the case of new version distributions for any OpenSearch library, hurdles to speed up this procedure are also present. Whenever a new product version is scheduled for GA release, release notes and changelog updates have to be prepared manually. This process is both time-consuming and labor-intensive.
+Furthermore, hurdles to speed up this procedure are also present in the case of new version distributions for any OpenSearch library. Whenever a new product version is scheduled for GA, release notes and changelog updates have to be prepared manually. This task is also time-consuming and labor-intensive.
 
 Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories without wasting time on laborious operative tasks.
 
