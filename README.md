@@ -38,13 +38,10 @@ This repository contains the details and source code for a new broader **Automat
 - [Usage for OpenSearch Maintainers and Contributors](#usage-for-opensearch-maintainers-and-contributors)
   - [Changelog Workflow Process](#changelog-workflow-process-2)
     - [Automatic Apporach Folled](#automatic-apporach-folled)
+    - [Manual Apporach Folled](#manual-apporach-folled)
   - [Release Notes Script Process](#release-notes-script-process-1)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
-- [Usage](#usage)
-  - [Changelog Process](#changelog-process)
-    - [Workflow Details](#workflow-details)
-    - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
   - [Release Notes Process](#release-notes-process-2)
 - [Contributing](#contributing)
@@ -292,7 +289,7 @@ Below are the formatting standards for changelog entries in the `## Changelog`:
   - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
 - After the colon, contributors should provide a concise description of their changes. Descriptions must be 100 characters or less.
 
-Below is an example of a valid entry in the `## Changelog` section of the PR description.
+Below is an example of valid entries in the `## Changelog` section of the PR description:
 
 ```markdown
 ## Changelog
@@ -301,11 +298,36 @@ Below is an example of a valid entry in the `## Changelog` section of the PR des
 
 - feat: Adds a new feature
 - refactor: Improves an existing feature
+- test: Add unit testing to new feature
+- test: Update unit testing for existing feature
 ```
 
 Mantainers and contributors can add more than one entry if they are contributing to more than one type of PR prefix. Also, they do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add lie _outside_ of the comment block.
 
-For more reference, the examples beneath show invalid entries that will result in erros and a failed parsing process:
+Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a chnageset file as below in the `chagelog/fragments` directory
+
+```yaml
+feat:
+  - Adds a new feature ([#532](https://github.com/.../pull/532))
+
+refactor:
+  - Improves an existing feature ([#532](https://github.com/.../pull/532))
+
+test:
+  - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
+  - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
+```
+
+This changeset file will become part of the code that is merged when the PR is approved.
+
+If the workflow encounters a `- skip` line in the PR, and there are no other changelog entries present, it will skip the creation of a changeset file, and the workflow will terminate successfully.
+
+If the workflow encounters an error (e.g., an invalid changelog entry), it will fail, and a custom error message will be printed to the workflow logs and added as a comment to the open PR explaining the reason for the failure.
+
+
+
+
+For the case of entries that will result in errors, you can check the examples below for reference:
 
 ```
 // Including "skip" with another category
@@ -332,6 +354,10 @@ feat: Adds a new feature
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
+
+#### Manual Apporach Folled
+
+<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
 ### Release Notes Script Process
 
@@ -380,118 +406,9 @@ Contributors can then address the error and update their PR, which will trigger 
 
 ### Release Notes Process
 
-[COMPLETE RILEY AND WILL]
+<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
-## Usage
 
-### Changelog Process
-
-Here's an example of how to use this action in a workflow file:
-
-```yaml
-name: Create Change Set
-
-on:
-  pull_request:
-    types: [synchronize, opened, edited]
-    paths-ignore:
-      - "changelogs/fragments/**/*"
-
-jobs:
-  update-changelog:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Update Changelog
-        uses: BigSamu/OpenSearch_Change_Set_Create_Action@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          changeset_path: changelogs/fragments
-```
-
-#### Workflow Details
-
-Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
-
-The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
-
-If a contributor has entered valid changelog entries (see formatting requirements below), the workflow will categorize these entries and either create or update a `.yml` changeset file in the `changelogs/fragments` directory of the repository.
-
-This changeset file will include changelog descriptions under their proper category and also add a link to the PR that generated these changes. Below is an example of what the contents of a changeset file will look like:
-
-```yaml
-feat:
-  - Adds a new feature ([#532](https://github.com/.../pull/532))
-
-refactor:
-  - Improves an existing feature ([#532](https://github.com/.../pull/532))
-
-test:
-  - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
-  - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
-```
-
-This changeset file will become part of the code that is merged when the PR is approved.
-
-If the workflow encounters an error, it will fail, and a custom error message will be printed to the workflow logs explaining the reason for the failure.
-
-Contributors can then address the error and update their PR, which will trigger the workflow to run again.
-
-#### Formatting Requirements
-
-In order for the workflow to successfully create or update a changeset file from a PR description, contributors will need to ensure that their entries in the "Changelog" section of the PR description adhere to the following formatting requirements:
-
-- Each entry line must begin with a hyphen (-) in the Markdown source file.
-- Contributors must categorize their changes by using one of the following prefixes, followed by a colon.
-  - `breaking`
-  - `chore`
-  - `deprecate`
-  - `doc`
-  - `feat`
-  - `fix`
-  - `infra`
-  - `refactor`
-  - `test`
-  - `security`
-- If the changes in a PR are minor (e.g., fixing a typo), contributors can enter `- skip` in the "Changelog" section to instruct the workflow not to generate a changeset file.
-  - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
-- After the colon, contributors should provide a concise description of their changes. Descriptions must be 50 characters or less.
-
-Below is an example of a valid entry in the "Changelog" section of the PR description. (Contributors can add more than one entry if they are contributing more than one type of change in their PR.)
-
-```
-- feat: Adds a new feature
-- refactor: Improves an existing feature
-```
-
-Below are examples of invalid entries:
-
-```
-// Including "skip" with another category
-- skip
-- feat: Adds a new feature
-```
-
-```
-// Missing a hyphen
-feat: Adds a new feature
-```
-
-```
-// Invalid category prefix
-- new: Adds something new
-```
-
-```
-// Missing description
-- feat
-```
-
-```
-// Description longer than 50 characters
-- feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
-```
 
 #### Workflow Flowchart
 
