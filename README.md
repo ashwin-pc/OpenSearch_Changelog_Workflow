@@ -34,12 +34,11 @@ This repository contains the details and source code for a new broader **Automat
     - [Create a New `changelogs` Directory](#create-a-new-changelogs-directory)
     - [Add a "Changelog" Section to the PR Description Template](#add-a-changelog-section-to-the-pr-description-template)
     - [Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
-    - [Workflow Details](#workflow-details)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
   - [Changelog Process](#changelog-process)
-    - [Workflow Details](#workflow-details-1)
+    - [Workflow Details](#workflow-details)
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
   - [Release Notes Process](#release-notes-process-2)
@@ -246,15 +245,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
 ```
 
-#### Workflow Details
-
-Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
-
-The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
-
-If a contributor has entered valid changelog entries (see formatting requirements below), the workflow will categorize these entries and either create or update a `.yml` changeset file in the `changelogs/fragments` directory of the repository.
-
-This changeset file will include changelog descriptions under their proper category and also add a link to the PR that generated these changes. Below is an example of what the contents of a changeset file will look like:
+Whenever a PR is opened or edited in an OpenSearch repository, this workflow will be triggered in the **OpenSearch Upstream Repository**. Metadata from the PR will be extracted and parsed or checked depending the approach a contributor want to follow (automatic or manual commit of changeset files).
 
 
 
