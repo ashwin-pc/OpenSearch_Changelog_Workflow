@@ -294,7 +294,18 @@ Below is an example of valid entries in the `## Changelog` section of the PR des
 ```markdown
 ## Changelog
 
-<!-- Default comment block giving formatting instructions for changeloo entries -->
+<!--
+Add each of the changelog entries as a line item in this section. e.g.
+- fix: Updates the graph
+- feat: Adds a new feature
+
+If this change does not need to added to the changelog, just add a single `skip` line e.g.
+- skip
+
+Valid prefixes: breaking, chore, deprecate, doc, feat, fix, infra, refactor, test
+
+Descriptions following the prefixes must be 50 characters or less
+-->
 
 - feat: Adds a new feature
 - refactor: Improves an existing feature
