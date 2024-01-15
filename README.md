@@ -29,11 +29,15 @@ This repository contains the details and source code for a new broader **Automat
     - [Changelog Process Entities](#changelog-process-entities)
     - [Changelog Process Jobs](#changelog-process-jobs)
   - [Release Notes Process](#release-notes-process)
-- [Getting Started](#getting-started)
+- [Getting Started OpenSearch Maintainers](#getting-started-opensearch-maintainers)
   - [Changelog Workflow Process](#changelog-workflow-process-1)
     - [Create a New `changelogs` Directory](#create-a-new-changelogs-directory)
     - [Add a "Changelog" Section to the PR Description Template](#add-a-changelog-section-to-the-pr-description-template)
     - [Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
+  - [Release Notes Script Process](#release-notes-script-process)
+- [Usage Maintainers and Contributors](#usage-maintainers-and-contributors)
+  - [Changelog Workflow Process](#changelog-workflow-process-2)
+  - [Release Notes Script Process](#release-notes-script-process-1)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
@@ -157,17 +161,17 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 
 ### Release Notes Process
 
-[IN PROGRESS FOR BETTER DESCRIPTION]
+<img src="./assets/under-construction-warning-sign-vector.jpg" width={200}>
 
-For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
+<!-- For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
-Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
+Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog. -->
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Getting Started
+## Getting Started OpenSearch Maintainers
 
-This section discusses in greater detail the steps required by each **OpenSearch Maintainer** to get its OpenSearch library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
+This section discusses in greater detail the steps required by each **OpenSearch** repo to get its library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
 
 ### Changelog Workflow Process
 
@@ -248,13 +252,21 @@ jobs:
 Whenever a PR is opened or edited in an OpenSearch repository, this workflow will be triggered in the **OpenSearch Upstream Repository**. Metadata from the PR will be extracted and parsed or checked depending the approach a contributor want to follow (automatic or manual commit of changeset files).
 
 
+### Release Notes Script Process
 
+[IN PROGRESS FOR BETTER DESCRIPTION]
 
+For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
+Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
 
+## Usage Maintainers and Contributors
 
+This section discusses how maintainers and contributors can use this new process in their daily days to take advantge of benefits the automatization implemented the creation of changelogs and release notes
 
+### Changelog Workflow Process
 
+### Release Notes Script Process
 
 
 
