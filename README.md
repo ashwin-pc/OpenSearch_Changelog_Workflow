@@ -2,7 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
-# OpenSearch Changelog Workflow and Release Notes Script
+# OpenSearch Automated Changelog Workflow and Release Notes Process
 <!-- prettier-ignore-end -->
 
 ![Apache 2.0 License](https://img.shields.io/github/license/saltstack/salt)
@@ -14,17 +14,15 @@
 ## Introduction
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for the **OpenSearch Changelog Workflow** and **OpenSearch Release Notes Script** processes, part of the new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/). It presents comprehensive information on how to set up these new procedures aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute.
-
-For more details about the **Automated Changelog and Release Notes Process** as a whole, please consult the following sections.
+This repository contains the details and source code for a new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. It presents comprehensive information on how to set up this new procedure aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute. For more details about it, please consult the sections below.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
 ## Table of Contents
 <!-- prettier-ignore-end -->
 
-- [Background of the Automated Process](#background-of-the-automated-process)
-- [Benefits of the Automated Process](#benefits-of-the-automated-process)
+- [Background of Proposal](#background-of-proposal)
+- [Current Context](#current-context)
 - [Process Overview](#process-overview)
   - [Changelog Process](#changelog-process)
     - [Changelog Process Entities](#changelog-process-entities)
@@ -48,33 +46,41 @@ For more details about the **Automated Changelog and Release Notes Process** as 
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Background of the Automated Process
+## Background of Proposal
 
-On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing CHANGELOGs, and release notes during General Availability (GA) of the product, for all OpenSearch project repositories."
+On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing changelogs and release notes during General Availability (GA) of the product, for all OpenSearch project repositories."
 
 On May 4, 2023, a working group voted unanimously to move forward with the "Automation" variation of [Ashwin Chandran's proposal](https://github.com/opensearch-project/.github/issues/156). This proposal has now been implemented, and the details of the new changelog and release notes process are set out below.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Benefits of the Automated Process
+## Current Context
 
-The **Automated Changelog and Release Notes Process** improves both contributor experience as well as the efficiency of product development and the release of new versions.
+The **Automated Changelog and Release Notes Process** presented here improves both contributor experience as well as the efficiency of product development and the release of new versions for any OpenSeearch library.
 
-Before this automated process was adopted, whenever a contributor opened a new PR, they were prompted to indicate whether or not they had manually added an entry to the CHANGELOG.md file. However, since a changelog entry required a PR number as a reference, contributors had to first open a PR first, grab the PR number, and then add a second commit to their open PR with the changelog entry for their changes.
+Currently, whenever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, since any changelog entry entered requires a PR number as a reference, contributors had to open a PR first, grab its number, and then add a second commit to include these new changes.
 
-In addition to being inefficient, this two-step process also created an opportunity for merge conflicts. If two or more contributors updated the CHANGELOG.md file in their PRs, and those updates were not synchronized with one another, the order of entries in the changelog would be inaccurate, requiring manual intervention to sort things out.
+In addition to the aforementioned inefficiency, this two-step process also creates an opportunity for merge conflicts. If two or more contributors update the CHANGELOG.md file in their respective PRs, and those updates are not synchronized, the order of the changelog entries may introduce conflicts for the same prefix (i.e. `feat`), requiring manual intervention to sort things out.
 
-Likewise, when a new product version was scheduled for GA release, release notes and changelog updates had to be prepared manually. This process was both time consuming and labor intensive.
+In the case of new version distributions for any OpenSearch library, hurdles to speed up this procedure are also present. Whenever a new product version is scheduled for GA release, release notes and changelog updates have to be prepared manually. This process is both time-consuming and labor-intensive.
 
-Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories.
+Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories without wasting time on laborious operative tasks.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Process** and (2) the **Release Notes Process**.
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
 
-The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: automatic or manual creation/update of fragments (i.e, changeset files). For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
+The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach to creating or updating **changeset** files or a manual one.
+
+A **changeset** or **framgment** - in the context of this automated solution - refers to a collection of entries that details the modifications in the source code of an OpenSearch library made in a PR by a contributor. This information is stored in `.yml` files for each PR merged, containing the following three bits of information:
+
+- **Entry Prefix**: type of change proposed by the contributor. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`,`test`, `skip`.
+- **Entry Description**: detail regarding changes proposed by the contributor.
+- **PR Number and Link**: pull request number identifier and GitHub link related to the set of changes in the contribution.
+
+For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
 
 For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
