@@ -30,13 +30,13 @@ This repository contains the details and source code for a new broader **Automat
     - [Changelog Process Jobs](#changelog-process-jobs)
   - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
-  - [Changelog Process](#changelog-process)
+  - [Changelog Workflow Process](#changelog-workflow-process-1)
     - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
     - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
-  - [Changelog Process](#changelog-process-1)
+  - [Changelog Process](#changelog-process)
     - [Workflow Details](#workflow-details)
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
@@ -156,7 +156,7 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 
 ### Release Notes Process
 
-[COMPLETE RILEY AND WILL]
+[IN PROGRESS FOR BETTER DESCRIPTION]
 
 For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
@@ -166,17 +166,27 @@ Implementing a script that, when manually triggered from the command line upon g
 
 ## Getting Started
 
-This section discusses in greater detail the four primary changes listed in the "[Process Overview](#process-overview)" section above.
+This section discusses in greater detail the steps required to get started to implement the processes described in the "[Process Overview](#process-overview)" section above.
 
-### Changelog Process
+### Changelog Workflow Process
 
 #### Creating a New `changelogs` Directory
 
-To centralize information pertinent to the new changelog process, a new `changelogs` directory has been added to the root of the repository. This directory is the new location for `CHANGELOG.md`.
+To centralize information pertinent to the new changelog process, a new `changelogs` directory has to be added by maintainers at the root of any OpenSearch repository. This directory is the new location for `CHANGELOG.md`.
 
-It also houses the `fragments` subdirectory, which includes changeset files in `.yml` format that have been generated from merged PRs. (Only one changeset file is generated per PR.)
+Also a subdirectory called `fragments` needs to be added in the parent folder `changelogs`. The later one is the one where all changeset files in `.yml` are being added automatically or manually when a PR is open. Remember that only one changeset file is required per PR. These changeset files are named with the PR number they correspond to. (E.g., `5218.yml`.)
 
-Changeset files are named with the PR number they correspond to. (E.g., `5218.yml`.)
+Below is an example of how this directory looks like
+
+```
+├── ...
+└── changelogs
+  ├── CHANGELOG.md
+  └── fragments
+      ├── 5218.yml
+      ├── 5219.yml
+      └── 5220.yml
+```
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
