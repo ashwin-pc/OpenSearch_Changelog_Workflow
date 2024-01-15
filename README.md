@@ -31,13 +31,15 @@ This repository contains the details and source code for a new broader **Automat
   - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
   - [Changelog Workflow Process](#changelog-workflow-process-1)
-    - [Create a new `changelogs` directory](#create-a-new-changelogs-directory)
+    - [Create a New `changelogs` Directory](#create-a-new-changelogs-directory)
     - [Add a "Changelog" Section to the PR Description Template](#add-a-changelog-section-to-the-pr-description-template)
+    - [Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
+    - [Workflow Details](#workflow-details)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
   - [Changelog Process](#changelog-process)
-    - [Workflow Details](#workflow-details)
+    - [Workflow Details](#workflow-details-1)
     - [Formatting Requirements](#formatting-requirements)
     - [Workflow Flowchart](#workflow-flowchart)
   - [Release Notes Process](#release-notes-process-2)
@@ -170,7 +172,7 @@ This section discusses in greater detail the steps required by each **OpenSearch
 
 ### Changelog Workflow Process
 
-#### Create a new `changelogs` directory
+#### Create a New `changelogs` Directory
 
 To centralize information pertinent to the new changelog process, a new `changelogs` directory has to be added by maintainers at the root of any OpenSearch repository. This directory is the new location for `CHANGELOG.md`.
 
@@ -215,6 +217,64 @@ Descriptions following the prefixes must be 50 characters or less
 ```
 
 The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
+
+#### Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
+
+Under each `./github/workflow` directory create a file called `opensearch_changelog_workflow.yml` and add the following code below:
+
+```yaml
+name: OpenSearch Changelog Workflow
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Parse changelog entries and submit request for changset creation
+        uses: BigSamu/OpenSearch_Parse_Changelog_Action@main
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+```
+
+#### Workflow Details
+
+Whenever a PR is opened or edited in an OpenSearch repository, this workflow is triggered.
+
+The workflow extracts the metadata from the PR and checks what a contributor has entered in the "Changelog" section of the PR description.
+
+If a contributor has entered valid changelog entries (see formatting requirements below), the workflow will categorize these entries and either create or update a `.yml` changeset file in the `changelogs/fragments` directory of the repository.
+
+This changeset file will include changelog descriptions under their proper category and also add a link to the PR that generated these changes. Below is an example of what the contents of a changeset file will look like:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Below are the formatting standards for changelog entries:
 
