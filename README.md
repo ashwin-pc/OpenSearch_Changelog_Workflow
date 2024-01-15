@@ -37,6 +37,7 @@ This repository contains the details and source code for a new broader **Automat
   - [Release Notes Script Process](#release-notes-script-process)
 - [Usage Maintainers and Contributors](#usage-maintainers-and-contributors)
   - [Changelog Workflow Process](#changelog-workflow-process-2)
+    - [Automatic Apporach Folled](#automatic-apporach-folled)
   - [Release Notes Script Process](#release-notes-script-process-1)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
@@ -266,20 +267,18 @@ This section discusses how maintainers and contributors can use this new process
 
 ### Changelog Workflow Process
 
-### Release Notes Script Process
+To make use of the changelog workflow when opening a PR, a contributor or maintainer can follow either an automatic or manual approach for commiting changeset files.
 
+#### Automatic Apporach Folled
 
+In order to use the **OpenSearch Changelog PR Bridge** service for automatic commit of changeset files in any of your OpenSearch forked repos:
 
+- Navigate to the [OpenSearch-bot](https://github.com/apps/opensearch-changeset-bot) installation page and click "Install".
+- Follow the instructions there and only install this App in all forked OpenSearch repositories where you want to have this feature activated.
 
+Once installed, go to the PR description and under the `## Changelog` section add the changelog entries detailing the changes suggested in your PR.
 
-
-
-
-
-
-
-
-Below are the formatting standards for changelog entries:
+Below are the formatting standards for changelog entries in the `## Changelog`:
 
 - Each entry line must begin with a hyphen (-) in the Markdown source file.
 - Contributors must categorize their changes by using one of the following prefixes, followed by a colon.
@@ -295,9 +294,9 @@ Below are the formatting standards for changelog entries:
   - `test`
 - If the changes in a PR are minor (e.g., fixing a typo), contributors can enter `- skip` in the "Changelog" section to instruct the workflow not to generate a changeset file.
   - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
-- After the colon, contributors should provide a concise description of their changes. Descriptions must be 50 characters or less.
+- After the colon, contributors should provide a concise description of their changes. Descriptions must be 100 characters or less.
 
-Below is an example of a valid entry in the "Changelog" section of the PR description. (Contributors can add more than one entry if they are contributing more than one type of change in their PR. They do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add to their PR lie _outside_ of the comment block.)
+Below is an example of a valid entry in the `## Changelog` section of the PR description.
 
 ```markdown
 ## Changelog
@@ -308,7 +307,9 @@ Below is an example of a valid entry in the "Changelog" section of the PR descri
 - refactor: Improves an existing feature
 ```
 
-Below are examples of invalid entries:
+Mantainers and contributors can add more than one entry if they are contributing to more than one type of PR prefix. Also, they do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add lie _outside_ of the comment block.
+
+For more reference, the examples beneath show invalid entries that will result in erros and a failed parsing process:
 
 ```
 // Including "skip" with another category
@@ -335,6 +336,21 @@ feat: Adds a new feature
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
+
+### Release Notes Script Process
+
+<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
+
+
+
+
+
+
+
+
+
+
+
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
