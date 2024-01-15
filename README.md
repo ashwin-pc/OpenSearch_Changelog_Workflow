@@ -29,13 +29,13 @@ This repository contains the details and source code for a new broader **Automat
     - [Changelog Process Entities](#changelog-process-entities)
     - [Changelog Process Jobs](#changelog-process-jobs)
   - [Release Notes Process](#release-notes-process)
-- [Getting Started OpenSearch Maintainers](#getting-started-opensearch-maintainers)
+- [Getting Started for OpenSearch Repository Maintainers](#getting-started-for-opensearch-repository-maintainers)
   - [Changelog Workflow Process](#changelog-workflow-process-1)
     - [Create a New `changelogs` Directory](#create-a-new-changelogs-directory)
     - [Add a "Changelog" Section to the PR Description Template](#add-a-changelog-section-to-the-pr-description-template)
     - [Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
   - [Release Notes Script Process](#release-notes-script-process)
-- [Usage Maintainers and Contributors](#usage-maintainers-and-contributors)
+- [Usage for OpenSearch Maintainers and Contributors](#usage-for-opensearch-maintainers-and-contributors)
   - [Changelog Workflow Process](#changelog-workflow-process-2)
     - [Automatic Apporach Folled](#automatic-apporach-folled)
   - [Release Notes Script Process](#release-notes-script-process-1)
@@ -170,7 +170,7 @@ Implementing a script that, when manually triggered from the command line upon g
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Getting Started OpenSearch Maintainers
+## Getting Started for OpenSearch Repository Maintainers
 
 This section discusses in greater detail the steps required by each **OpenSearch** repo to get its library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
 
@@ -257,7 +257,7 @@ Whenever a PR is opened or edited in an OpenSearch repository, this workflow wil
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
-## Usage Maintainers and Contributors
+## Usage for OpenSearch Maintainers and Contributors
 
 This section discusses how maintainers and contributors can use this new process in their daily days to take advantge of benefits the automatization implemented the creation of changelogs and release notes
 
