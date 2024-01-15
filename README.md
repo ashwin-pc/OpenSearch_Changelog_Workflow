@@ -23,6 +23,7 @@ This repository contains the details and source code for a new broader **Automat
 
 - [Background of Proposal](#background-of-proposal)
 - [Current Context](#current-context)
+- [Changesets](#changesets)
 - [Process Overview](#process-overview)
   - [Changelog Process](#changelog-process)
     - [Changelog Process Entities](#changelog-process-entities)
@@ -68,17 +69,18 @@ Automating the changelog and release notes process resolves these complications,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Process Overview
-
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
-
-The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach to creating or updating **changeset** files or a manual one.
-
-A **changeset** or **framgment** - in the context of this automated solution - refers to a collection of entries that details the modifications in the source code of an OpenSearch library made in a PR by a contributor. This information is stored in `.yml` files for each PR merged, containing the following three bits of information:
+## Changesets
+The **Automated Changelog and Release Notes Process** bases its logic in the use of **changeset** or **fragment** files. In the context of this automated solution, **changesets** are atomic pieces of information that store a collection of changelog entries detailing modifications done by a contributor in the source code. This information is stored in a `.yml` file for each PR and contains the following three bits of information:
 
 - **Entry Prefix**: type of change proposed by the contributor. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`,`test`, `skip`.
 - **Entry Description**: detail regarding changes proposed by the contributor.
 - **PR Number and Link**: pull request number identifier and GitHub link related to the set of changes in the contribution.
+
+## Process Overview
+
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
+
+The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach or a manual one.
 
 For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
 
