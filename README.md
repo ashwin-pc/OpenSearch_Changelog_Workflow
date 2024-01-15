@@ -31,8 +31,8 @@ This repository contains the details and source code for a new broader **Automat
   - [Release Notes Process](#release-notes-process)
 - [Getting Started](#getting-started)
   - [Changelog Workflow Process](#changelog-workflow-process-1)
-    - [Creating a New `changelogs` Directory](#creating-a-new-changelogs-directory)
-    - [Adding a "Changelog" Section to the PR Description Template](#adding-a-changelog-section-to-the-pr-description-template)
+    - [Create a new `changelogs` directory](#create-a-new-changelogs-directory)
+    - [Add a "Changelog" Section to the PR Description Template](#add-a-changelog-section-to-the-pr-description-template)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
   - [Release Notes Process](#release-notes-process-1)
 - [Usage](#usage)
@@ -166,11 +166,11 @@ Implementing a script that, when manually triggered from the command line upon g
 
 ## Getting Started
 
-This section discusses in greater detail the steps required to get started to implement the processes described in the "[Process Overview](#process-overview)" section above.
+This section discusses in greater detail the steps required by each **OpenSearch Maintainer** to get its OpenSearch library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
 
 ### Changelog Workflow Process
 
-#### Creating a New `changelogs` Directory
+#### Create a new `changelogs` directory
 
 To centralize information pertinent to the new changelog process, a new `changelogs` directory has to be added by maintainers at the root of any OpenSearch repository. This directory is the new location for `CHANGELOG.md`.
 
@@ -190,9 +190,31 @@ Below is an example of how this directory looks like
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### Adding a "Changelog" Section to the PR Description Template
+#### Add a "Changelog" Section to the PR Description Template
 
-The PR template has been updated with a new "Changelog" section. The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
+The PR template has to be updated by adding a new "Changelog" section as follows:
+
+```
+...
+
+## Changelog
+<!--
+Add each of the changelog entries as a line item in this section. e.g.
+- fix: Updates the graph
+- feat: Adds a new feature
+
+If this change does not need to added to the changelog, just add a single `skip` line e.g.
+- skip
+
+Valid prefixes: breaking, chore, deprecate, doc, feat, fix, infra, refactor, test
+
+Descriptions following the prefixes must be 50 characters or less
+-->
+
+...
+```
+
+The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
 
 Below are the formatting standards for changelog entries:
 
