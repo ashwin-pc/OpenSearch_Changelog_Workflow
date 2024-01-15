@@ -255,11 +255,7 @@ Whenever a PR is opened or edited in an OpenSearch repository, this workflow wil
 
 ### Release Notes Script Process
 
-[IN PROGRESS FOR BETTER DESCRIPTION]
-
-For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
-
-Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
+<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
 ## Usage Maintainers and Contributors
 
