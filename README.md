@@ -161,7 +161,7 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 
 ### Release Notes Process
 
-<img src="./assets/under-construction-warning-sign-vector.jpg" width={200}>
+<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
 <!-- For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
