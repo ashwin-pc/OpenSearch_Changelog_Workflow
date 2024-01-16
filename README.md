@@ -147,19 +147,15 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 
-<!-- 1. Creating a new `changelogs` directory in the root folder of the repository.
-
-1. Adding a "Changelog" section to the PR template, with instructions for how contributors can add valid changelog entries to this section.
-
-2. Using a GitHub Actions workflow to extract entries from the "Changelog" section of each PR description, create or update a changeset file in `.yml` format, and add this file to the new `changelogs/fragments` directory. The generated changeset file is automatically included as part of the changes to be merged when the PR is approved. -->
-
 ### Release Notes Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
-<!-- For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
+For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
-Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog. -->
+Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
+
+[TO COMPLETE AND REVIEW]
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
