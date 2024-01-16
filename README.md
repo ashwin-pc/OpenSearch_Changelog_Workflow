@@ -30,6 +30,7 @@ This repository contains the details and source code for a new broader **Automat
     - [4.1.2. Changelog Process Jobs](#412-changelog-process-jobs)
   - [4.2. Release Notes Process](#42-release-notes-process)
     - [4.2.1 Update the Changelog Document](#421-update-the-changelog-document)
+    - [4.2.2 Generate the Release Notes](#422-generate-the-release-notes)
 - [5. Getting Started for OpenSearch Repository Maintainers](#5-getting-started-for-opensearch-repository-maintainers)
   - [5.1. Changelog Workflow Process](#51-changelog-workflow-process)
     - [5.1.1. Create a New `changelogs` Directory](#511-create-a-new-changelogs-directory)
@@ -161,13 +162,13 @@ The **Release Notes Process** performs two primary actions:
 
 #### 4.2.1 Update the Changelog Document
 
+This script begins by reading the changeset files in the `changelogs/fragments/` directory. It uses a pre-established section map to group changelog entries together by shared category headings. The **Automated Changelog Process** facilitates this mapping by ensuring that changeset files have been correctly formatted and categorized.
 
+As a precaution, the release notes script relocates the changeset files to a temporary directory. It then uses the mapped changelog entries to create a new section in the `CHANGELOG.md` document.
 
-For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
+#### 4.2.2 Generate the Release Notes
 
-Implementing a script that, when manually triggered from the command line upon general availability of a new product version, will cull the `changelogs/fragments` directory for changeset files and use those files to populate the release notes for the new version and update the final changelog.
-
-[TO COMPLETE AND REVIEW]
+Having done the work of mapping changelog entries and updating the `CHANGELOG.md` document, the script uses this prepared material to generate a release notes document. After adding this file to the repository's release notes directory, the script deletes the changeset files from their temporary location and exits the process successfully.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
