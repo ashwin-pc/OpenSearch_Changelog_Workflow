@@ -40,10 +40,10 @@ This repository contains the details and source code for a new broader **Automat
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
     - [6.1.2. Manual Apporach Folled](#612-manual-apporach-folled)
   - [6.2. Release Notes Script Process](#62-release-notes-script-process)
-- [Mantainers](#mantainers)
-- [7. Contributing](#7-contributing)
-- [8. License](#8-license)
-- [9. Need Help?](#9-need-help)
+- [7. Mantainers](#7-mantainers)
+- [8. Contributing](#8-contributing)
+- [9. License](#9-license)
+- [10. Need Help?](#10-need-help)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -440,12 +440,12 @@ This command executes a script that performs the following actions:
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## Mantainers
+## 7. Mantainers
 
 - [Samuel Valdes Gutierrez](https://github.com/BigSamu) - OpenSearch Slack [link](https://opensearch.slack.com/archives/D05T6HWHLG3)
 - [Johnathon Bowers](https://github.com/JohnathonBowers) - OpenSearch Slack [link](https://opensearch.slack.com/archives/D06075U158Q)
 
-## 7. Contributing
+## 8. Contributing
 
 The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite.
 
@@ -455,12 +455,12 @@ Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Releas
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 8. License
+## 9. License
 
 This project is an open-source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 9. Need Help?
+## 10. Need Help?
 
 Feel free to contact us in the slack channel or by oppening an issue in this repo.
