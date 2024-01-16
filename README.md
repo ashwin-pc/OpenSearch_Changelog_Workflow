@@ -36,7 +36,7 @@ This repository contains the details and source code for a new broader **Automat
     - [5.1.1. Create a New `changelogs` Directory](#511-create-a-new-changelogs-directory)
     - [5.1.2. Add a "Changelog" Section to the PR Description Template](#512-add-a-changelog-section-to-the-pr-description-template)
     - [5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#513-add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
-  - [5.2. Release Notes Script Process](#52-release-notes-script-process)
+  - [5.2. Release Notes Process](#52-release-notes-process)
 - [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
@@ -259,9 +259,9 @@ Whenever a PR is opened or edited in an OpenSearch repository, this workflow wil
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 5.2. Release Notes Script Process
+### 5.2. Release Notes Process
 
-<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
+As mentioned above, the release notes process was designed for the specific context of the `OpenSearch-Dashboards` repository. Therefore, the following instructions demonstrate how to configure and execute the script in that context. Implementation details may vary from repository to repository.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
