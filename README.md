@@ -219,6 +219,8 @@ Descriptions following the prefixes must be 50 characters or less
 
 The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 #### Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
 
 Under each `./github/workflow` directory of your OpenSearch repo, create a file called `opensearch_changelog_workflow.yml` and add the following code below:
@@ -249,10 +251,13 @@ jobs:
 
 Whenever a PR is opened or edited in an OpenSearch repository, this workflow will be triggered in the **OpenSearch Upstream Repository**. Metadata from the PR will be extracted and parsed or checked depending the approach a contributor want to follow (automatic or manual commit of changeset files).
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ### Release Notes Script Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Usage for OpenSearch Maintainers and Contributors
 
@@ -411,25 +416,17 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
     style N fill:#4ade80,color:#0f172a
 ```
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### Manual Apporach Folled
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 ### Release Notes Script Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
-
-
-
-
-
-
-
-
-
-
-
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
