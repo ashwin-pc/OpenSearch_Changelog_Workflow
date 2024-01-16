@@ -37,7 +37,7 @@ This repository contains the details and source code for a new broader **Automat
   - [Release Notes Script Process](#release-notes-script-process)
 - [Usage for OpenSearch Maintainers and Contributors](#usage-for-opensearch-maintainers-and-contributors)
   - [Changelog Workflow Process](#changelog-workflow-process-2)
-    - [Automatic Apporach Folled](#automatic-apporach-folled)
+    - [Automatic Apporach Followed](#automatic-apporach-followed)
     - [Manual Apporach Folled](#manual-apporach-folled)
   - [Release Notes Script Process](#release-notes-script-process-1)
     - [Using a GitHub Actions Workflow to Generate Changeset Files](#using-a-github-actions-workflow-to-generate-changeset-files)
@@ -221,7 +221,7 @@ The comment block in this section provides contributors with instructions for ho
 
 #### Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
 
-Under each `./github/workflow` directory create a file called `opensearch_changelog_workflow.yml` and add the following code below:
+Under each `./github/workflow` directory of your OpenSearch repo, create a file called `opensearch_changelog_workflow.yml` and add the following code below:
 
 ```yaml
 name: OpenSearch Changelog Workflow
@@ -262,7 +262,7 @@ This section discusses how maintainers and contributors can use this new process
 
 To make use of the changelog workflow when opening a PR, a contributor or maintainer can follow either an automatic or manual approach for commiting changeset files.
 
-#### Automatic Apporach Folled
+#### Automatic Apporach Followed
 
 In order to use the **OpenSearch Changelog PR Bridge** service for automatic commit of changeset files in any of your OpenSearch forked repos:
 
