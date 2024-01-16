@@ -434,6 +434,8 @@ This command executes a script that performs the following actions:
 - Create a release notes document to accompany the new release
 - Del**ete the ch**angeset files from the `changelogs/fragments` directory
 
+[TO COMPLETE AND REVIEW]
+
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Contributing
@@ -449,5 +451,7 @@ Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Releas
 ## License
 
 This project is an open-source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## Need Help?
