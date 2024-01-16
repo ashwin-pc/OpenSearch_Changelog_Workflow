@@ -182,6 +182,7 @@ Below is an example of how this directory looks like
       ├── 5219.yml
       └── 5220.yml
 ```
+> **NOTE**: At this point neither a CHANGELOG.md file or changeset .yml files need to be added. On later steps this will be shown.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
