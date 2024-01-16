@@ -315,18 +315,19 @@ Descriptions following the prefixes must be 50 characters or less
 
 Mantainers and contributors can add more than one entry if they are contributing to more than one type of PR prefix. Also, they do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add lie _outside_ of the comment block.
 
-Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a changeset file as below in the `chagelog/fragments` directory
+Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a changeset file in the `chagelog/fragments` directory as below:
 
 ```yaml
+# Changeset file 13.yml
 feat:
-  - Adds a new feature ([#532](https://github.com/.../pull/532))
+  - Adds a new feature ([#13](https://github.com/.../pull/13))
 
 refactor:
-  - Improves an existing feature ([#532](https://github.com/.../pull/532))
+  - Improves an existing feature ([#13](https://github.com/.../pull/13))
 
 test:
-  - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
-  - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
+  - Add unit testing to new feature ([#13](https://github.com/.../pull/13))
+  - Update unit testing for existing feature ([#13](https://github.com/.../pull/13))
 ```
 
 And the following update will appear in the PR conversation history:
@@ -335,11 +336,11 @@ And the following update will appear in the PR conversation history:
 
 This changeset file will become part of the code that is merged when the PR is approved.
 
-If the workflow encounters a `- skip` line in the PR, and there are no other changelog entries present, it will skip the creation of a changeset file, and the workflow will terminate successfully.
+If the workflow encounters a `- skip` line in the PR, and there are no other changelog entries present, it will skip instead the creation of a changeset file, and the workflow will terminate successfully with a label `skip-changelog` appearing as follows:
 
 ![Skip_Changelog_Label_Commit_Message](./assets/Skip_Changelog_Label_Commit_Message.png)
 
-If the workflow encounters an error (e.g., an invalid changelog entry), it will fail, and a custom error message will be printed to the workflow logs and added as a comment to the open PR explaining the reason for the failure.
+Lastly, if the workflow encounters an error (e.g., empty description for entry prefix), then the parsing process will fail, and a custom error message will be posted along side a `failed changeset` label:
 
 ![Error_Comment_and_Failed_Changeset_Label_Commit_Message.png](./assets/Error_Comment_and_Failed_Changeset_Label_Commit_Message.png)
 
@@ -402,14 +403,14 @@ This changeset file will include changelog descriptions under their proper categ
 
 ```yaml
 feat:
-  - Adds a new feature ([#532](https://github.com/.../pull/532))
+  - Adds a new feature ([#13](https://github.com/.../pull/13))
 
 refactor:
-  - Improves an existing feature ([#532](https://github.com/.../pull/532))
+  - Improves an existing feature ([#13](https://github.com/.../pull/13))
 
 test:
-  - Add unit testing to new feature ([#532](https://github.com/.../pull/532))
-  - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
+  - Add unit testing to new feature ([#13](https://github.com/.../pull/13))
+  - Update unit testing for existing feature ([#13](https://github.com/.../pull/13))
 ```
 
 This changeset file will become part of the code that is merged when the PR is approved.
