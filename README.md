@@ -315,7 +315,7 @@ Descriptions following the prefixes must be 50 characters or less
 
 Mantainers and contributors can add more than one entry if they are contributing to more than one type of PR prefix. Also, they do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add lie _outside_ of the comment block.
 
-Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a chnageset file as below in the `chagelog/fragments` directory
+Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a changeset file as below in the `chagelog/fragments` directory
 
 ```yaml
 feat:
@@ -329,14 +329,19 @@ test:
   - Update unit testing for existing feature ([#532](https://github.com/.../pull/532))
 ```
 
+And the following update will appear in the PR conversation history:
+
+![Changeset_Created_Updated_Commit_Message](./assets/Changeset_Created_Updated_Commit_Message.png)
+
 This changeset file will become part of the code that is merged when the PR is approved.
 
 If the workflow encounters a `- skip` line in the PR, and there are no other changelog entries present, it will skip the creation of a changeset file, and the workflow will terminate successfully.
 
+![Skip_Changelog_Label_Commit_Message](./assets/Skip_Changelog_Label_Commit_Message.png)
+
 If the workflow encounters an error (e.g., an invalid changelog entry), it will fail, and a custom error message will be printed to the workflow logs and added as a comment to the open PR explaining the reason for the failure.
 
-
-
+![Changeset_Created_Updated_Commit_Message](./assets/Changeset_Created_Updated_Commit_Message.png)
 
 For the case of entries that will result in errors, you can check the examples below for reference:
 
