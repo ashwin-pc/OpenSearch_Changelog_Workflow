@@ -341,7 +341,7 @@ If the workflow encounters a `- skip` line in the PR, and there are no other cha
 
 If the workflow encounters an error (e.g., an invalid changelog entry), it will fail, and a custom error message will be printed to the workflow logs and added as a comment to the open PR explaining the reason for the failure.
 
-![Changeset_Created_Updated_Commit_Message](./assets/Changeset_Created_Updated_Commit_Message.png)
+![Error_Comment_and_Failed_Changeset_Label_Commit_Message.png](./assets/Error_Comment_and_Failed_Changeset_Label_Commit_Message.png)
 
 For the case of entries that will result in errors, you can check the examples below for reference:
 
