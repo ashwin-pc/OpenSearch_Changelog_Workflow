@@ -340,11 +340,11 @@ If the workflow encounters a `- skip` line in the PR, and there are no other cha
 
 ![Skip_Changelog_Label_Commit_Message](./assets/Skip_Changelog_Label_Commit_Message.png)
 
-Lastly, if the workflow encounters an error (e.g., empty description for entry prefix), then the parsing process will fail, and a custom error message will be posted along side a `failed changeset` label:
+Lastly, if the workflow encounters an error (e.g., empty description for specific prefix), then the parsing process will fail, and a custom error message will be posted along side a `failed changeset` label:
 
 ![Error_Comment_and_Failed_Changeset_Label_Commit_Message.png](./assets/Error_Comment_and_Failed_Changeset_Label_Commit_Message.png)
 
-For the case of entries that will result in errors, you can check the examples below for reference:
+A set of examples with entries resulting in errors are listed beneath:
 
 ```
 // Including "skip" with another category
@@ -371,6 +371,46 @@ feat: Adds a new feature
 // Description longer than 50 characters
 - feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
 ```
+
+The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax, illustrates the logic this workflow follows.
+
+```mermaid
+%%{init: {'themeVariables': { 'fontSize': '24px' }}}%%
+  flowchart TD;
+    A(Changelog \nWorkflow Starts) --> B{Changelog section\n present in PR?}
+    B --> |Yes| C[Extract changelog entries from\n'Changelog' section of PR]
+    B --> |No| D[InvalidChangelogHeadingError \nEmptyChangelogSectionError]
+    D --> E[Error messsage added as comment to PR]
+    E --> F(Workflow fails)
+    F --> G[Contributor edits PR]
+    G --> A
+    C --> H[Prepare changeset entry map]
+    H --> I{Entries in PR \nformatted correctly?}
+    I --> |Yes| J{'skip' in changeset \n entry map?}
+    I --> |No| K[ChangelogEntryMissingHyphenError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
+    K --> E
+    J --> |Yes| L{Is 'skip' the \nonly entry?}
+    J --> |No| M[Changset file created / updated]
+    M --> N(Workflow ends successfully)
+    L --> |Yes| O['skip-changelog' label added to PR]
+    O --> P[No changeset file created / updated]
+    P --> N
+    L --> |No| Q[CategoryWithSkipOptionError]
+    Q --> E
+
+    style A fill:#38bdf8,color:#0f172a
+    style B fill:#fbbf24,color:#0f172a
+    style D fill:#fb923c,color:#0f172a
+    style F fill:#ef4444,color:#f8fafc
+    style G fill:#c084fc,color:#0f172a
+    style I fill:#fbbf24,color:#0f172a
+    style J fill:#fbbf24,color:#0f172a
+    style K fill:#fb923c,color:#0f172a
+    style L fill:#fbbf24,color:#0f172a
+    style Q fill:#fb923c,color:#0f172a
+    style N fill:#4ade80,color:#0f172a
+```
+
 
 #### Manual Apporach Folled
 
