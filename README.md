@@ -40,6 +40,7 @@ This repository contains the details and source code for a new broader **Automat
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
     - [6.1.2. Manual Apporach Folled](#612-manual-apporach-folled)
   - [6.2. Release Notes Script Process](#62-release-notes-script-process)
+- [Mantainers](#mantainers)
 - [7. Contributing](#7-contributing)
 - [8. License](#8-license)
 - [9. Need Help?](#9-need-help)
@@ -439,13 +440,18 @@ This command executes a script that performs the following actions:
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
+## Mantainers
+
+- [Samuel Valdes Gutierrez](https://github.com/BigSamu) - OpenSearch Slack [link](https://opensearch.slack.com/archives/D05T6HWHLG3)
+- [Johnathon Bowers](https://github.com/JohnathonBowers) - OpenSearch Slack [link](https://opensearch.slack.com/archives/D06075U158Q)
+
 ## 7. Contributing
 
 The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite.
 
 Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Release** Notes** services are welcome! See our [Developer Guide](./DEVELOPER_GUIDE.md) for instructions on how to set up the project in your local environment and [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
-**NOTE:** Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used.
+>**NOTE:** Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -456,3 +462,5 @@ This project is an open-source product released under the Apache 2.0 license (se
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 ## 9. Need Help?
+
+Feel free to contact us in the slack channel or by oppening an issue in this repo.
