@@ -29,6 +29,7 @@ This repository contains the details and source code for a new broader **Automat
     - [4.1.1. Changelog Process Entities](#411-changelog-process-entities)
     - [4.1.2. Changelog Process Jobs](#412-changelog-process-jobs)
   - [4.2. Release Notes Process](#42-release-notes-process)
+    - [4.2.1 Update the Changelog Document](#421-update-the-changelog-document)
 - [5. Getting Started for OpenSearch Repository Maintainers](#5-getting-started-for-opensearch-repository-maintainers)
   - [5.1. Changelog Workflow Process](#51-changelog-workflow-process)
     - [5.1.1. Create a New `changelogs` Directory](#511-create-a-new-changelogs-directory)
@@ -150,7 +151,17 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 
 ### 4.2. Release Notes Process
 
-<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
+The **Release Notes Process** is a script that can be adapted to the needs of a particular OpenSearch repository. This script is included in the [releaseNotesTemplates](./releaseNotesTemplates/) directory. Please note that this script is *not executable* in its current form. It must either be configured according to the instructions below or customized to suit a different use case.
+
+The **Release Notes Process** performs two primary actions:
+
+1. Update the repository's `CHANGELOG.md` document with a new section detailing the changes that accompany a new version release.
+
+2. Generate a release notes document tied to the new release and write that file to the repository's release notes directory.
+
+#### 4.2.1 Update the Changelog Document
+
+
 
 For the second sub-process, this repository also provides template files for a script that can be used to automatically update the release notes document when a new version is scheduled for release.
 
