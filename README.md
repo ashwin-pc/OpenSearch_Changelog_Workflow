@@ -9,6 +9,11 @@
 
 <!-- ![Coverage Badge](./badges/coverage.svg) -->
 
+<!-- prettier-ignore-start -->
+<!-- omit in toc -->
+<h2> Introduction </h2>
+<!-- prettier-ignore-end -->
+
 This repository contains the details and source code for a new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. It presents comprehensive information on how to set up this new procedure aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute. For more details about it, please consult the sections below.
 
 <!-- prettier-ignore-start -->
@@ -16,32 +21,32 @@ This repository contains the details and source code for a new broader **Automat
 <h2> Table of Contents </h2>
 <!-- prettier-ignore-end -->
 
-- [1.1. Background of Proposal](#11-background-of-proposal)
-- [1.2. Current Context](#12-current-context)
-- [1.3. Changesets](#13-changesets)
-- [1.4. Process Overview](#14-process-overview)
-  - [1.4.1. Changelog Workflow Process](#141-changelog-workflow-process)
-    - [1.4.1.1. Changelog Process Entities](#1411-changelog-process-entities)
-    - [1.4.1.2. Changelog Process Jobs](#1412-changelog-process-jobs)
-  - [1.4.2. Release Notes Process](#142-release-notes-process)
-- [1.5. Getting Started for OpenSearch Repository Maintainers](#15-getting-started-for-opensearch-repository-maintainers)
-  - [1.5.1. Changelog Workflow Process](#151-changelog-workflow-process)
-    - [1.5.1.1. Create a New `changelogs` Directory](#1511-create-a-new-changelogs-directory)
-    - [1.5.1.2. Add a "Changelog" Section to the PR Description Template](#1512-add-a-changelog-section-to-the-pr-description-template)
-    - [1.5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#1513-add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
-  - [1.5.2. Release Notes Script Process](#152-release-notes-script-process)
-- [1.6. Usage for OpenSearch Maintainers and Contributors](#16-usage-for-opensearch-maintainers-and-contributors)
-  - [1.6.1. Changelog Workflow Process](#161-changelog-workflow-process)
-    - [1.6.1.1. Automatic Apporach Followed](#1611-automatic-apporach-followed)
-    - [1.6.1.2. Manual Apporach Folled](#1612-manual-apporach-folled)
-  - [1.6.2. Release Notes Script Process](#162-release-notes-script-process)
-- [1.7. Contributing](#17-contributing)
-- [1.8. License](#18-license)
-- [1.9. Need Help?](#19-need-help)
+- [1. Background of Proposal](#1-background-of-proposal)
+- [2. Current Context](#2-current-context)
+- [3. Changesets](#3-changesets)
+- [4. Process Overview](#4-process-overview)
+  - [4.1. Changelog Workflow Process](#41-changelog-workflow-process)
+    - [4.1.1. Changelog Process Entities](#411-changelog-process-entities)
+    - [4.1.2. Changelog Process Jobs](#412-changelog-process-jobs)
+  - [4.2. Release Notes Process](#42-release-notes-process)
+- [5. Getting Started for OpenSearch Repository Maintainers](#5-getting-started-for-opensearch-repository-maintainers)
+  - [5.1. Changelog Workflow Process](#51-changelog-workflow-process)
+    - [5.1.1. Create a New `changelogs` Directory](#511-create-a-new-changelogs-directory)
+    - [5.1.2. Add a "Changelog" Section to the PR Description Template](#512-add-a-changelog-section-to-the-pr-description-template)
+    - [5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#513-add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
+  - [5.2. Release Notes Script Process](#52-release-notes-script-process)
+- [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
+  - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
+    - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
+    - [6.1.2. Manual Apporach Folled](#612-manual-apporach-folled)
+  - [6.2. Release Notes Script Process](#62-release-notes-script-process)
+- [7. Contributing](#7-contributing)
+- [8. License](#8-license)
+- [9. Need Help?](#9-need-help)
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.1. Background of Proposal
+## 1. Background of Proposal
 
 On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing changelogs and release notes during General Availability (GA) of the product, for all OpenSearch project repositories."
 
@@ -49,7 +54,7 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.2. Current Context
+## 2. Current Context
 
 The **Automated Changelog and Release Notes Process** presented here improves both contributor experience as well as the efficiency of product development and the release of new versions for any OpenSeearch library.
 
@@ -63,7 +68,7 @@ Automating the changelog and release notes process resolves these complications,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.3. Changesets
+## 3. Changesets
 
 The **Automated Changelog and Release Notes Process** bases its logic in the use of **changeset** or **fragment** files. In the context of this automated solution, **changesets** are atomic pieces of information that store a collection of changelog entries detailing modifications done by a contributor in the source code. This information is stored in a `.yml` file for each PR and contains the following three bits of information:
 
@@ -73,11 +78,11 @@ The **Automated Changelog and Release Notes Process** bases its logic in the use
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.4. Process Overview
+## 4. Process Overview
 
 The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
 
-### 1.4.1. Changelog Workflow Process
+### 4.1. Changelog Workflow Process
 
 The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach or a manual one.
 
@@ -89,7 +94,7 @@ The following flow diagram depicts the entire **Changelog Workflow Process** fro
 
 > **NOTE**: Currently the chnagelog process is enforcing an automatic approach. No manual approach is available yet.
 
-#### 1.4.1.1. Changelog Process Entities
+#### 4.1.1. Changelog Process Entities
 
 As the diagram illustrates, the **Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **External Services** (a reusable GitHub Action and an Express.js application), and one **GitHub App**. These components work together differently depending on whether or not a contributor opts to install the App on its forked OpenSearch repo.
 
@@ -120,7 +125,7 @@ As the diagram illustrates, the **Changelog Process** involves interaction betwe
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 1.4.1.2. Changelog Process Jobs
+#### 4.1.2. Changelog Process Jobs
 
 As the diagram illustrates, the **Changelog Process** consists of three primary jobs:
 
@@ -142,7 +147,7 @@ As the diagram illustrates, the **Changelog Process** consists of three primary 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 
-### 1.4.2. Release Notes Process
+### 4.2. Release Notes Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
@@ -154,13 +159,13 @@ Implementing a script that, when manually triggered from the command line upon g
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.5. Getting Started for OpenSearch Repository Maintainers
+## 5. Getting Started for OpenSearch Repository Maintainers
 
 This section discusses in greater detail the steps required by each **OpenSearch** repo to get its library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
 
-### 1.5.1. Changelog Workflow Process
+### 5.1. Changelog Workflow Process
 
-#### 1.5.1.1. Create a New `changelogs` Directory
+#### 5.1.1. Create a New `changelogs` Directory
 
 To centralize information pertinent to the new changelog process, a new `changelogs` directory has to be added by maintainers at the root of any OpenSearch repository. This directory is the new location for `CHANGELOG.md`.
 
@@ -180,7 +185,7 @@ Below is an example of how this directory looks like
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 1.5.1.2. Add a "Changelog" Section to the PR Description Template
+#### 5.1.2. Add a "Changelog" Section to the PR Description Template
 
 The PR template has to be updated by adding a new "Changelog" section as follows:
 
@@ -208,7 +213,7 @@ The comment block in this section provides contributors with instructions for ho
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 1.5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
+#### 5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
 
 Under each `./github/workflow` directory of your OpenSearch repo, create a file called `opensearch_changelog_workflow.yml` and add the following code below:
 
@@ -240,21 +245,21 @@ Whenever a PR is opened or edited in an OpenSearch repository, this workflow wil
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.5.2. Release Notes Script Process
+### 5.2. Release Notes Script Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.6. Usage for OpenSearch Maintainers and Contributors
+## 6. Usage for OpenSearch Maintainers and Contributors
 
 This section discusses how maintainers and contributors can use this new process in their daily days to take advantge of benefits the automatization implemented the creation of changelogs and release notes
 
-### 1.6.1. Changelog Workflow Process
+### 6.1. Changelog Workflow Process
 
 To make use of the changelog workflow when opening a PR, a contributor or maintainer can follow either an automatic or manual approach for commiting changeset files.
 
-#### 1.6.1.1. Automatic Apporach Followed
+#### 6.1.1. Automatic Apporach Followed
 
 In order to use the **OpenSearch Changelog PR Bridge** service for automatic commit of changeset files in any of your OpenSearch forked repos:
 
@@ -405,13 +410,13 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 1.6.1.2. Manual Apporach Folled
+#### 6.1.2. Manual Apporach Folled
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 1.6.2. Release Notes Script Process
+### 6.2. Release Notes Script Process
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
@@ -433,7 +438,7 @@ This command executes a script that performs the following actions:
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.7. Contributing
+## 7. Contributing
 
 The **Automated Changelog Release Notes Process** is the result of a concerted effort by OpenSearch maintainers and contributors to improve the development experience for all involved in OpenSearch suite.
 
@@ -443,10 +448,10 @@ Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Releas
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.8. License
+## 8. License
 
 This project is an open-source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1.9. Need Help?
+## 9. Need Help?
