@@ -14,7 +14,8 @@
 <h2> Introduction </h2>
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for a new broader **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. It presents comprehensive information on how to set up this new procedure aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute. For more details about it, please consult the sections below.
+This repository contains the details and source code for the **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. This automated process streamlines the release process for OpenSearch contributors and maintainers. Details about the automated process, along with instructions for configuring and 
+It presents comprehensive information on how to set up this new procedure aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute. For more details about it, please consult the sections below.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
