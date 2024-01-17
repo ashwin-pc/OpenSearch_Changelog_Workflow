@@ -37,6 +37,8 @@ This repository contains the details and source code for a new broader **Automat
     - [5.1.2. Add a "Changelog" Section to the PR Description Template](#512-add-a-changelog-section-to-the-pr-description-template)
     - [5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#513-add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
   - [5.2. Release Notes Process](#52-release-notes-process)
+    - [5.2.1 Verify Core Modules and Install `js-yaml`](#521-verify-core-modules-and-install-js-yaml)
+    - [5.2.2 Ensure Proper Location of Files and Directories](#522-ensure-proper-location-of-files-and-directories)
 - [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
@@ -261,7 +263,48 @@ Whenever a PR is opened or edited in an OpenSearch repository, this workflow wil
 
 ### 5.2. Release Notes Process
 
-As mentioned above, the release notes process was designed for the specific context of the `OpenSearch-Dashboards` repository. Therefore, the following instructions demonstrate how to configure and execute the script in that context. Implementation details may vary from repository to repository.
+As mentioned above, the release notes process was designed for the specific context of the `OpenSearch-Dashboards` repository. Therefore, the following instructions demonstrate how to configure the script in that context. Implementation details may vary from repository to repository.
+
+#### 5.2.1 Verify Core Modules and Install `js-yaml`
+
+The script uses the following Node.js core modules:
+- `path`
+- `fs` (including `fs/promises`)
+
+`fs/promises` has been a stable built-in module since Node version 14. So, depending on which version of Node you are using, it may already be installed in your `node-modules` directory. Still, it is worth verifying that these modules are accessible to your project.
+
+In addition to these core modules, the release notes script utilizes `js-yaml` for parsing and writing YAML files. If it is not already among your project dependencies, you can install it from within your root directory via `npm` or `yarn`:
+
+```bash
+npm install js-yaml
+```
+```bash
+yarn add js-yaml
+```
+
+#### 5.2.2 Ensure Proper Location of Files and Directories
+
+Because the release notes script reads from and writes to specific directories and files, it is important to ensure that the script is able to target the correct paths.
+
+Below is a simplified directory tree showing where the script expects to find the various resources it needs to complete its tasks:
+
+```
+./
+|  ├── changelogs/
+|  |  ├── fragments/
+|  |  |  ├── 5218.yml
+|  |  |  ├── 5219.yml
+|  |  |  └── 5220.yml
+|  ├── release-notes/
+|  ├── scripts/
+|  |  ├── generate_release_note.js
+|  |  └── use_node
+|  ├── src/
+|  |  ├── dev/
+|  |  |  ├── generate_release_note.ts
+|  |  |  └── generate_release_note_helper.ts
+|  └── package.json
+```
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
