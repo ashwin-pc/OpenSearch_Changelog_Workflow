@@ -96,46 +96,52 @@ Fragment files in this project are created in YAML format. The changeset descrip
 
 ## 4. Process Overview
 
-The **Automated Changelog and Release Notes Process** is comprised of two independent sets of separate sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Script Process**.
+The **Automated Changelog and Release Notes Process** is comprised of two independent sets of sub-processes: (1) the **Changelog Workflow Process** and (2) the **Release Notes Process**.
 
 ### 4.1. Changelog Workflow Process
 
-The first sub-process is conformed by a [Github Action](https://docs.github.com/en/actions) using a [Reusable Workflow](https://docs.github.com/en/actions/using-workflows/reusing-workflows) that checks the validity of a newly added or edited changeset file. Two distinct approaches can be used for these checks: an automatic approach or a manual one.
+The first sub-process involves a reusable [Github Action](https://docs.github.com/en/actions) that checks the validity of changeset files that have either been added manually or generated automatically based on the contents of PR descriptions (details below).
 
-For an automated approach, the workflow communicates with an external service ([OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot)) that can automatically create these changeset files on a contributor's behalf and commit them to the open PR.
+In order to generate changeset files automatically, the workflow communicates with an external service called the [OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot). This bridge service can create changeset files on a contributor's behalf and commit them to the open PR.
 
 The following flow diagram depicts the entire **Changelog Workflow Process** from start to finish.
 
 ![OpenSearch_Changelog_Workflow_Process](./assets/OpenSearch_Changelog_Process_Diagram.png)
 
-> **NOTE**: Currently the chnagelog process is enforcing an automatic approach. No manual approach is available yet.
+> **NOTE**: Currently, the changelog process only supports the automatic creation of changeset files. Support for adding changeset files manually is forthcoming.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### 4.1.1. Changelog Process Entities
 
-As the diagram illustrates, the **Changelog Process** involves interaction between two **GitHub Repositories** (the OpenSearch repo and the contributor's forked repo), two **External Services** (a reusable GitHub Action and an Express.js application), and one **GitHub App**. These components work together differently depending on whether or not a contributor opts to install the App on its forked OpenSearch repo.
+As the diagram illustrates, the **Changelog Workflow Process** involves interaction between two **GitHub Repositories**, two **External Services**, and one **GitHub App**. These components work together differently depending on whether or not a contributor has installed the App on their forked OpenSearch repository.
 
 - **GitHub Repositories**
 
-  - **OpenSearch Upstream Repository** → This is the base repository where a contributor's PR resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
-  - **Contributor Forked Repository** → The head repository from which the contributor's PR originates. It contains the changes the contributor suggests for a merge into the base repository.
+  - **OpenSearch Upstream Repository:** This is the base repository where a contributor's PR resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
+  
+  - **Contributor Forked Repository:** The head repository from which the contributor's PR originates. It contains the changes the contributor is proposing to be merged into the base repository.
 
 - **External Services**
 
-  - **OpenSearch Changelog Workflow** → GitHub Action implementing a reusable workflow that triggers whenever a PR is opened or edited. This workflow acts only in the **OpenSearch Upstream Repository** and carries out the following actions:
+  - **OpenSearch Changelog Action:** A reusable GitHub Action, invoked within a workflow file in an OpenSearch repository. This workflow is triggered whenever a PR is opened or edited. The reusable Action works only in the **OpenSearch Upstream Repository** and performs the following functions:
 
-    - Check and parse contributor entries in the `## Changelog` section of the PR description.
+    - Check and parse contributor entries in a `## Changelog` section of an open PR description.
+  
     - Post comments and add or remove labels on PRs.
-    - For an automatic changeset approach, it communicates with **OpenSearch** Changelog PR Bridge\*\* to create, update, or delete changeset files automatically.
-    - For a manual changeset approach, it validates the content of a fragment file created or updated by a contributor.
 
-  - **OpenSearch Changelog PR Bridge** → An Express.js application that serves as the authorized entity for committing changeset files on behalf of the contributor. Only available for an automatic approach for creating or updating fragment files.
+    - Communicate with the **OpenSearch Changelog PR Bridge** to create, update, or delete changeset files automatically.
 
-    <!-- - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**.
+    - Validate the content of a changeset file created or updated by a contributor. (***support forthcoming*)
 
-    - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file. -->
+  - **OpenSearch Changelog PR Bridge:** An Express.js application that serves as the authorized entity for committing changeset files to an open PR on behalf of the contributor.
+
+    <!-- - If a contributor has [installed the bot](https://github.com/apps/opensearch-changeset-bot) in their forked repository, the PR bridge service will receive HTTP requests from the **OpenSearch Changelog Workflow** and commit a changeset file to the branch in the contributor's repository where the PR has originated from. The PR bridge service acts only in the **Contributor Forked Repository**. -->
+
+    <!-- - If a contributor has not installed the bot, the PR bridge service will communicate back to the **OpenSearch Changelog Workflow**, instructing it to look for and parse a manually-created changeset file. -->
 
 - **GitHub App**
-  - **OpenSearch Changelog Bot** → a GitHub App required for a contributor to grant permissions to the **OpenSearch Changelog PR Bridge** service so the latter can act on his behalf.
+  - **OpenSearch Changelog Bot:** This GitHub App must be installed on the contributor's forked repository so that the contributor can grant permissions to the **OpenSearch Changelog PR Bridge** service to act on their behalf.
 
    <!-- As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot). -->
 
