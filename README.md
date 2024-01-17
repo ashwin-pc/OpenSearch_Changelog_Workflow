@@ -39,6 +39,10 @@ This repository contains the details and source code for a new broader **Automat
   - [5.2. Release Notes Process](#52-release-notes-process)
     - [5.2.1 Verify Core Modules and Install `js-yaml`](#521-verify-core-modules-and-install-js-yaml)
     - [5.2.2 Ensure Proper Location of Files and Directories](#522-ensure-proper-location-of-files-and-directories)
+    - [5.2.3 Configure Files and Script Command](#523-configure-files-and-script-command)
+      - [5.2.3.1 `package.json`](#5231-packagejson)
+      - [5.2.3.2 `scripts/generate_release_note.js`](#5232-scriptsgenerate_release_notejs)
+      - [5.2.3.3 `generate_release_note.ts` and `generate_release_note_helper.ts`](#5233-generate_release_notets-and-generate_release_note_helperts)
 - [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
@@ -282,6 +286,8 @@ npm install js-yaml
 yarn add js-yaml
 ```
 
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
 #### 5.2.2 Ensure Proper Location of Files and Directories
 
 Because the release notes script reads from and writes to specific directories and files, it is important to ensure that the script is able to target the correct paths.
@@ -307,6 +313,39 @@ Below is a simplified directory tree showing where the script expects to find th
 ```
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+#### 5.2.3 Configure Files and Script Command
+
+##### 5.2.3.1 `package.json`
+The release notes script is executed manually from the command line. To configure the command, the following line should be added to the `"scripts"` object in the `package.json` file:
+
+```json
+{
+  "scripts": {
+    "release_note:generate": "scripts/use_node scripts/generate_release_note"
+  }
+}
+```
+
+When invoked, `"release_note:generate"` script identifier runs a script command that executes the `generate_release_note` script within the appropriate Node.js runtime. It passes the `generate_release_note` script as an argument to the `use_node` script, which is available in the [OpenSearch-Dashboards repository](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/scripts/use_node) for reference.
+
+Additionally, to generate accurate headings in the release notes document and changelog section, the script will need to be able to access the current product version. Please ensure that the `"version"` property in your `package.json` file is updated with the current release version.
+
+<p align="right">(<a href="#back-to-top">back to top</a>)</p>
+
+##### 5.2.3.2 `scripts/generate_release_note.js`
+
+This file, located in the `scripts/` directory, imports the files necessary for the execution of the release notes script. It should be configured as follows:
+
+```js
+require('../src/setup_node_env');
+require('../src/dev/generate_release_note');
+require('../src/dev/generate_release_note_helper');
+```
+
+##### 5.2.3.3 `generate_release_note.ts` and `generate_release_note_helper.ts`
+
+These files, available in the [releaseNotesTemplates](./releaseNotesTemplates/) directory in this repository, should be added to the `src/dev/` directory as indicated in the simplified directory tree above.
 
 ## 6. Usage for OpenSearch Maintainers and Contributors
 
