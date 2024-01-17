@@ -21,8 +21,8 @@ This repository contains the details and source code for the **Automated Changel
 <h2> Table of Contents </h2>
 <!-- prettier-ignore-end -->
 
-- [1. Background of Proposal](#1-background-of-proposal)
-- [2. Current Context](#2-current-context)
+- [1. Background of the Automated Process](#1-background-of-the-automated-process)
+- [2. Benefits of the Automated Process](#2-benefits-of-the-automated-process)
 - [3. Changesets](#3-changesets)
 - [4. Process Overview](#4-process-overview)
   - [4.1. Changelog Workflow Process](#41-changelog-workflow-process)
@@ -52,7 +52,7 @@ This repository contains the details and source code for the **Automated Changel
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 1. Background of Proposal
+## 1. Background of the Automated Process
 
 On March 20, 2023, Josh Romero issued a [call for proposals](https://github.com/opensearch-project/.github/issues/148) that would "solve the entire collection of issues around generating both ongoing changelogs and release notes during General Availability (GA) of the product, for all OpenSearch project repositories."
 
@@ -60,17 +60,17 @@ On May 4, 2023, a working group voted unanimously to move forward with the "Auto
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 2. Current Context
+## 2. Benefits of the Automated Process
 
-The **Automated Changelog and Release Notes Process** presented here improves both contributor experience as well as the efficiency of product development and the release of new versions for any OpenSeearch library.
+The **Automated Changelog and Release Notes Process** presented here improves both contributor experience as well as the efficiency of product development and the release of new versions for OpenSearch repositories.
 
-Whenever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the CHANGELOG.md file. However, since any changelog entry entered requires a PR number as a reference, contributors had to open a PR first, grab its number, and then add a second commit to include these new changes.
+Without the automated process, henever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the `CHANGELOG.md` file. However, since changelog entries require a PR number as a reference, contributors need to open a PR first, grab its number, and then add a second commit including the changelog entry.
 
-In addition to the inefficiency above, this two-step process also creates an opportunity for merge conflicts. Suppose two or more contributors update the CHANGELOG.md file in their respective PRs, and updates are not synchronized. In that case, changelog entries may introduce error conflicts for the same prefix (i.e., `feat`) due to the order they are being added, requiring manual intervention to sort things out, which is tedious.
+This creates an inefficient two-step process, which also opens the door to potential merge conflicts. If two or more contributors update the `CHANGELOG.md` file in their respective PRs, and those updates are not synchronized with each other, the possibility of merge conflicts arises, which complicates the process of contributing. 
 
-Furthermore, hurdles to speed up this procedure are also present in the case of new version distributions for any OpenSearch library. Whenever a new product version is scheduled for GA, release notes and changelog updates have to be prepared manually. This task is also time-consuming and labor-intensive.
+Likewise, when a new product version is scheduled for GA release, release notes and changelog updates have to be prepared manually. This process is both time consuming and labor intensive.
 
-Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories without wasting time on laborious operative tasks.
+Automating the changelog and release notes process resolves these complications, giving valuable time back to contributors and maintainers and improving the overall experience of working in OpenSearch's repositories.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
