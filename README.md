@@ -14,8 +14,7 @@
 <h2> Introduction </h2>
 <!-- prettier-ignore-end -->
 
-This repository contains the details and source code for the **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. This automated process streamlines the release process for OpenSearch contributors and maintainers. Details about the automated process, along with instructions for configuring and 
-It presents comprehensive information on how to set up this new procedure aimed at streamlining contributions for any OpenSearch repo, including also guidelines on how to contribute. For more details about it, please consult the sections below.
+This repository contains the details and source code for the **Automated Changelog and Release Notes Process** adopted by the [OpenSearch Project](https://opensearch.org/) community. This automated process streamlines the release procedure for OpenSearch contributors and maintainers. Details about the automated process, along with instructions for configuring and using the process in OpenSearch repositories, are available below.
 
 <!-- prettier-ignore-start -->
 <!-- omit in toc -->
@@ -41,9 +40,6 @@ It presents comprehensive information on how to set up this new procedure aimed 
     - [5.2.1 Verify Core Modules and Install `js-yaml`](#521-verify-core-modules-and-install-js-yaml)
     - [5.2.2 Ensure Proper Location of Files and Directories](#522-ensure-proper-location-of-files-and-directories)
     - [5.2.3 Configure Files and Script Command](#523-configure-files-and-script-command)
-      - [5.2.3.1 `package.json`](#5231-packagejson)
-      - [5.2.3.2 `scripts/generate_release_note.js`](#5232-scriptsgenerate_release_notejs)
-      - [5.2.3.3 `generate_release_note.ts` and `generate_release_note_helper.ts`](#5233-generate_release_notets-and-generate_release_note_helperts)
 - [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
@@ -317,7 +313,10 @@ Below is a simplified directory tree showing where the script expects to find th
 
 #### 5.2.3 Configure Files and Script Command
 
+<!-- prettier-ignore-start -->
+<!-- omit in toc -->
 ##### 5.2.3.1 `package.json`
+<!-- prettier-ignore-start -->
 The release notes script is executed manually from the command line. To configure the command, the following line should be added to the `"scripts"` object in the `package.json` file:
 
 ```json
@@ -334,7 +333,10 @@ Additionally, to generate accurate headings in the release notes document and ch
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
+<!-- prettier-ignore-start -->
+<!-- omit in toc -->
 ##### 5.2.3.2 `scripts/generate_release_note.js`
+<!-- prettier-ignore-start -->
 
 This file, located in the `scripts/` directory, imports the files necessary for the execution of the release notes script. It should be configured as follows:
 
@@ -343,8 +345,10 @@ require('../src/setup_node_env');
 require('../src/dev/generate_release_note');
 require('../src/dev/generate_release_note_helper');
 ```
-
+<!-- prettier-ignore-start -->
+<!-- omit in toc -->
 ##### 5.2.3.3 `generate_release_note.ts` and `generate_release_note_helper.ts`
+<!-- prettier-ignore-start -->
 
 These files, available in the [releaseNotesTemplates](./releaseNotesTemplates/) directory in this repository, should be added to the `src/dev/` directory as indicated in the simplified directory tree above.
 
