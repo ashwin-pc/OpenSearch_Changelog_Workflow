@@ -47,7 +47,7 @@ This repository contains the details and source code for a new broader **Automat
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
     - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
     - [6.1.2. Manual Apporach Folled](#612-manual-apporach-folled)
-  - [6.2. Release Notes Script Process](#62-release-notes-script-process)
+  - [6.2. Release Notes Process](#62-release-notes-process)
 - [7. Mantainers](#7-mantainers)
 - [8. Contributing](#8-contributing)
 - [9. License](#9-license)
@@ -512,25 +512,20 @@ The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-### 6.2. Release Notes Script Process
+### 6.2. Release Notes Process
 
-<img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
-
-When a new product release is ready for general availability, OpenSearch maintainers can run the following script command from the command line:
+When a new product release is ready for general availability, OpenSearch maintainers can run the following script command from the command line, provided that the files and commands have been configured properly in the repository:
 
 ```bash
 yarn release_note:generate
 ```
+OR
 
-This command executes a script that performs the following actions:
+```bash
+npm run release_note:generate
+```
 
-- Extract information from the changeset files in the `changelogs/fragments` directory
-- Map the changelog entries in these files to their appropriate changelog section headings
-- Generate the changelog section for the new release and add it to the top of the changelog
-- Create a release notes document to accompany the new release
-- Del**ete the ch**angeset files from the `changelogs/fragments` directory
-
-[TO COMPLETE AND REVIEW]
+This command will execute the script process detailed in section 5 above. If the process completes successfully, an updated changelog and a new release notes document will be available for publication. Maintainers should review both of these documents to ensure that they have been prepared and formatted as expected.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
