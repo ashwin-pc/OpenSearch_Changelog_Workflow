@@ -23,7 +23,7 @@ This repository contains the details and source code for the **Automated Changel
 
 - [1. Background of the Automated Process](#1-background-of-the-automated-process)
 - [2. Benefits of the Automated Process](#2-benefits-of-the-automated-process)
-- [3. Changesets](#3-changesets)
+- [3. A Word on Terminology](#3-a-word-on-terminology)
 - [4. Process Overview](#4-process-overview)
   - [4.1. Changelog Workflow Process](#41-changelog-workflow-process)
     - [4.1.1. Changelog Process Entities](#411-changelog-process-entities)
@@ -74,13 +74,23 @@ Automating the changelog and release notes process resolves these complications,
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-## 3. Changesets
+## 3. A Word on Terminology
 
-The **Automated Changelog and Release Notes Process** bases its logic in the use of **changeset** or **fragment** files. In the context of this automated solution, **changesets** are atomic pieces of information that store a collection of changelog entries detailing modifications done by a contributor in the source code. This information is stored in a `.yml` file for each PR and contains the following three bits of information:
+The **Automated Changelog and Release Notes Process** makes frequent reference to the concept of **changesets** and **fragment files**. In version control systems, changesets are the logical grouping of changes that represent the difference between two versions of software. In Git, a commit would be a changeset.
 
-- **Entry Prefix**: type of change proposed by the contributor. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`,`test`, `skip`.
-- **Entry Description**: detail regarding changes proposed by the contributor.
-- **PR Number and Link**: pull request number identifier and GitHub link related to the set of changes in the contribution.
+A changeset description is a message accompanying a changeset that describes the changeset in a human-readable format. In Git, this would correspond to a commit message.
+
+A **fragment file** stores changeset descriptions as text that can be retrieved and combined with other changeset descriptions to create an updated changelog section or a release notes document. 
+
+*In this document, the term "changeset file" is used as a shorthand for fragment files containing changeset descriptions.*
+
+Fragment files in this project are created in YAML format. The changeset descriptions contained within fragment files follow a three-part structure:
+
+- **Entry Prefix**: Categorizes changesets by type. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`, and `test`.
+  
+- **Entry Description**: A concise, human-readable summary of the changeset.
+  
+- **PR Number and Link**: The pull request number the changeset is connected to, along with a link to the pull request on GitHub.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
