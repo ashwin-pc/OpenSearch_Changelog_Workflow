@@ -73,7 +73,7 @@ export const isSkipEntry = (entryMap) => {
 };
 
 export const checkGithubAppDomainIsAvailable = () => {
-  if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+  if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
     throw new MissingGitHubAppDomainError();
   }
 };
@@ -83,7 +83,7 @@ export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
     !CHANGELOG_PR_BRIDGE_API_KEY ||
     CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
   ) {
-    throw new MissingChangelogPrBridgeSecretKeyError();
+    throw new MissingChangelogPrBridgeApiKeyError();
   }
 };
 

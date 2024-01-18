@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-export const GITHUB_APP_DOMAIN = process.env.INPUT_GH_APP_DOMAIN;
+export const GITHUB_APP_URL_DOMAIN = process.env.INPUT_GH_APP_DOMAIN;
 export const API_PATH_SUFFIX = "/api/v1";
-export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
+export const GITHUB_APP_BASE_URL = `${GITHUB_APP_URL_DOMAIN}${API_PATH_SUFFIX}`;
 
 export const CHANGELOG_PR_BRIDGE_API_KEY =
   process.env.INPUT_CHANGELOG_PR_BRIDGE_API_KEY;

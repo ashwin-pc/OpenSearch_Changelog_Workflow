@@ -30,14 +30,14 @@ export class GitHubAppSuspendedOrNotInstalledError extends Error {
 }
 
 /**
- * Represents an error when the GITHUB_APP_DOMAIN constant is not set.
+ * Represents an error when the GITHUB_APP_URL_DOMAIN constant is not set.
  */
 export class MissingGitHubAppDomainError extends Error {
   /**
    * Constructs the MissingGitHubAppDomainError instance.
    */
   constructor() {
-    const message = `The GITHUB_APP_DOMAIN constant is not set.
+    const message = `The GITHUB_APP_URL_DOMAIN constant is not set.
     Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.
 
     For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;

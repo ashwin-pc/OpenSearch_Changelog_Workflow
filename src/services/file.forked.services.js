@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-  GITHUB_APP_DOMAIN,
+  GITHUB_APP_URL_DOMAIN,
   GITHUB_APP_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
@@ -25,7 +25,7 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
     if (
@@ -91,7 +91,7 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
     if (
@@ -145,7 +145,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
     if (
@@ -204,7 +204,7 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
     if (
@@ -252,7 +252,7 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
+    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
     if (
