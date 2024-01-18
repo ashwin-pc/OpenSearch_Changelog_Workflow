@@ -1,5 +1,6 @@
 import axios from "axios";
 import { 
+  GITHUB_APP_DOMAIN,
   GITHUB_APP_BASE_URL,
   CHANGELOG_PR_BRIDGE_SECRET_KEY, 
 } from "../config/constants.js";
@@ -24,7 +25,7 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
       throw new MissingGitHubAppDomainError();
     }
     if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
@@ -88,7 +89,7 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
       throw new MissingGitHubAppDomainError();
     }
     if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
@@ -141,7 +142,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
       throw new MissingGitHubAppDomainError();
     }
     if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
@@ -194,7 +195,7 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
       throw new MissingGitHubAppDomainError();
     }
     if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
@@ -241,7 +242,7 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    if(!GITHUB_APP_BASE_URL || GITHUB_APP_BASE_URL.trim() === '') {
+    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
       throw new MissingGitHubAppDomainError();
     }
     if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
