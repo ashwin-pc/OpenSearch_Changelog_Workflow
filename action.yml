@@ -11,7 +11,7 @@ inputs:
   GH_APP_DOMAIN:
     description: "GitHub App domain for API calls"
     required: true
-  CHANGELOG_PR_BRIDGE_SECRET_KEY:
+  CHANGELOG_PR_BRIDGE_API_KEY:
     description: "API key for communicating with the changelog PR bridge"
     required: true
 runs:

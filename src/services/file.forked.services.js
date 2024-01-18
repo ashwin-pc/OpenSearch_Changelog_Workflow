@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   GITHUB_APP_DOMAIN,
   GITHUB_APP_BASE_URL,
-  CHANGELOG_PR_BRIDGE_SECRET_KEY,
+  CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
 import {
   GitHubAppSuspendedOrNotInstalledError,
@@ -29,14 +29,14 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       throw new MissingGitHubAppDomainError();
     }
     if (
-      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
-      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+      !CHANGELOG_PR_BRIDGE_API_KEY ||
+      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
-        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
       },
       params: {
         owner: owner,
@@ -95,14 +95,14 @@ const getAllFilesFromForkedRepoByPath = async (
       throw new MissingGitHubAppDomainError();
     }
     if (
-      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
-      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+      !CHANGELOG_PR_BRIDGE_API_KEY ||
+      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
       headers: {
-        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
       },
       params: {
         owner: owner,
@@ -149,8 +149,8 @@ const createOrUpdateFileInForkedRepoByPath = async (
       throw new MissingGitHubAppDomainError();
     }
     if (
-      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
-      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+      !CHANGELOG_PR_BRIDGE_API_KEY ||
+      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
@@ -160,7 +160,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
       { content: encodedContent, message: message },
       {
         headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
         },
         params: {
           owner: owner,
@@ -208,14 +208,14 @@ const deleteFileInForkedRepoByPath = async (
       throw new MissingGitHubAppDomainError();
     }
     if (
-      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
-      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+      !CHANGELOG_PR_BRIDGE_API_KEY ||
+      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
     await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
-        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
       },
       data: { message: message },
       params: {
@@ -256,8 +256,8 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
       throw new MissingGitHubAppDomainError();
     }
     if (
-      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
-      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+      !CHANGELOG_PR_BRIDGE_API_KEY ||
+      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
@@ -265,7 +265,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {
         headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
         },
         data: { message: message },
         params: {
