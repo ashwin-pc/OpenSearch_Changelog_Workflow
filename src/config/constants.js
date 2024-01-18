@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-export const GITHUB_APP_DOMAIN =  "https://open-search-changeset-bot.vercel.app";
+export const GITHUB_APP_DOMAIN =  process.env.INPUT_GH_APP_DOMAIN;
 export const API_PATH_SUFFIX = "/api/v1";
 export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
 
