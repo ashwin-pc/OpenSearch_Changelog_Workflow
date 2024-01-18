@@ -35,7 +35,7 @@ This repository contains the details and source code for the **Automated Changel
   - [5.1. Changelog Workflow Process](#51-changelog-workflow-process)
     - [5.1.1. Create a New `changelogs` Directory](#511-create-a-new-changelogs-directory)
     - [5.1.2. Add a "Changelog" Section to the PR Description Template](#512-add-a-changelog-section-to-the-pr-description-template)
-    - [5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow](#513-add-a-github-worflow-file-to-invoke-opensearch-changelog-workflow)
+    - [5.1.3. Add a Github Worflow File to Invoke the OpenSearch Changelog Action](#513-add-a-github-worflow-file-to-invoke-the-opensearch-changelog-action)
   - [5.2. Release Notes Process](#52-release-notes-process)
     - [5.2.1 Verify Core Modules and Install `js-yaml`](#521-verify-core-modules-and-install-js-yaml)
     - [5.2.2 Ensure Proper Location of Files and Directories](#522-ensure-proper-location-of-files-and-directories)
@@ -166,7 +166,7 @@ As the diagram illustrates, the **Changelog Workflow Process** consists of three
 - **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** App is not installed in the **Contributor Forked Repository**. In this case, the contributor must manually commit a changeset file to the branch they have opened their PR from. After the contributor commits a changeset file, the **OpenSearch Changelog Workflow** will check the formatting of the file. This check will end in one of two outcomes:
 
   1. **Check Failed**: If one or more entries in the changeset file are formatted incorrectly, the process will post an error comment and add a `failed changeset` label to the open PR.
-  
+
   2. **Check Succeeded**: If the entries in the fragment file are correctly formatted, the changelog process will finish sucessfully.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
@@ -196,36 +196,34 @@ Having done the work of mapping changelog entries and updating the `CHANGELOG.md
 
 ## 5. Getting Started for OpenSearch Repository Maintainers
 
-This section discusses in greater detail the steps required by each **OpenSearch** repo to get its library ready to implement the processes described in the "[Process Overview](#process-overview)" section above.
+This section discusses in greater detail the steps required to implement the **Automated Changelog and Release Notes Process**.
 
 ### 5.1. Changelog Workflow Process
 
 #### 5.1.1. Create a New `changelogs` Directory
 
-To centralize information pertinent to the new changelog process, a new `changelogs` directory has to be added by maintainers at the root of any OpenSearch repository. This directory is the new location for `CHANGELOG.md`.
+To centralize information pertinent to the new changelog process, OpenSearch repositories will need to add a `changelogs` directory to their root directory.
 
-Also a subdirectory called `fragments` needs to be added in the parent folder `changelogs`. The later one is the one where all changeset files in `.yml` are being added automatically or manually when a PR is open. Remember that only one changeset file is required per PR. These changeset files are named with the PR number they correspond to. (E.g., `5218.yml`.)
+Within the `changelog` directory, a subdirectory named `fragments` should be added. This subdirectory will hold all of the changeset files associated with the upcoming version release. *Only one changeset file may be generated per pull request.* These changeset files should be named according to the PR number they are associated with (e.g., `5218.yml`.)
 
-Below is an example of how this directory looks like
+Below is an example of what the `changelog` directory should look like. (The changeset files in this example are for illustration only.)
 
 ```
 ├── ...
 └── changelogs
-  ├── CHANGELOG.md
   └── fragments
       ├── 5218.yml
       ├── 5219.yml
       └── 5220.yml
 ```
-> **NOTE**: At this point neither a CHANGELOG.md file or changeset .yml files need to be added. On later steps this will be shown.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
 #### 5.1.2. Add a "Changelog" Section to the PR Description Template
 
-The PR template has to be updated by adding a new "Changelog" section as follows:
+The PR template should be updated with a `## Changelog` that looks like the following:
 
-```
+```md
 ...
 
 ## Changelog
@@ -239,19 +237,19 @@ If this change does not need to added to the changelog, just add a single `skip`
 
 Valid prefixes: breaking, chore, deprecate, doc, feat, fix, infra, refactor, test
 
-Descriptions following the prefixes must be 50 characters or less
+Descriptions following the prefixes must be 100 characters or less
 -->
 
 ...
 ```
 
-The comment block in this section provides contributors with instructions for how to add properly-formatted changelog entries to their PR.
+The comment block in this section instructs contributors on how to properly format any changelog entries they add to their PR descriptions.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 5.1.3. Add a Github Worflow File to Invoke OpenSearch Changelog Workflow
+#### 5.1.3. Add a Github Worflow File to Invoke the OpenSearch Changelog Action
 
-Under each `./github/workflow` directory of your OpenSearch repo, create a file called `opensearch_changelog_workflow.yml` and add the following code below:
+In the `./github/workflows` directory of your OpenSearch repository, create a file called `opensearch_changelog_workflow.yml` and add the following code below:
 
 ```yaml
 name: OpenSearch Changelog Workflow
@@ -277,7 +275,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
 ```
 
-Whenever a PR is opened or edited in an OpenSearch repository, this workflow will be triggered in the **OpenSearch Upstream Repository**. Metadata from the PR will be extracted and parsed or checked depending the approach a contributor want to follow (automatic or manual commit of changeset files).
+Whenever a PR is opened or edited in an OpenSearch repository, this workflow will be triggered in the **OpenSearch Upstream Repository**.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
