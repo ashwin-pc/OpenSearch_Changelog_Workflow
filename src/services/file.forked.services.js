@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-  GITHUB_APP_URL_DOMAIN,
+  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
   GITHUB_APP_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
@@ -12,7 +12,10 @@ import {
   MissingGitHubAppDomainError,
   MissingChangelogBridgeApiKeyError,
 } from "../errors/index.js";
-
+import {
+  checkGithubAppDomainIsAvailable,
+  checkChangelogPrBridgeApiKeyIsAvailable,
+} from "../utils/index.js";
 /**
  * Get a file in a given path in a forked GitHub repository.
  *
@@ -25,15 +28,8 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
-      throw new MissingGitHubAppDomainError();
-    }
-    if (
-      !CHANGELOG_PR_BRIDGE_API_KEY ||
-      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
-    ) {
-      throw new MissingChangelogBridgeApiKeyError();
-    }
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -91,15 +87,8 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
-      throw new MissingGitHubAppDomainError();
-    }
-    if (
-      !CHANGELOG_PR_BRIDGE_API_KEY ||
-      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
-    ) {
-      throw new MissingChangelogBridgeApiKeyError();
-    }
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -145,15 +134,8 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
-      throw new MissingGitHubAppDomainError();
-    }
-    if (
-      !CHANGELOG_PR_BRIDGE_API_KEY ||
-      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
-    ) {
-      throw new MissingChangelogBridgeApiKeyError();
-    }
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${GITHUB_APP_BASE_URL}/files`,
@@ -204,15 +186,8 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
-      throw new MissingGitHubAppDomainError();
-    }
-    if (
-      !CHANGELOG_PR_BRIDGE_API_KEY ||
-      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
-    ) {
-      throw new MissingChangelogBridgeApiKeyError();
-    }
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -252,15 +227,8 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
-      throw new MissingGitHubAppDomainError();
-    }
-    if (
-      !CHANGELOG_PR_BRIDGE_API_KEY ||
-      CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
-    ) {
-      throw new MissingChangelogBridgeApiKeyError();
-    }
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {

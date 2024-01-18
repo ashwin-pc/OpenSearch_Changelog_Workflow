@@ -73,7 +73,10 @@ export const isSkipEntry = (entryMap) => {
 };
 
 export const checkGithubAppDomainIsAvailable = () => {
-  if (!GITHUB_APP_URL_DOMAIN || GITHUB_APP_URL_DOMAIN.trim() === "") {
+  if (
+    !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
+    CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
+  ) {
     throw new MissingGitHubAppDomainError();
   }
 };
