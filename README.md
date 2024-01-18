@@ -149,21 +149,24 @@ As the diagram illustrates, the **Changelog Workflow Process** involves interact
 
 #### 4.1.2. Changelog Process Jobs
 
-As the diagram illustrates, the **Changelog Process** consists of three primary jobs:
+As the diagram illustrates, the **Changelog Workflow Process** consists of three primary jobs:
 
-- **Changelog Parsing** → Here, the reusable workflow checks first if the **OpenSearch Changelog Bot** App has been installed in the **Contributor Forked Repository**. If so, the service parses the `## Changelog` section of the open PR description. On the other hand, I=if the **OpenSearch Changelog Bot** App has not been set up, the contributor is prompted to either install the bot or manually commit a changeset file.
+- **Changelog Parsing:** The reusable Action checks first to see if the **OpenSearch Changelog Bot** (i.e., the GitHub App) has been installed in the **Contributor Forked Repository**. If so, the Action parses the `## Changelog` section of the open PR description. If not, the contributor is prompted to either install the bot or manually commit a changeset file.
 
-  If the automatic approach is followed, the parsing of the `## Changelog` section from the PR will result in one of the following three outputs:
+  If the reusable Action is cleared to parse the `## Changelog` section from the PR, three outcomes are possible:
 
-  1. **Parsing Failed** → If one or more entries in the `## Changelog` section are formatted improperly, the process will post an error comment, and a `failed changeset` label will be added to the PR. Addtionaly any previous existent changeset file from that PR will be removed.
-  2. **Parsing Succeeded** → If the entries in the `## Changelog` section are adequately formatted and the action succeeds in parsing them, then the **Automatic Changeset Creation/Update** job is initiated adn the chnagelog process continue.
-  3. **Skip Entry** → If a contributor adds a `skip` entry (i.e. changes in base code do not require a changelog entry, for instance fixing a minor typographical error),  then no changeset file will be created or existing ones will be deleted. A `Skip-Changelog` label will be added to the PR, and the changelog process will end successfully.
+  1. **Parsing Failed:** If one or more entries in the `## Changelog` section are formatted improperly, the process will post an error comment and add a `failed changeset` label to the open PR. It will also delete any previously-committed changeset file.
+   
+  2. **Parsing Succeeded:** → If the entries in the `## Changelog` section are adequately formatted and the action succeeds in parsing them, then the **Automatic Changeset Creation/Update** job is initiated and the changelog process continues.
+   
+  3. **Skip Entry:** → If a contributor adds a `skip` entry in the PR description—meaning that the changes introduced (e.g., fixing a typo) do not warrant a changelog entry—then no changeset file will be created, and any existing changeset file will be deleted. A `Skip-Changelog` label will be added to the PR, and the changelog process will end successfully.
 
-- **Automatic Changeset Creation/Update** → This second job is initiated after the `## Changelog` section from the PR description is successfully parsed. In this job, the **OpenSearch Changelog PR Bridge** service receives a request from the **OpenSearch Changelog Workflow** for committing a changeset file in the **Contributor Forked Repository**. The former obtains the required permissions from the **OpenSearch Changelog Bot** when this is installed in the later repo, thus acting on behalf of the contributor.
+- **Automatic Changeset Creation/Update:** This second job is initiated after the `## Changelog` section from the PR description has been successfully parsed. In this job, the **OpenSearch Changelog Workflow** communicates with the **OpenSearch Changelog PR Bridge**. The bridge service creates or updates a changeset file and commits that file to the branch in the **Contributor Forked Repository** where the PR originated from. The **OpenSearch Changelog PR Bridge** receives the permissions to commit this file from the **OpenSearch Changelog Bot**.
 
-- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** App is not installed in the **Contributor Forked Repository**. The contributor must manually add or edit a fragment file in this case. After the contributor commits a fragment file, the **OpenSearch Changelog Workflow** will - on this occasion - check the formatting of the changeset file. In this case. wwo outcomes are possible here:
+- **Manual Changeset Creation/Update** → This third job is an alternative to the second one if the **OpenSearch Changelog Bot** App is not installed in the **Contributor Forked Repository**. In this case, the contributor must manually commit a changeset file to the branch they have opened their PR from. After the contributor commits a changeset file, the **OpenSearch Changelog Workflow** will check the formatting of the file. This check will end in one of two outcomes:
 
-  1. **Check Failed**: If one or more entries in the fragment file are wrongly formatted, the process will post an error comment and a `failed changeset` label will be added to the PR.
+  1. **Check Failed**: If one or more entries in the changeset file are formatted incorrectly, the process will post an error comment and add a `failed changeset` label to the open PR.
+  
   2. **Check Succeeded**: If the entries in the fragment file are correctly formatted, the changelog process will finish sucessfully.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
