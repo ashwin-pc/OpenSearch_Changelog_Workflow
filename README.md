@@ -42,8 +42,8 @@ This repository contains the details and source code for the **Automated Changel
     - [5.2.3 Configure Files and Script Command](#523-configure-files-and-script-command)
 - [6. Usage for OpenSearch Maintainers and Contributors](#6-usage-for-opensearch-maintainers-and-contributors)
   - [6.1. Changelog Workflow Process](#61-changelog-workflow-process)
-    - [6.1.1. Automatic Apporach Followed](#611-automatic-apporach-followed)
-    - [6.1.2. Manual Apporach Folled](#612-manual-apporach-folled)
+    - [6.1.1. Automatic Approach](#611-automatic-approach)
+    - [6.1.2. Manual Approach](#612-manual-approach)
   - [6.2. Release Notes Process](#62-release-notes-process)
 - [7. Mantainers](#7-mantainers)
 - [8. Contributing](#8-contributing)
@@ -371,25 +371,29 @@ These files, available in the [releaseNotesTemplates](./releaseNotesTemplates/) 
 
 ## 6. Usage for OpenSearch Maintainers and Contributors
 
-This section discusses how maintainers and contributors can use this new process in their daily days to take advantge of benefits the automatization implemented the creation of changelogs and release notes
+This section discusses how maintainers and contributors can utilize the **Automated Changelog and Release Notes Process**.
 
 ### 6.1. Changelog Workflow Process
 
-To make use of the changelog workflow when opening a PR, a contributor or maintainer can follow either an automatic or manual approach for commiting changeset files.
+To make use of the changelog workflow when opening a PR, a contributor or maintainer can choose between two options. First, they can install the `OpenSearch_Changeset_Bot` on their repository/repositories to give the **OpenSearch Changelog PR Bridge** permission to commit changeset files on their behalf. This option will be called the "automatic approach" below.
 
-#### 6.1.1. Automatic Apporach Followed
+Second, a contributor or maintainer can choose to commit their changeset files manually instead of authorizing the **OpenSearch Changelog PR Bridge** to do so on their behalf. This option is referred to below as the "manual approach".
 
-In order to use the **OpenSearch Changelog PR Bridge** service for automatic commit of changeset files in any of your OpenSearch forked repos:
+#### 6.1.1. Automatic Approach
+
+In order to use the **OpenSearch Changelog PR Bridge** service to commit changeset files on your behalf in any of your forked OpenSearch repositories:
 
 - Navigate to the [OpenSearch-bot](https://github.com/apps/opensearch-changeset-bot) installation page and click "Install".
-- Follow the instructions there and only install this App in all forked OpenSearch repositories where you want to have this feature activated.
 
-Once installed, go to the PR description and under the `## Changelog` section add the changelog entries detailing the changes suggested in your PR.
+- Follow the instructions there and install this App in the forked OpenSearch repositories where you want to have this feature activated.
 
-Below are the formatting standards for changelog entries in the `## Changelog`:
+Once the App has been installed and you open a PR, find the `## Changelog` section in the PR description template and add a changelog entry/entries detailing the changes introduced in your PR.
+
+Your entries in the `## Changelog` section must adhere to the following format:
 
 - Each entry line must begin with a hyphen (-) in the Markdown source file.
-- Contributors must categorize their changes by using one of the following prefixes, followed by a colon.
+  
+- Following the hyphen, enter the category prefix that best represents the changes you are introducing. This prefix must be followed by a colon. Only the following category prefixes may be used:
   - `breaking`
   - `chore`
   - `deprecate`
@@ -400,9 +404,12 @@ Below are the formatting standards for changelog entries in the `## Changelog`:
   - `refactor`
   - `security`
   - `test`
-- If the changes in a PR are minor (e.g., fixing a typo), contributors can enter `- skip` in the "Changelog" section to instruct the workflow not to generate a changeset file.
-  - If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present.
-- After the colon, contributors should provide a concise description of their changes. Descriptions must be 100 characters or less.
+
+- If the changes in a PR are minor (e.g., fixing a typo), you can enter `- skip` in the "Changelog" section to alert the `OpenSearch_Parse_Changelog_Action` that a changeset file is unnecessary.
+
+  - ****NOTE:** If `-skip` is entered in the "Changelog" section, no other categories or descriptions can be present in the section.
+
+- After the colon, provide a concise description of your changes, using the imperative mood. Descriptions must be 100 characters or less.
 
 Below is an example of valid entries in the `## Changelog` section of the PR description:
 
@@ -411,34 +418,36 @@ Below is an example of valid entries in the `## Changelog` section of the PR des
 
 <!--
 Add each of the changelog entries as a line item in this section. e.g.
-- fix: Updates the graph
-- feat: Adds a new feature
+- fix: Update the graph
+- feat: Add a new feature
 
 If this change does not need to added to the changelog, just add a single `skip` line e.g.
 - skip
 
 Valid prefixes: breaking, chore, deprecate, doc, feat, fix, infra, refactor, test
 
-Descriptions following the prefixes must be 50 characters or less
+Descriptions following the prefixes must be 100 characters or less
 -->
 
-- feat: Adds a new feature
-- refactor: Improves an existing feature
+- feat: Add a new feature
+- refactor: Improve an existing feature
 - test: Add unit testing to new feature
 - test: Update unit testing for existing feature
 ```
 
-Mantainers and contributors can add more than one entry if they are contributing to more than one type of PR prefix. Also, they do not need to delete the comment block in this section, although they can. If they leave the comment block, they should ensure that the changelog entries they add lie _outside_ of the comment block.
+You can add more than one entry if your changes fall under more than one category prefix or represent discrete changes within the same category prefix. 
 
-Once done adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run an create a changeset file in the `chagelog/fragments` directory as below:
+Also, you do not need to delete the comment block in the `## Changelog` section, although you can. If you leave the comment block, please ensure that the changelog entries you add lie _outside_ of the comment block.
+
+Once you are finished adding the changelog entries and submitting the PR, the `OpenSearch Changelog Workflow` will run and create a changeset file in the `chagelog/fragments` directory that will look like the following example:
 
 ```yaml
 # Changeset file 13.yml
 feat:
-  - Adds a new feature ([#13](https://github.com/.../pull/13))
+  - Add a new feature ([#13](https://github.com/.../pull/13))
 
 refactor:
-  - Improves an existing feature ([#13](https://github.com/.../pull/13))
+  - Improve an existing feature ([#13](https://github.com/.../pull/13))
 
 test:
   - Add unit testing to new feature ([#13](https://github.com/.../pull/13))
@@ -451,84 +460,45 @@ And the following update will appear in the PR conversation history:
 
 This changeset file will become part of the code that is merged when the PR is approved.
 
-If the workflow encounters a `- skip` line in the PR, and there are no other changelog entries present, it will skip instead the creation of a changeset file, and the workflow will terminate successfully with a label `skip-changelog` appearing as follows:
+If the Action encounters a `- skip` line in the PR, and there are no other changelog entries present, it will not create a changeset file. Instead, the process will add a `Skip-Changelog` label to the PR and terminate successfully:
 
 ![Skip_Changelog_Label_Commit_Message](./assets/Skip_Changelog_Label_Commit_Message.png)
 
-Lastly, if the workflow encounters an error (e.g., empty description for specific prefix), then the parsing process will fail, and a custom error message will be posted along side a `failed changeset` label:
+Lastly, if the Action encounters an error (e.g., the PR description includes a category prefix but no changelog entry), it will post a comment in the commit history identifying the error, add a `failed changeset` label to the PR, and terminate:
 
 ![Error_Comment_and_Failed_Changeset_Label_Commit_Message.png](./assets/Error_Comment_and_Failed_Changeset_Label_Commit_Message.png)
 
-A set of examples with entries resulting in errors are listed beneath:
+Below are examples of improperly-formatted changelog entries that will cause the Action to throw an error:
 
-```
-// Including "skip" with another category
+**1. Including `- skip` in addition to other categories:**
+```md
 - skip
-- feat: Adds a new feature
+- feat: Add a new feature
 ```
 
-```
-// Missing a hyphen
-feat: Adds a new feature
-```
-
-```
-// Invalid category prefix
-- new: Adds something new
+**2. Adding a category prefix without a preceding hyphen:**
+```md
+feat: Add a new feature
 ```
 
+**3. Using an invalid category prefix:**
+```md
+- new: Add something new
 ```
-// Missing description
+
+**4. Using a valid category prefix without an accompanying description:**
+```md
 - feat
 ```
 
-```
-// Description longer than 50 characters
-- feat: Adds a new feature that is simply too excellent to be described in 50 characters or less
-```
-
-The following flow chart, built using [Mermaid](https://mermaid.js.org/) syntax, illustrates the logic this workflow follows.
-
-```mermaid
-%%{init: {'themeVariables': { 'fontSize': '24px' }}}%%
-  flowchart TD;
-    A(Changelog \nWorkflow Starts) --> B{Changelog section\n present in PR?}
-    B --> |Yes| C[Extract changelog entries from\n'Changelog' section of PR]
-    B --> |No| D[InvalidChangelogHeadingError \nEmptyChangelogSectionError]
-    D --> E[Error messsage added as comment to PR]
-    E --> F(Workflow fails)
-    F --> G[Contributor edits PR]
-    G --> A
-    C --> H[Prepare changeset entry map]
-    H --> I{Entries in PR \nformatted correctly?}
-    I --> |Yes| J{'skip' in changeset \n entry map?}
-    I --> |No| K[ChangelogEntryMissingHyphenError\nInvalidPrefixError\nEmptyEntryDescriptionError\nEntryTooLongError]
-    K --> E
-    J --> |Yes| L{Is 'skip' the \nonly entry?}
-    J --> |No| M[Changset file created / updated]
-    M --> N(Workflow ends successfully)
-    L --> |Yes| O['skip-changelog' label added to PR]
-    O --> P[No changeset file created / updated]
-    P --> N
-    L --> |No| Q[CategoryWithSkipOptionError]
-    Q --> E
-
-    style A fill:#38bdf8,color:#0f172a
-    style B fill:#fbbf24,color:#0f172a
-    style D fill:#fb923c,color:#0f172a
-    style F fill:#ef4444,color:#f8fafc
-    style G fill:#c084fc,color:#0f172a
-    style I fill:#fbbf24,color:#0f172a
-    style J fill:#fbbf24,color:#0f172a
-    style K fill:#fb923c,color:#0f172a
-    style L fill:#fbbf24,color:#0f172a
-    style Q fill:#fb923c,color:#0f172a
-    style N fill:#4ade80,color:#0f172a
+**5. Including a description that is longer than 100 characters**
+```md
+- feat: Add a new feature that... [ > 100 characters]
 ```
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
-#### 6.1.2. Manual Apporach Folled
+#### 6.1.2. Manual Approach
 
 <img src="./assets/under-construction-warning-sign-vector.jpg" width="200">
 
