@@ -1,8 +1,8 @@
 import axios from "axios";
-import { 
+import {
   GITHUB_APP_DOMAIN,
   GITHUB_APP_BASE_URL,
-  CHANGELOG_PR_BRIDGE_SECRET_KEY, 
+  CHANGELOG_PR_BRIDGE_SECRET_KEY,
 } from "../config/constants.js";
 import {
   GitHubAppSuspendedOrNotInstalledError,
@@ -25,25 +25,26 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
+    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
-    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+    if (
+      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
+      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+    ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
-    const { data } = await axios.get(
-      `${GITHUB_APP_BASE_URL}/files`, 
-      {
-        headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
-        },
-        params: {
-          owner: owner,
-          repo: repo,
-          branch: branch,
-          path: path,
-        },
-      });
+    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+      },
+      params: {
+        owner: owner,
+        repo: repo,
+        branch: branch,
+        path: path,
+      },
+    });
 
     return {
       name: data.name,
@@ -57,7 +58,8 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       console.log(`File '${path}' not found.`);
       return;
     } else {
-      const errorMessage = error.response?.data?.error?.message || error.message;
+      const errorMessage =
+        error.response?.data?.error?.message || error.message;
       console.error(
         `Error fetching file from forked repo ${owner}/${branch}:`,
         errorMessage
@@ -65,7 +67,7 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       if (errorMessage.includes("GitHub App")) {
         throw new GitHubAppSuspendedOrNotInstalledError();
       }
-      throw new CreateOrUpdateContentError();
+      throw new GetContentError();
     }
   }
 };
@@ -89,25 +91,26 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
+    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
-    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+    if (
+      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
+      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+    ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
-    const { data } = await axios.get(
-      `${GITHUB_APP_BASE_URL}/directory/files`, 
-      {
-        headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
-        },
-        params: {
-          owner: owner,
-          repo: repo,
-          branch: branch,
-          path: directoryPath,
-        },
-      });
+    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+      },
+      params: {
+        owner: owner,
+        repo: repo,
+        branch: branch,
+        path: directoryPath,
+      },
+    });
     return data?.files || [];
   } catch (error) {
     const errorMessage = error.response?.data?.error?.message || error.message;
@@ -118,7 +121,7 @@ const getAllFilesFromForkedRepoByPath = async (
     if (errorMessage.includes("GitHub App")) {
       throw new GitHubAppSuspendedOrNotInstalledError();
     }
-    throw new CreateOrUpdateContentError();
+    throw new GetContentError();
   }
 };
 
@@ -142,10 +145,13 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
+    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
-    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+    if (
+      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
+      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+    ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
     const encodedContent = Buffer.from(content).toString("base64");
@@ -168,7 +174,10 @@ const createOrUpdateFileInForkedRepoByPath = async (
     console.log(message);
   } catch (error) {
     const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(`Error creating or updating file in forked repo ${owner}/${branch}:`, errorMessage);
+    console.error(
+      `Error creating or updating file in forked repo ${owner}/${branch}:`,
+      errorMessage
+    );
 
     if (errorMessage.includes("GitHub App")) {
       throw new GitHubAppSuspendedOrNotInstalledError();
@@ -195,26 +204,27 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
+    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
-    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+    if (
+      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
+      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+    ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
-    await axios.delete(
-      `${GITHUB_APP_BASE_URL}/files`, 
-      {
-        headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
-        },
-        data: { message: message },
-        params: {
-          owner: owner,
-          repo: repo,
-          branch: branch,
-          path: path,
-        },
-      });
+    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_SECRET_KEY,
+      },
+      data: { message: message },
+      params: {
+        owner: owner,
+        repo: repo,
+        branch: branch,
+        path: path,
+      },
+    });
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
@@ -226,7 +236,7 @@ const deleteFileInForkedRepoByPath = async (
     if (errorMessage.includes("GitHub App")) {
       throw new GitHubAppSuspendedOrNotInstalledError();
     }
-    throw new CreateOrUpdateContentError();
+    throw new DeleteContentError();
   }
 };
 
@@ -242,10 +252,13 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    if(!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === '') {
+    if (!GITHUB_APP_DOMAIN || GITHUB_APP_DOMAIN.trim() === "") {
       throw new MissingGitHubAppDomainError();
     }
-    if(!CHANGELOG_PR_BRIDGE_SECRET_KEY || CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === '') {
+    if (
+      !CHANGELOG_PR_BRIDGE_SECRET_KEY ||
+      CHANGELOG_PR_BRIDGE_SECRET_KEY.trim() === ""
+    ) {
       throw new MissingChangelogBridgeSecretKeyError();
     }
     const { data } = await axios.delete(
@@ -271,7 +284,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     if (errorMessage.includes("GitHub App")) {
       throw new GitHubAppSuspendedOrNotInstalledError();
     }
-    throw new CreateOrUpdateContentError();
+    throw new DeleteContentError();
   }
 }
 
