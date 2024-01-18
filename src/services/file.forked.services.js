@@ -10,7 +10,7 @@ import {
   CreateOrUpdateContentError,
   DeleteContentError,
   MissingGitHubAppDomainError,
-  MissingChangelogBridgeSecretKeyError,
+  MissingChangelogBridgeApiKeyError,
 } from "../errors/index.js";
 
 /**
@@ -32,7 +32,7 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       !CHANGELOG_PR_BRIDGE_API_KEY ||
       CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
-      throw new MissingChangelogBridgeSecretKeyError();
+      throw new MissingChangelogBridgeApiKeyError();
     }
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
@@ -98,7 +98,7 @@ const getAllFilesFromForkedRepoByPath = async (
       !CHANGELOG_PR_BRIDGE_API_KEY ||
       CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
-      throw new MissingChangelogBridgeSecretKeyError();
+      throw new MissingChangelogBridgeApiKeyError();
     }
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
       headers: {
@@ -152,7 +152,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
       !CHANGELOG_PR_BRIDGE_API_KEY ||
       CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
-      throw new MissingChangelogBridgeSecretKeyError();
+      throw new MissingChangelogBridgeApiKeyError();
     }
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
@@ -211,7 +211,7 @@ const deleteFileInForkedRepoByPath = async (
       !CHANGELOG_PR_BRIDGE_API_KEY ||
       CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
-      throw new MissingChangelogBridgeSecretKeyError();
+      throw new MissingChangelogBridgeApiKeyError();
     }
     await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
       headers: {
@@ -259,7 +259,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
       !CHANGELOG_PR_BRIDGE_API_KEY ||
       CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
     ) {
-      throw new MissingChangelogBridgeSecretKeyError();
+      throw new MissingChangelogBridgeApiKeyError();
     }
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,

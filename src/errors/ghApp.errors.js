@@ -38,7 +38,7 @@ export class MissingGitHubAppDomainError extends Error {
    */
   constructor() {
     const message = `The GITHUB_APP_DOMAIN constant is not set.
-    Please ensure the secret is configured in your repository.
+    Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.
 
     For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
@@ -52,11 +52,11 @@ export class MissingGitHubAppDomainError extends Error {
 }
 
 /**
- * Represents an error when the CHANGELOG_BRIDGE_SECRET_KEY constant is not set.
+ * Represents an error when the CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
  */
-export class MissingChangelogBridgeSecretKeyError extends Error {
+export class MissingChangelogBridgeApiKeyError extends Error {
   /**
-   * Constructs the MissingChangelogBridgeSecretKeyError instance.
+   * Constructs the MissingChangelogBridgeApiKeyError instance.
    */
   constructor() {
     const message = `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
