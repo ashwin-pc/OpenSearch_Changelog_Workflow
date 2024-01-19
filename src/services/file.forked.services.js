@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
   CHANGELOG_PR_BRIDGE_API_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
