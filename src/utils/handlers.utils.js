@@ -22,7 +22,7 @@ export const handleChangelogPRBridgeResponseError = (
       : "creating or updating";
   const errorMessage = error.response?.data?.error?.message || error.message;
   const statusCode = error.response?.status || error.status;
-  
+
   console.log(
     `Error ${operationVerb} file from forked repo ${owner}/${branch}:`,
     errorMessage
