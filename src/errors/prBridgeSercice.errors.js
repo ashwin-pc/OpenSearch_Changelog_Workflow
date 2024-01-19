@@ -38,10 +38,10 @@ export class MissingChangelogPrBridgeUrlDomainError extends Error {
    * Constructs the MissingChangelogPrBridgeUrlDomainError instance.
    */
   constructor() {
-    const message = `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set.
-    Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.
-
-    For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
+    const message =
+      `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set.
+    Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.\n\n` +
+      `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
     this.status = 422;
@@ -61,10 +61,10 @@ export class MissingChangelogPrBridgeApiKeyError extends Error {
    * Constructs the MissingChangelogPrBridgeApiKeyError instance.
    */
   constructor() {
-    const message = `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
-      Please ensure the key is configured in your repository as a Github Secret.
-
-      For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
+    const message =
+      `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
+      Please ensure the key is configured in your repository as a Github Secret.\n\n` +
+      `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
     this.status = 422;
