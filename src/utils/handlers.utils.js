@@ -21,12 +21,12 @@ export const handleChangelogPRBridgeResponseError = (
       ? "deleting"
       : "creating or updating";
   const errorMessage = error.response?.data?.error?.message || error.message;
-  console.log("error", error);
+  console.log("error", error.status);
   console.log(
     `Error ${operationVerb} file from forked repo ${owner}/${branch}:`,
     errorMessage
   );
-  switch (error.status) {
+  switch (error.statusCode) {
     case 404:
       console.error(`File '${path}' not found.`);
       return;
