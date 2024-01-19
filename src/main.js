@@ -121,7 +121,7 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-
+    console.log(error)
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
