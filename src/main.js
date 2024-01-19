@@ -149,14 +149,21 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-    await forkedFileServices.deleteFileInForkedRepoByPath(
-      headOwner,
-      headRepo,
-      headBranch,
-      changesetFilePath(prNumber),
-      commitMessage
-    );
+    if (
+      error.name !== "GitHubAppSuspendedOrNotInstalledError" ||
+      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" ||
+      error.name !== "MissingChangelogPullRequestBridgeApiKeyError" ||
+      error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
+    ) {
+      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+      await forkedFileServices.deleteFileInForkedRepoByPath(
+        headOwner,
+        headRepo,
+        headBranch,
+        changesetFilePath(prNumber),
+        commitMessage
+      );
+    }
 
     throw new Error("Changeset creation workflow failed.");
   }
