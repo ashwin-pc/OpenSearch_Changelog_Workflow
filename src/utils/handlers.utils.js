@@ -8,7 +8,8 @@ import {
 } from "../errors/index.js";
 
 export const handleChangelogPRBridgeResponseErrors = (error, crudOperation) => {
-  console.log(error.status)
+  console.log("error status: ", error.status);
+  console.log(error);
   switch (error.status) {
     case 404:
       console.error(`File '${path}' not found.`);
@@ -18,18 +19,15 @@ export const handleChangelogPRBridgeResponseErrors = (error, crudOperation) => {
     case 403:
       throw new GitHubAppSuspendedOrNotInstalledError();
     case 422:
-      if(error.name = "GitHubAppSuspendedOrNotInstalledError")
+      if ((error.name = "GitHubAppSuspendedOrNotInstalledError"))
         throw new MissingChangelogBridgeApiKeyError();
-      else
-        throw new CreateOrUpdateContentError();
+      else throw new CreateOrUpdateContentError();
     default:
       if (crudOperation === "READ") {
         throw new GetContentError();
-      }
-      else if (crudOperation === "DELETE") {
+      } else if (crudOperation === "DELETE") {
         throw new DeleteContentError();
-      }
-      else {
+      } else {
         throw new CreateOrUpdateContentError();
       }
   }
