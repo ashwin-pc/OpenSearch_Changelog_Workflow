@@ -3,15 +3,11 @@ import {
   CreateOrUpdateContentError,
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
-  UnauthorizedRequestToPRBridgeServiceError
-
+  UnauthorizedRequestToPRBridgeServiceError,
+  MissingChangelogBridgeApiKeyError,
 } from "../errors/index.js";
 
-export const handleChangelogPRBridgeResponseErrors = (
-  error,
-  crudOperation,
-) => {
-
+export const handleChangelogPRBridgeResponseErrors = (error, crudOperation) => {
   switch (error.status) {
     case 404:
       console.error(`File '${path}' not found.`);
@@ -20,18 +16,20 @@ export const handleChangelogPRBridgeResponseErrors = (
       throw new UnauthorizedRequestToPRBridgeServiceError();
     case 403:
       throw new GitHubAppSuspendedOrNotInstalledError();
+    case 422:
+      if(error.name = "GitHubAppSuspendedOrNotInstalledError")
+        throw new MissingChangelogBridgeApiKeyError();
+      else
+        throw new CreateOrUpdateContentError();
     default:
       if (crudOperation === "READ") {
         throw new GetContentError();
       }
-      else if (crudOperation === "CREATE_OR_UPDATE") {
-        throw new CreateOrUpdateContentError();
-      }
-      else if (crudOperation === "DELETE"){
+      else if (crudOperation === "DELETE") {
         throw new DeleteContentError();
       }
       else {
-        throw error;
+        throw new CreateOrUpdateContentError();
       }
   }
 };
