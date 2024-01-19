@@ -3,9 +3,9 @@ import {
   CreateOrUpdateContentError,
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
-  UnauthorizedRequestToPRBridgeServiceError,
-  MissingChangelogPrBridgeApiKeyError,
-  MissingChangelogPrBridgeUrlDomainError,
+  UnauthorizedRequestToPullRequestBridgeServiceError,
+  MissingChangelogPullRequestBridgeApiKeyError,
+  MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
 
 export const handleChangelogPRBridgeResponseError = (
@@ -32,14 +32,14 @@ export const handleChangelogPRBridgeResponseError = (
       console.error(`File '${path}' not found.`);
       return;
     case 401:
-      return new UnauthorizedRequestToPRBridgeServiceError();
+      return new UnauthorizedRequestToPullRequestBridgeServiceError();
     case 403:
       return new GitHubAppSuspendedOrNotInstalledError();
     case 422:
       if ((error.name = "GitHubAppSuspendedOrNotInstalledError")) {
-        return new MissingChangelogPrBridgeApiKeyError();
+        return new MissingChangelogPullRequestBridgeApiKeyError();
       } else {
-        return new MissingChangelogPrBridgeUrlDomainError();
+        return new MissingChangelogPullRequestBridgeUrlDomainError();
       }
     default:
       if (crudOperation === "READ") {

@@ -32,9 +32,9 @@ export class GitHubAppSuspendedOrNotInstalledError extends Error {
 /**
  * Represents an error when the CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set.
  */
-export class MissingChangelogPrBridgeUrlDomainError extends Error {
+export class MissingChangelogPullRequestBridgeUrlDomainError extends Error {
   /**
-   * Constructs the MissingChangelogPrBridgeUrlDomainError instance.
+   * Constructs the MissingChangelogPullRequestBridgeUrlDomainError instance.
    */
   constructor() {
     const message =
@@ -54,9 +54,9 @@ export class MissingChangelogPrBridgeUrlDomainError extends Error {
 /**
  * Represents an error when the CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
  */
-export class MissingChangelogPrBridgeApiKeyError extends Error {
+export class MissingChangelogPullRequestBridgeApiKeyError extends Error {
   /**
-   * Constructs the MissingChangelogPrBridgeApiKeyError instance.
+   * Constructs the MissingChangelogPullRequestBridgeApiKeyError instance.
    */
   constructor() {
     const message =
@@ -73,7 +73,7 @@ export class MissingChangelogPrBridgeApiKeyError extends Error {
   }
 }
 
-export class UnauthorizedRequestToPRBridgeServiceError extends Error {
+export class UnauthorizedRequestToPullRequestBridgeServiceError extends Error {
   /**
    * Constructs the UnauthorizedApiKeyError instance.
    */
