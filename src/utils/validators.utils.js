@@ -89,5 +89,3 @@ export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
     throw new MissingChangelogPrBridgeApiKeyError();
   }
 };
-
-export const isGitHubAppInstalledInForkedRepo = async (owner, repo) => {};
