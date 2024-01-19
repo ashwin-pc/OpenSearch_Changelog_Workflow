@@ -77,7 +77,7 @@ export const checkGithubAppDomainIsAvailable = () => {
     !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
     CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
   ) {
-    throw new MissingGitHubAppDomainError();
+    throw new MissingChangelogPrBridgeUrlDomainError();
   }
 };
 
