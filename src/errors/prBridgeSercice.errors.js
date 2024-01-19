@@ -56,9 +56,9 @@ export class MissingChangelogPrBridgeUrlDomainError extends Error {
 /**
  * Represents an error when the CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
  */
-export class MissingChangelogBridgeApiKeyError extends Error {
+export class MissingChangelogPrBridgeApiKeyError extends Error {
   /**
-   * Constructs the MissingChangelogBridgeApiKeyError instance.
+   * Constructs the MissingChangelogPrBridgeApiKeyError instance.
    */
   constructor() {
     const message = `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set.

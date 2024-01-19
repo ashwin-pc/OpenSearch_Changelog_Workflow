@@ -4,7 +4,7 @@ import {
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
   UnauthorizedRequestToPRBridgeServiceError,
-  MissingChangelogBridgeApiKeyError,
+  MissingChangelogPrBridgeApiKeyError,
   MissingChangelogPrBridgeUrlDomainError,
 } from "../errors/index.js";
 
@@ -21,7 +21,7 @@ export const handleChangelogPRBridgeResponseErrors = (error, crudOperation) => {
       throw new GitHubAppSuspendedOrNotInstalledError();
     case 422:
       if ((error.name = "GitHubAppSuspendedOrNotInstalledError")) {
-        throw new MissingChangelogBridgeApiKeyError();
+        throw new MissingChangelogPrBridgeApiKeyError();
       } else {
         throw new MissingChangelogPrBridgeUrlDomainError();
       }

@@ -12,6 +12,8 @@ import {
   EmptyEntryDescriptionError,
   EntryTooLongError,
   CategoryWithSkipOptionError,
+  MissingChangelogPrBridgeApiKeyError,
+  MissingChangelogPrBridgeUrlDomainError,
 } from "../errors/index.js";
 
 /**
