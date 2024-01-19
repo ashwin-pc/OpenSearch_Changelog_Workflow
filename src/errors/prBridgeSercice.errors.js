@@ -14,8 +14,7 @@ export class GitHubAppSuspendedOrNotInstalledError extends Error {
    */
   constructor() {
     const message =
-      `[${GITHUB_APP_NAME}](${GITHUB_APP_INSTALLATION_LINK}) is suspended or not installed in your forked repository. ` +
-      `Please ensure the app is installed and has the necessary permissions.` +
+      `[${GITHUB_APP_NAME}](${GITHUB_APP_INSTALLATION_LINK}) is suspended or not installed in your forked repository. Please ensure the app is installed and has the necessary permissions.` +
       `\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
@@ -39,8 +38,7 @@ export class MissingChangelogPrBridgeUrlDomainError extends Error {
    */
   constructor() {
     const message =
-      `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set.
-    Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.\n\n` +
+      `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set. Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
@@ -62,8 +60,7 @@ export class MissingChangelogPrBridgeApiKeyError extends Error {
    */
   constructor() {
     const message =
-      `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set.
-      Please ensure the key is configured in your repository as a Github Secret.\n\n` +
+      `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set. Please ensure the key is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
