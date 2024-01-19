@@ -122,7 +122,6 @@ async function run() {
     );
   } catch (error) {
 
-    console.log(error)
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR

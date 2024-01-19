@@ -9,8 +9,6 @@ import {
 } from "../errors/index.js";
 
 export const handleChangelogPRBridgeResponseErrors = (error, crudOperation) => {
-  console.log("error status: ", error.status);
-  console.log(error);
   switch (error.status) {
     case 404:
       console.error(`File '${path}' not found.`);
