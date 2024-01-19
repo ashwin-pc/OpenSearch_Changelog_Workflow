@@ -121,7 +121,6 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-    
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
@@ -150,16 +149,14 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    if (error.name !== "GitHubAppSuspendedOrNotInstalledError") {
-      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-      await forkedFileServices.deleteFileInForkedRepoByPath(
-        headOwner,
-        headRepo,
-        headBranch,
-        changesetFilePath(prNumber),
-        commitMessage
-      );
-    }
+    const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+    await forkedFileServices.deleteFileInForkedRepoByPath(
+      headOwner,
+      headRepo,
+      headBranch,
+      changesetFilePath(prNumber),
+      commitMessage
+    );
 
     throw new Error("Changeset creation workflow failed.");
   }
