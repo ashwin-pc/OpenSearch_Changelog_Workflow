@@ -19,7 +19,7 @@ export class GitHubAppSuspendedOrNotInstalledError extends Error {
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.statusCode = 403;
+    this.status = 403;
 
     /**
      * Indicates whether this error should trigger a comment in the pull request.
@@ -42,7 +42,7 @@ export class MissingChangelogPrBridgeUrlDomainError extends Error {
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.statusCode = 422;
+    this.status = 422;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
      * @type {boolean}
@@ -84,7 +84,7 @@ export class UnauthorizedRequestToPRBridgeServiceError extends Error {
       For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.statusCode = 401;
+    this.status = 401;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
      * @type {boolean}
