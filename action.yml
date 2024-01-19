@@ -5,10 +5,10 @@ inputs:
     description: "GitHub token for authentication"
     required: true
   CHANGELOG_PR_BRIDGE_URL_DOMAIN:
-    description: "URL domain for OpenSearch Chnagelog PR Bridge servie"
+    description: "URL domain for OpenSearch Chnagelog PR Bridge service"
     required: true
   CHANGELOG_PR_BRIDGE_API_KEY:
-    description: "API key for communicating for OpenSearch Changelog PR Bridge service"
+    description: "API key for communicating with OpenSearch Changelog PR Bridge service"
     required: true
 runs:
   using: "node16"
