@@ -21,7 +21,7 @@ export const handleChangelogPRBridgeResponseError = (
       ? "deleting"
       : "creating or updating";
   const errorMessage = error.response?.data?.error?.message || error.message;
-  console.log("error", error.status);
+  console.log("error", error.statusCode);
   console.log(
     `Error ${operationVerb} file from forked repo ${owner}/${branch}:`,
     errorMessage
