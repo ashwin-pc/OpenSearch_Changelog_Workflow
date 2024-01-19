@@ -87,7 +87,7 @@ export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
     !CHANGELOG_PR_BRIDGE_API_KEY ||
     CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
   ) {
-    console.log('CHANGELOG_PR_BRIDGE_API_KEY:', CHANGELOG_PR_BRIDGE_API_KEY')
+    console.log('CHANGELOG_PR_BRIDGE_API_KEY:', CHANGELOG_PR_BRIDGE_API_KEY)
     throw new MissingChangelogPrBridgeApiKeyError();
   }
 };
