@@ -4,16 +4,11 @@ import {
   CHANGELOG_PR_BRIDGE_API_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
-import {
-  GitHubAppSuspendedOrNotInstalledError,
-  GetContentError,
-  CreateOrUpdateContentError,
-  DeleteContentError,
-} from "../errors/index.js";
+
 import {
   checkGithubAppDomainIsAvailable,
   checkChangelogPrBridgeApiKeyIsAvailable,
-  handleChangelogPRBridgeResponseErrors,
+  handleChangelogPRBridgeResponseError,
 } from "../utils/index.js";
 /**
  * Get a file in a given path in a forked GitHub repository.
@@ -52,12 +47,15 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
-    const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(
-      `Error fetching file from forked repo ${owner}/${branch}:`,
-      errorMessage
+    const errorToThrow = handleChangelogPRBridgeResponseError(
+      error,
+      owner,
+      branch,
+      "READ"
     );
-    handleChangelogPRBridgeResponseErrors(error, "READ");
+    if (errorToThrow) {
+      throw errorToThrow;
+    }
   }
 };
 
@@ -98,12 +96,15 @@ const getAllFilesFromForkedRepoByPath = async (
     );
     return data?.files || [];
   } catch (error) {
-    const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(
-      `Error fetching file from forked repo ${owner}/${branch}:`,
-      errorMessage
+    const errorToThrow = handleChangelogPRBridgeResponseError(
+      error,
+      owner,
+      branch,
+      "READ"
     );
-    handleChangelogPRBridgeResponseErrors(error, "READ");
+    if (errorToThrow) {
+      throw errorToThrow;
+    }
   }
 };
 
@@ -148,13 +149,15 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    console.log(error);
-    const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(
-      `Error creating/updating file in forked repo ${owner}/${branch}:`,
-      errorMessage
+    const errorToThrow = handleChangelogPRBridgeResponseError(
+      error,
+      owner,
+      branch,
+      "CREATE_OR_UPDATE"
     );
-    handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE");
+    if (errorToThrow) {
+      throw errorToThrow;
+    }
   }
 };
 
@@ -193,12 +196,15 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
-    const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(
-      `Error deleting file from forked repo ${owner}/${branch}:`,
-      errorMessage
+    const errorToThrow = handleChangelogPRBridgeResponseError(
+      error,
+      owner,
+      branch,
+      "DELETE"
     );
-    handleChangelogPRBridgeResponseErrors(error, "DELETE");
+    if (errorToThrow) {
+      throw errorToThrow;
+    }
   }
 };
 
@@ -234,12 +240,15 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-    const errorMessage = error.response?.data?.error?.message || error.message;
-    console.error(
-      `Error deleting file from forked repo ${owner}/${branch}:`,
-      errorMessage
+    const errorToThrow = handleChangelogPRBridgeResponseError(
+      error,
+      owner,
+      branch,
+      "DELETE"
     );
-    handleChangelogPRBridgeResponseErrors(error, "DELETE");
+    if (errorToThrow) {
+      throw errorToThrow;
+    }
   }
 }
 
