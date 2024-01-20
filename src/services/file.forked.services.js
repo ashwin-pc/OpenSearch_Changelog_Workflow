@@ -1,12 +1,20 @@
 import axios from "axios";
-import { GITHUB_APP_BASE_URL } from "../config/constants.js";
+import {
+  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
+  GITHUB_APP_BASE_URL,
+  CHANGELOG_PR_BRIDGE_API_KEY,
+} from "../config/constants.js";
 import {
   GitHubAppSuspendedOrNotInstalledError,
   GetContentError,
   CreateOrUpdateContentError,
   DeleteContentError,
 } from "../errors/index.js";
-
+import {
+  checkGithubAppDomainIsAvailable,
+  checkChangelogPrBridgeApiKeyIsAvailable,
+  handleChangelogPRBridgeResponseErrors,
+} from "../utils/index.js";
 /**
  * Get a file in a given path in a forked GitHub repository.
  *
@@ -19,7 +27,12 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+      },
       params: {
         owner: owner,
         repo: repo,
@@ -36,18 +49,12 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
-    if (error.status === 404) {
-      console.log(`File '${path}' not found.`);
-      return;
-    } else {
-      console.error(
-        `Error fetching file from forked repo ${owner}/${branch}:`,
-        error.message
-      );
-      throw error.status === 403 || error.status === 401
-        ? new GitHubAppSuspendedOrNotInstalledError()
-        : new CreateOrUpdateContentError();
-    }
+    const errorMessage = error.response?.data?.error?.message || error.message;
+    console.error(
+      `Error fetching file from forked repo ${owner}/${branch}:`,
+      errorMessage
+    );
+    handleChangelogPRBridgeResponseErrors(error, "READ");
   }
 };
 
@@ -70,7 +77,12 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+      },
       params: {
         owner: owner,
         repo: repo,
@@ -80,13 +92,12 @@ const getAllFilesFromForkedRepoByPath = async (
     });
     return data?.files || [];
   } catch (error) {
+    const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
-      `Error fetching directory contents from forked repo ${owner}/${branch}:`,
-      error.message
+      `Error fetching file from forked repo ${owner}/${branch}:`,
+      errorMessage
     );
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    handleChangelogPRBridgeResponseErrors(error, "READ");
   }
 };
 
@@ -110,11 +121,16 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${GITHUB_APP_BASE_URL}/files`,
       { content: encodedContent, message: message },
       {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+        },
         params: {
           owner: owner,
           repo: repo,
@@ -126,13 +142,12 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    const errorMessage = error.response?.data?.message || error.message;
-    console.error(`Error in ${owner}/${branch}:`, errorMessage);
-
-    const status = error.response?.status;
-    throw status === 403 || status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    const errorMessage = error.response?.data?.error?.message || error.message;
+    console.error(
+      `Error creating/updating file in forked repo ${owner}/${branch}:`,
+      errorMessage
+    );
+    handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE");
   }
 };
 
@@ -154,7 +169,12 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
+      headers: {
+        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+      },
       data: { message: message },
       params: {
         owner: owner,
@@ -166,13 +186,12 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
+    const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
-      `Error deleting file in forked repo ${owner}/${branch}:`,
-      error.message
+      `Error deleting file from forked repo ${owner}/${branch}:`,
+      errorMessage
     );
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    handleChangelogPRBridgeResponseErrors(error, "DELETE");
   }
 };
 
@@ -188,9 +207,14 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
+    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.delete(
       `${GITHUB_APP_BASE_URL}/directory/files`,
       {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+        },
         data: { message: message },
         params: {
           owner: owner,
@@ -203,10 +227,12 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-    console.error("Error deleting file:", error.message);
-    throw error.status === 403 || error.status === 401
-      ? new GitHubAppSuspendedOrNotInstalledError()
-      : new CreateOrUpdateContentError();
+    const errorMessage = error.response?.data?.error?.message || error.message;
+    console.error(
+      `Error deleting file from forked repo ${owner}/${branch}:`,
+      errorMessage
+    );
+    handleChangelogPRBridgeResponseErrors(error, "DELETE");
   }
 }
 

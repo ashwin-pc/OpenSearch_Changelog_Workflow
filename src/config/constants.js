@@ -3,15 +3,18 @@ import dotenv from "dotenv";
 // Load environment variables from .env file
 dotenv.config();
 
-export const GITHUB_APP_DOMAIN =  "https://open-search-changeset-bot.vercel.app";
+export const CHANGELOG_PR_BRIDGE_URL_DOMAIN = process.env.INPUT_CHANGELOG_PR_BRIDGE_URL_DOMAIN;
 export const API_PATH_SUFFIX = "/api/v1";
-export const GITHUB_APP_BASE_URL = `${GITHUB_APP_DOMAIN}${API_PATH_SUFFIX}`;
+export const GITHUB_APP_BASE_URL = `${CHANGELOG_PR_BRIDGE_URL_DOMAIN}${API_PATH_SUFFIX}`;
 
-export const GITHUB_APP_NAME = "Auto Changeset Commmit App";
+export const CHANGELOG_PR_BRIDGE_API_KEY =
+  process.env.INPUT_CHANGELOG_PR_BRIDGE_API_KEY;
+
+export const GITHUB_APP_NAME = "Auto Changeset Commit App";
 export const GITHUB_APP_INSTALLATION_LINK =
   "https://github.com/apps/opensearch-changeset-bot";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME =
-  "OpenSeach Auto Changeset and Release Notes Tool";
+  "OpenSearch Auto Changeset and Release Notes Tool";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS =
   "https://github.com/BigSamu/OpenSearch_Parse_Changelog_Action";
 

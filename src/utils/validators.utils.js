@@ -72,7 +72,20 @@ export const isSkipEntry = (entryMap) => {
   }
 };
 
+export const checkGithubAppDomainIsAvailable = () => {
+  if (
+    !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
+    CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
+  ) {
+    throw new MissingChangelogPrBridgeUrlDomainError();
+  }
+};
 
-export const isGitHubAppInstalledInForkedRepo = async (owner, repo) => {
-  
+export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
+  if (
+    !CHANGELOG_PR_BRIDGE_API_KEY ||
+    CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
+  ) {
+    throw new MissingChangelogPrBridgeApiKeyError();
+  }
 };

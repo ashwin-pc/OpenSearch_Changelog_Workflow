@@ -4,10 +4,12 @@ inputs:
   token:
     description: "GitHub token for authentication"
     required: true
-  changeset_path:
-    description: "Path where the changeset files will be added"
-    # required: true
-    default: "changeset/fragments"
+  CHANGELOG_PR_BRIDGE_URL_DOMAIN:
+    description: "URL domain for OpenSearch Chnagelog PR Bridge service"
+    required: true
+  CHANGELOG_PR_BRIDGE_API_KEY:
+    description: "API key for communicating with OpenSearch Changelog PR Bridge service"
+    required: true
 runs:
   using: "node16"
   main: "src/main.js"
