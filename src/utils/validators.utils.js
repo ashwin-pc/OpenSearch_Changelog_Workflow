@@ -2,6 +2,8 @@ import {
   MAX_ENTRY_LENGTH,
   CHANGELOG_ENTRY_PREFIXES,
   ENTRY_FORMATTING_PATTERN_REGEX,
+  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
+  CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
 
 import {
@@ -10,6 +12,8 @@ import {
   EmptyEntryDescriptionError,
   EntryTooLongError,
   CategoryWithSkipOptionError,
+  MissingChangelogPullRequestBridgeApiKeyError,
+  MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
 
 /**
@@ -77,7 +81,11 @@ export const checkGithubAppDomainIsAvailable = () => {
     !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
     CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
   ) {
-    throw new MissingChangelogPrBridgeUrlDomainError();
+    console.log(
+      "CHANGELOG_PR_BRIDGE_URL_DOMAIN:",
+      CHANGELOG_PR_BRIDGE_URL_DOMAIN
+    );
+    throw new MissingChangelogPullRequestBridgeUrlDomainError();
   }
 };
 
@@ -86,6 +94,7 @@ export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
     !CHANGELOG_PR_BRIDGE_API_KEY ||
     CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
   ) {
-    throw new MissingChangelogPrBridgeApiKeyError();
+    console.log("CHANGELOG_PR_BRIDGE_API_KEY:", CHANGELOG_PR_BRIDGE_API_KEY);
+    throw new MissingChangelogPullRequestBridgeApiKeyError();
   }
 };

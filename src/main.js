@@ -121,7 +121,6 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
@@ -150,7 +149,13 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    if (error.name !== "GitHubAppSuspendedOrNotInstalledError") {
+    console.log(error.name);
+    if (
+      error.name !== "GitHubAppSuspendedOrNotInstalledError" &&
+      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
+      error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
+      error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
+    ) {
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       await forkedFileServices.deleteFileInForkedRepoByPath(
         headOwner,
