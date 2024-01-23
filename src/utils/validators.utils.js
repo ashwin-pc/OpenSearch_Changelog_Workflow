@@ -76,7 +76,7 @@ export const isSkipEntry = (entryMap) => {
   }
 };
 
-export const checkGithubAppDomainIsAvailable = () => {
+export const checkChangelogPrBridgeUrlDomainIsConfigured = () => {
   if (
     !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
     CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""

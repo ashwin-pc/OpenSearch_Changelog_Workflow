@@ -5,7 +5,7 @@ import {
 } from "../config/constants.js";
 
 import {
-  checkGithubAppDomainIsAvailable,
+  checkChangelogPrBridgeUrlDomainIsConfigured,
   checkChangelogPrBridgeApiKeyIsAvailable,
   handleChangelogPRBridgeResponseError,
 } from "../utils/index.js";
@@ -21,7 +21,7 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
     checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
@@ -77,7 +77,7 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
     checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
@@ -127,7 +127,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
     checkChangelogPrBridgeApiKeyIsAvailable();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
@@ -178,7 +178,7 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
     checkChangelogPrBridgeApiKeyIsAvailable();
     await axios.delete(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`, {
       headers: {
@@ -219,7 +219,7 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    checkGithubAppDomainIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
     checkChangelogPrBridgeApiKeyIsAvailable();
     const { data } = await axios.delete(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
