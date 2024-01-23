@@ -36,7 +36,7 @@ export const handleChangelogPRBridgeResponseError = (
     case 403:
       return new GitHubAppSuspendedOrNotInstalledError();
     case 422:
-      if ((error.name = "GitHubAppSuspendedOrNotInstalledError")) {
+      if (error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
         return new MissingChangelogPullRequestBridgeApiKeyError();
       } else {
         return new MissingChangelogPullRequestBridgeUrlDomainError();
