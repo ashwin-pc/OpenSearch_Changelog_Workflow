@@ -18,7 +18,7 @@ const getOctokitClient = () => {
     const octokit = github.getOctokit(GITHUB_TOKEN);
     return octokit;
   } catch (error) {
-    console.error('Error getting ocktokit client:', error.message);
+    console.error('Error getting Octokit client:', error.message);
     throw error; // Re-throw the error to propagate it to the caller.
   }
 };

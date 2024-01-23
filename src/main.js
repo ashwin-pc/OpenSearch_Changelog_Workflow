@@ -23,7 +23,7 @@ import {
 
 async function run() {
   // Initialize Octokit client with the GitHub token
-  const octokit = authServices.getOcktokitClient();
+  const octokit = authServices.getOctokitClient();
 
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
