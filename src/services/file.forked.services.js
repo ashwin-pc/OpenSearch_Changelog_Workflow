@@ -6,7 +6,7 @@ import {
 
 import {
   checkChangelogPrBridgeUrlDomainIsConfigured,
-  checkChangelogPrBridgeApiKeyIsAvailable,
+  checkChangelogPrBridgeApiKeyIsConfigured,
   handleChangelogPRBridgeResponseError,
 } from "../utils/index.js";
 /**
@@ -22,7 +22,7 @@ import {
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
     checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       {
@@ -78,7 +78,7 @@ const getAllFilesFromForkedRepoByPath = async (
 ) => {
   try {
     checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
@@ -128,7 +128,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
 ) => {
   try {
     checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
@@ -179,7 +179,7 @@ const deleteFileInForkedRepoByPath = async (
 ) => {
   try {
     checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     await axios.delete(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -220,7 +220,7 @@ const deleteFileInForkedRepoByPath = async (
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
     checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.delete(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {

@@ -89,7 +89,7 @@ export const checkChangelogPrBridgeUrlDomainIsConfigured = () => {
   }
 };
 
-export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
+export const checkChangelogPrBridgeApiKeyIsConfigured = () => {
   if (
     !CHANGELOG_PR_BRIDGE_API_KEY ||
     CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
