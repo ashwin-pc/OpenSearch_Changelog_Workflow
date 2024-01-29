@@ -77,7 +77,7 @@ export class UnauthorizedRequestToPullRequestBridgeServiceError extends Error {
    */
   constructor() {
     const message =
-      `Unauthorized request to **OpenSearch Changelog PR Bridge** service.Please ensure the correct API key is configured in your repository as a Github Secret.\n\n` +
+      `Unauthorized request to **OpenSearch Changelog PR Bridge** service. Please ensure the correct API key is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
