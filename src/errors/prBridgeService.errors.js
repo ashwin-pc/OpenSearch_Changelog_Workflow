@@ -64,7 +64,7 @@ export class MissingChangelogPullRequestBridgeApiKeyError extends Error {
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.statusCode = 422;
+    this.status = 422;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
      * @type {boolean}
