@@ -149,7 +149,6 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    console.log(error.name);
     if (
       error.name !== "GitHubAppSuspendedOrNotInstalledError" &&
       error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
