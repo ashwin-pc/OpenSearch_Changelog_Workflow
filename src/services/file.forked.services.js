@@ -46,15 +46,18 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
-    console.error("ERROR NAME:", error.name);
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "READ"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -96,15 +99,18 @@ const getAllFilesFromForkedRepoByPath = async (
     );
     return data?.files || [];
   } catch (error) {
-    console.error("ERROR NAME:", error.name);
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "READ"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -150,15 +156,18 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    console.error("ERROR NAME:", error.name);
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "CREATE_OR_UPDATE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "CREATE_OR_UPDATE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -198,15 +207,18 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
-    console.error("ERROR NAME:", error.name);
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "DELETE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -243,15 +255,18 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-    console.error("ERROR NAME:", error.name);
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "DELETE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 }
