@@ -4,8 +4,6 @@ import {
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
   UnauthorizedRequestToPullRequestBridgeServiceError,
-  MissingChangelogPullRequestBridgeApiKeyError,
-  MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
 
 export const handleChangelogPRBridgeResponseError = (
