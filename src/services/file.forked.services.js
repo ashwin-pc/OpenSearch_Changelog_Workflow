@@ -46,6 +46,7 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
+    console.error("ERROR NAME:", error.name);
     const errorToThrow = handleChangelogPRBridgeResponseError(
       error,
       owner,
