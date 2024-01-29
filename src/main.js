@@ -164,8 +164,7 @@ async function run() {
         commitMessage
       );
     }
-
-    // throw new Error("Changeset creation workflow failed.");
+    throw new Error("Changeset creation workflow failed.");
   }
 }
 
