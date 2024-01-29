@@ -96,6 +96,7 @@ const getAllFilesFromForkedRepoByPath = async (
     );
     return data?.files || [];
   } catch (error) {
+    console.error("ERROR NAME:", error.name);
     const errorToThrow = handleChangelogPRBridgeResponseError(
       error,
       owner,
@@ -149,6 +150,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
+    console.error("ERROR NAME:", error.name);
     const errorToThrow = handleChangelogPRBridgeResponseError(
       error,
       owner,
@@ -196,6 +198,7 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
+    console.error("ERROR NAME:", error.name);
     const errorToThrow = handleChangelogPRBridgeResponseError(
       error,
       owner,
@@ -240,6 +243,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
+    console.error("ERROR NAME:", error.name);
     const errorToThrow = handleChangelogPRBridgeResponseError(
       error,
       owner,
