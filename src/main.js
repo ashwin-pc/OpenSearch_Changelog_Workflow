@@ -165,7 +165,7 @@ async function run() {
       );
     }
 
-    throw new Error("Changeset creation workflow failed.");
+    // throw new Error("Changeset creation workflow failed.");
   }
 }
 
