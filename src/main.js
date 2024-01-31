@@ -23,7 +23,7 @@ import {
 
 async function run() {
   // Initialize Octokit client with the GitHub token
-  const octokit = authServices.getOcktokitClient();
+  const octokit = authServices.getOctokitClient();
 
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
@@ -149,7 +149,6 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    console.log(error.name);
     if (
       error.name !== "GitHubAppSuspendedOrNotInstalledError" &&
       error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
@@ -165,7 +164,6 @@ async function run() {
         commitMessage
       );
     }
-
     throw new Error("Changeset creation workflow failed.");
   }
 }

@@ -4,8 +4,6 @@ import {
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
   UnauthorizedRequestToPullRequestBridgeServiceError,
-  MissingChangelogPullRequestBridgeApiKeyError,
-  MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
 
 export const handleChangelogPRBridgeResponseError = (
@@ -35,12 +33,6 @@ export const handleChangelogPRBridgeResponseError = (
       return new UnauthorizedRequestToPullRequestBridgeServiceError();
     case 403:
       return new GitHubAppSuspendedOrNotInstalledError();
-    case 422:
-      if ((error.name = "GitHubAppSuspendedOrNotInstalledError")) {
-        return new MissingChangelogPullRequestBridgeApiKeyError();
-      } else {
-        return new MissingChangelogPullRequestBridgeUrlDomainError();
-      }
     default:
       if (crudOperation === "READ") {
         return new GetContentError();

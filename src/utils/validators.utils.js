@@ -76,25 +76,24 @@ export const isSkipEntry = (entryMap) => {
   }
 };
 
-export const checkGithubAppDomainIsAvailable = () => {
+export const checkChangelogPrBridgeUrlDomainIsConfigured = () => {
   if (
     !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
     CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
   ) {
-    console.log(
-      "CHANGELOG_PR_BRIDGE_URL_DOMAIN:",
-      CHANGELOG_PR_BRIDGE_URL_DOMAIN
+    console.error(
+      "CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not configured."
     );
     throw new MissingChangelogPullRequestBridgeUrlDomainError();
   }
 };
 
-export const checkChangelogPrBridgeApiKeyIsAvailable = () => {
+export const checkChangelogPrBridgeApiKeyIsConfigured = () => {
   if (
     !CHANGELOG_PR_BRIDGE_API_KEY ||
     CHANGELOG_PR_BRIDGE_API_KEY.trim() === ""
   ) {
-    console.log("CHANGELOG_PR_BRIDGE_API_KEY:", CHANGELOG_PR_BRIDGE_API_KEY);
+    console.error("CHANGELOG_PR_BRIDGE_API_KEY constant is not configured.");
     throw new MissingChangelogPullRequestBridgeApiKeyError();
   }
 };

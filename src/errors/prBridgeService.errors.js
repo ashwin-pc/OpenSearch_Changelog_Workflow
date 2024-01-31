@@ -38,11 +38,10 @@ export class MissingChangelogPullRequestBridgeUrlDomainError extends Error {
    */
   constructor() {
     const message =
-      `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set. Please ensure the domain url for the **Github Changelog Bot** is configured in your repository as a Github Secret.\n\n` +
+      `The CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not set. Please ensure that this URL is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.status = 422;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
      * @type {boolean}
@@ -60,11 +59,10 @@ export class MissingChangelogPullRequestBridgeApiKeyError extends Error {
    */
   constructor() {
     const message =
-      `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set. Please ensure the key is configured in your repository as a Github Secret.\n\n` +
+      `The CHANGELOG_PR_BRIDGE_API_KEY constant is not set. Please ensure that this key is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;
-    this.statusCode = 422;
     /**
      * Indicates whether this error should trigger a comment in the pull request.
      * @type {boolean}
@@ -79,7 +77,7 @@ export class UnauthorizedRequestToPullRequestBridgeServiceError extends Error {
    */
   constructor() {
     const message =
-      `Unauthorized request to **OpenSearch Changelog PR Bridge** service.Please ensure the correct API key is configured in your repository as a Github Secret.\n\n` +
+      `Unauthorized request to **OpenSearch Changelog PR Bridge** service. Please ensure the correct API key is configured in your repository as a Github Secret.\n\n` +
       `For more information, visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     super(message);
     this.name = this.constructor.name;

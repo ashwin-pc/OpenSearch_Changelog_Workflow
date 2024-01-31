@@ -5,8 +5,8 @@ import {
 } from "../config/constants.js";
 
 import {
-  checkGithubAppDomainIsAvailable,
-  checkChangelogPrBridgeApiKeyIsAvailable,
+  checkChangelogPrBridgeUrlDomainIsConfigured,
+  checkChangelogPrBridgeApiKeyIsConfigured,
   handleChangelogPRBridgeResponseError,
 } from "../utils/index.js";
 /**
@@ -21,8 +21,8 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       {
@@ -46,14 +46,18 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "READ"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -77,8 +81,8 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
@@ -95,14 +99,18 @@ const getAllFilesFromForkedRepoByPath = async (
     );
     return data?.files || [];
   } catch (error) {
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "READ"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -127,8 +135,8 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
@@ -148,14 +156,18 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "CREATE_OR_UPDATE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "CREATE_OR_UPDATE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -178,8 +190,8 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     await axios.delete(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -195,14 +207,18 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "DELETE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 };
@@ -219,8 +235,8 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.delete(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
@@ -239,14 +255,18 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-    const errorToThrow = handleChangelogPRBridgeResponseError(
-      error,
-      owner,
-      branch,
-      "DELETE"
-    );
-    if (errorToThrow) {
-      throw errorToThrow;
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
     }
   }
 }
