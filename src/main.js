@@ -23,7 +23,7 @@ import {
 
 async function run() {
   // Initialize Octokit client with the GitHub token
-  const octokit = authServices.getOcktokitClient();
+  const octokit = authServices.getOctokitClient();
 
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
   let baseOwner,
@@ -121,7 +121,6 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
@@ -150,7 +149,12 @@ async function run() {
     );
 
     // Delete changeset file if one was previously created
-    if (error.name !== "GitHubAppSuspendedOrNotInstalledError") {
+    if (
+      error.name !== "GitHubAppSuspendedOrNotInstalledError" &&
+      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
+      error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
+      error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
+    ) {
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       await forkedFileServices.deleteFileInForkedRepoByPath(
         headOwner,
@@ -160,7 +164,6 @@ async function run() {
         commitMessage
       );
     }
-
     throw new Error("Changeset creation workflow failed.");
   }
 }

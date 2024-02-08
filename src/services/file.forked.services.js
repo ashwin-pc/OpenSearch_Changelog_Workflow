@@ -1,19 +1,13 @@
 import axios from "axios";
 import {
-  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
-  GITHUB_APP_BASE_URL,
+  CHANGELOG_PR_BRIDGE_API_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
 } from "../config/constants.js";
+
 import {
-  GitHubAppSuspendedOrNotInstalledError,
-  GetContentError,
-  CreateOrUpdateContentError,
-  DeleteContentError,
-} from "../errors/index.js";
-import {
-  checkGithubAppDomainIsAvailable,
-  checkChangelogPrBridgeApiKeyIsAvailable,
-  handleChangelogPRBridgeResponseErrors,
+  checkChangelogPrBridgeUrlDomainIsConfigured,
+  checkChangelogPrBridgeApiKeyIsConfigured,
+  handleChangelogPRBridgeResponseError,
 } from "../utils/index.js";
 /**
  * Get a file in a given path in a forked GitHub repository.
@@ -27,19 +21,22 @@ import {
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
-    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/files`, {
-      headers: {
-        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
-      },
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: path,
-      },
-    });
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
+    const { data } = await axios.get(
+      `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
+      {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+        },
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: path,
+        },
+      }
+    );
 
     return {
       name: data.name,
@@ -49,12 +46,28 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
+<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "READ", path);
+=======
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
+    }
+>>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -77,27 +90,46 @@ const getAllFilesFromForkedRepoByPath = async (
   directoryPath
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
-    const { data } = await axios.get(`${GITHUB_APP_BASE_URL}/directory/files`, {
-      headers: {
-        "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
-      },
-      params: {
-        owner: owner,
-        repo: repo,
-        branch: branch,
-        path: directoryPath,
-      },
-    });
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
+    const { data } = await axios.get(
+      `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
+      {
+        headers: {
+          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
+        },
+        params: {
+          owner: owner,
+          repo: repo,
+          branch: branch,
+          path: directoryPath,
+        },
+      }
+    );
     return data?.files || [];
   } catch (error) {
+<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "READ", directoryPath);
+=======
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "READ"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
+    }
+>>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -121,11 +153,11 @@ const createOrUpdateFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
-      `${GITHUB_APP_BASE_URL}/files`,
+      `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       { content: encodedContent, message: message },
       {
         headers: {
@@ -142,12 +174,28 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
+<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error creating/updating file in forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE", path);
+=======
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "CREATE_OR_UPDATE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
+    }
+>>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -169,9 +217,9 @@ const deleteFileInForkedRepoByPath = async (
   message
 ) => {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
-    await axios.delete(`${GITHUB_APP_BASE_URL}/files`, {
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
+    await axios.delete(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
       },
@@ -186,12 +234,28 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
+<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "DELETE", path);
+=======
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
+    }
+>>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -207,10 +271,10 @@ const deleteFileInForkedRepoByPath = async (
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
   try {
-    checkGithubAppDomainIsAvailable();
-    checkChangelogPrBridgeApiKeyIsAvailable();
+    checkChangelogPrBridgeUrlDomainIsConfigured();
+    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.delete(
-      `${GITHUB_APP_BASE_URL}/directory/files`,
+      `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
         headers: {
           "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -227,12 +291,28 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
+<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "DELETE", directoryPath);
+=======
+    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
+      throw error;
+    } else {
+      const errorToThrow = handleChangelogPRBridgeResponseError(
+        error,
+        owner,
+        branch,
+        "DELETE"
+      );
+      if (errorToThrow) {
+        throw errorToThrow;
+      }
+    }
+>>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 }
 
