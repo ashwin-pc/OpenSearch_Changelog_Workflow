@@ -71,7 +71,7 @@ export class MissingChangelogPullRequestBridgeApiKeyError extends Error {
   }
 }
 
-export class UnauthorizedRequestToPullRequestBridgeServiceError extends Error {
+export class UnauthorizedRequestToPRBridgeServiceError extends Error {
   /**
    * Constructs the UnauthorizedApiKeyError instance.
    */
