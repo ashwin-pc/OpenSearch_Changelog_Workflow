@@ -54,7 +54,7 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    handleChangelogPRBridgeResponseErrors(error, "READ");
+    handleChangelogPRBridgeResponseErrors(error, "READ", path);
   }
 };
 
@@ -97,7 +97,7 @@ const getAllFilesFromForkedRepoByPath = async (
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    handleChangelogPRBridgeResponseErrors(error, "READ");
+    handleChangelogPRBridgeResponseErrors(error, "READ", directoryPath);
   }
 };
 
@@ -147,7 +147,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
       `Error creating/updating file in forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE");
+    handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE", path);
   }
 };
 
@@ -191,7 +191,7 @@ const deleteFileInForkedRepoByPath = async (
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    handleChangelogPRBridgeResponseErrors(error, "DELETE");
+    handleChangelogPRBridgeResponseErrors(error, "DELETE", path);
   }
 };
 
@@ -232,7 +232,7 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
-    handleChangelogPRBridgeResponseErrors(error, "DELETE");
+    handleChangelogPRBridgeResponseErrors(error, "DELETE", directoryPath);
   }
 }
 

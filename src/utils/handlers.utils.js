@@ -10,11 +10,12 @@ import {
 export const handleChangelogPRBridgeResponseErrors = (
   error,
   crudOperation,
+  path
 ) => {
 
   switch (error.status) {
     case 404:
-      console.error(`File '${path}' not found.`);
+      console.error(`File/Directory '${path}' not found.`);
       return;
     case 401:
       throw new UnauthorizedRequestToPRBridgeServiceError();
