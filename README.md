@@ -66,7 +66,7 @@ The **Automated Changelog and Release Notes Process** presented here improves bo
 
 Without the automated process, henever a contributor opens a new PR, they are prompted to indicate whether or not they have manually added an entry to the `CHANGELOG.md` file. However, since changelog entries require a PR number as a reference, contributors need to open a PR first, grab its number, and then add a second commit including the changelog entry.
 
-This creates an inefficient two-step process, which also opens the door to potential merge conflicts. If two or more contributors update the `CHANGELOG.md` file in their respective PRs, and those updates are not synchronized with each other, the possibility of merge conflicts arises, which complicates the process of contributing. 
+This creates an inefficient two-step process, which also opens the door to potential merge conflicts. If two or more contributors update the `CHANGELOG.md` file in their respective PRs, and those updates are not synchronized with each other, the possibility of merge conflicts arises, which complicates the process of contributing.
 
 Likewise, when a new product version is scheduled for GA release, release notes and changelog updates have to be prepared manually. This process is both time consuming and labor intensive.
 
@@ -80,16 +80,16 @@ The **Automated Changelog and Release Notes Process** makes frequent reference t
 
 A changeset description is a message accompanying a changeset that describes the changeset in a human-readable format. In Git, this would correspond to a commit message.
 
-A **fragment file** stores changeset descriptions as text that can be retrieved and combined with other changeset descriptions to create an updated changelog section or a release notes document. 
+A **fragment file** stores changeset descriptions as text that can be retrieved and combined with other changeset descriptions to create an updated changelog section or a release notes document.
 
 *In this document, the term "changeset file" is used as a shorthand for fragment files containing changeset descriptions.*
 
 Fragment files in this project are created in YAML format. The changeset descriptions contained within fragment files follow a three-part structure:
 
 - **Entry Prefix**: Categorizes changesets by type. The available options are `breaking`,`chore`, `deprecate`, `doc`,`feat`,`fix`,`infra`,`refactor`,`security`, and `test`.
-  
+
 - **Entry Description**: A concise, human-readable summary of the changeset.
-  
+
 - **PR Number and Link**: The pull request number the changeset is connected to, along with a link to the pull request on GitHub.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
@@ -102,7 +102,7 @@ The **Automated Changelog and Release Notes Process** is comprised of two indepe
 
 The first sub-process involves a reusable [Github Action](https://docs.github.com/en/actions) that checks the validity of changeset files that have either been added manually or generated automatically based on the contents of PR descriptions (details below).
 
-In order to generate changeset files automatically, the workflow communicates with an external service called the [OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changeset_Bot). This bridge service can create changeset files on a contributor's behalf and commit them to the open PR.
+In order to generate changeset files automatically, the workflow communicates with an external service called the [OpenSearch Changelog PR Bridge](https://github.com/BigSamu/OpenSearch_Changelog_PR_Bridge). This bridge service can create changeset files on a contributor's behalf and commit them to the open PR.
 
 The following flow diagram depicts the entire **Changelog Workflow Process** from start to finish.
 
@@ -119,7 +119,7 @@ As the diagram illustrates, the **Changelog Workflow Process** involves interact
 - **GitHub Repositories**
 
   - **OpenSearch Upstream Repository:** This is the base repository where a contributor's PR resides (e.g. [OpenSearch Dashboards](https://github.com/opensearch-project/OpenSearch-Dashboards), [OpenSearch UI Framework](https://github.com/opensearch-project/oui), [OpenSearch Neural Search](https://github.com/opensearch-project/neural-search), etc).
-  
+
   - **Contributor Forked Repository:** The head repository from which the contributor's PR originates. It contains the changes the contributor is proposing to be merged into the base repository.
 
 - **External Services**
@@ -127,7 +127,7 @@ As the diagram illustrates, the **Changelog Workflow Process** involves interact
   - **OpenSearch Changelog Action:** A reusable GitHub Action, invoked within a workflow file in an OpenSearch repository. This workflow is triggered whenever a PR is opened or edited. The reusable Action works only in the **OpenSearch Upstream Repository** and performs the following functions:
 
     - Check and parse contributor entries in a `## Changelog` section of an open PR description.
-  
+
     - Post comments and add or remove labels on PRs.
 
     - Communicate with the **OpenSearch Changelog PR Bridge** to create, update, or delete changeset files automatically.
@@ -143,7 +143,7 @@ As the diagram illustrates, the **Changelog Workflow Process** involves interact
 - **GitHub App**
   - **OpenSearch Changelog Bot:** This GitHub App must be installed on the contributor's forked repository so that the contributor can grant permissions to the **OpenSearch Changelog PR Bridge** service to act on their behalf.
 
-   <!-- As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot). -->
+   <!-- As mentioned above, the App is installed in the **Contributor Forked Repository** and acts only to creating or updating changeset files. The source code and documentation for the bot is available in the [GitHub App's repository](https://github.com/BigSamu/OpenSearch_Changelog_PR_Bridge). -->
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
@@ -156,9 +156,9 @@ As the diagram illustrates, the **Changelog Workflow Process** consists of three
   If the reusable Action is cleared to parse the `## Changelog` section from the PR, three outcomes are possible:
 
   1. **Parsing Failed:** If one or more entries in the `## Changelog` section are formatted improperly, the process will post an error comment and add a `failed changeset` label to the open PR. It will also delete any previously-committed changeset file.
-   
+
   2. **Parsing Succeeded:** → If the entries in the `## Changelog` section are adequately formatted and the action succeeds in parsing them, then the **Automatic Changeset Creation/Update** job is initiated and the changelog process continues.
-   
+
   3. **Skip Entry:** → If a contributor adds a `skip` entry in the PR description—meaning that the changes introduced (e.g., fixing a typo) do not warrant a changelog entry—then no changeset file will be created, and any existing changeset file will be deleted. A `Skip-Changelog` label will be added to the PR, and the changelog process will end successfully.
 
 - **Automatic Changeset Creation/Update:** This second job is initiated after the `## Changelog` section from the PR description has been successfully parsed. In this job, the **OpenSearch Changelog Workflow** communicates with the **OpenSearch Changelog PR Bridge**. The bridge service creates or updates a changeset file and commits that file to the branch in the **Contributor Forked Repository** where the PR originated from. The **OpenSearch Changelog PR Bridge** receives the permissions to commit this file from the **OpenSearch Changelog Bot**.
@@ -375,7 +375,7 @@ This section discusses how maintainers and contributors can utilize the **Automa
 
 ### 6.1. Changelog Workflow Process
 
-To make use of the changelog workflow when opening a PR, a contributor or maintainer can choose between two options. First, they can install the `OpenSearch_Changeset_Bot` on their repository/repositories to give the **OpenSearch Changelog PR Bridge** permission to commit changeset files on their behalf. This option will be called the "automatic approach" below.
+To make use of the changelog workflow when opening a PR, a contributor or maintainer can choose between two options. First, they can install the `OpenSearch_Changelog_PR_Bridge` on their repository/repositories to give the **OpenSearch Changelog PR Bridge** permission to commit changeset files on their behalf. This option will be called the "automatic approach" below.
 
 Second, a contributor or maintainer can choose to commit their changeset files manually instead of authorizing the **OpenSearch Changelog PR Bridge** to do so on their behalf. This option is referred to below as the "manual approach".
 
@@ -392,7 +392,7 @@ Once the App has been installed and you open a PR, find the `## Changelog` secti
 Your entries in the `## Changelog` section must adhere to the following format:
 
 - Each entry line must begin with a hyphen (-) in the Markdown source file.
-  
+
 - Following the hyphen, enter the category prefix that best represents the changes you are introducing. This prefix must be followed by a colon. Only the following category prefixes may be used:
   - `breaking`
   - `chore`
@@ -435,7 +435,7 @@ Descriptions following the prefixes must be 100 characters or less
 - test: Update unit testing for existing feature
 ```
 
-You can add more than one entry if your changes fall under more than one category prefix or represent discrete changes within the same category prefix. 
+You can add more than one entry if your changes fall under more than one category prefix or represent discrete changes within the same category prefix.
 
 Also, you do not need to delete the comment block in the `## Changelog` section, although you can. If you leave the comment block, please ensure that the changelog entries you add lie _outside_ of the comment block.
 
@@ -532,7 +532,7 @@ The **Automated Changelog Release Notes Process** is the result of a concerted e
 
 Contributions to the **OpenSearch Changelog Workflow** and **OpenSearch **Release** Notes** services are welcome! See our [Developer Guide](./DEVELOPER_GUIDE.md) for instructions on how to set up the project in your local environment and [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
->**NOTE:** Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changeset_Bot) is used.
+>**NOTE:** Bear in mind that for suggestions or contributions to the **OpenSearch Changelog PR Bridge** service, a distinct [repository](https://github.com/BigSamu/OpenSearch_Changelog_PR_Bridge) is used.
 
 <p align="right">(<a href="#back-to-top">back to top</a>)</p>
 
