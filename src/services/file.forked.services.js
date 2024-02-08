@@ -7,7 +7,7 @@ import {
 import {
   checkChangelogPrBridgeUrlDomainIsConfigured,
   checkChangelogPrBridgeApiKeyIsConfigured,
-  handleChangelogPRBridgeResponseError,
+  handleChangelogPRBridgeResponseErrors,
 } from "../utils/index.js";
 /**
  * Get a file in a given path in a forked GitHub repository.
@@ -46,28 +46,12 @@ const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
       sha: data.sha,
     };
   } catch (error) {
-<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "READ", path);
-=======
-    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
-      throw error;
-    } else {
-      const errorToThrow = handleChangelogPRBridgeResponseError(
-        error,
-        owner,
-        branch,
-        "READ"
-      );
-      if (errorToThrow) {
-        throw errorToThrow;
-      }
-    }
->>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -108,28 +92,12 @@ const getAllFilesFromForkedRepoByPath = async (
     );
     return data?.files || [];
   } catch (error) {
-<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error fetching file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "READ", directoryPath);
-=======
-    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
-      throw error;
-    } else {
-      const errorToThrow = handleChangelogPRBridgeResponseError(
-        error,
-        owner,
-        branch,
-        "READ"
-      );
-      if (errorToThrow) {
-        throw errorToThrow;
-      }
-    }
->>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -174,28 +142,12 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error creating/updating file in forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "CREATE_OR_UPDATE", path);
-=======
-    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
-      throw error;
-    } else {
-      const errorToThrow = handleChangelogPRBridgeResponseError(
-        error,
-        owner,
-        branch,
-        "CREATE_OR_UPDATE"
-      );
-      if (errorToThrow) {
-        throw errorToThrow;
-      }
-    }
->>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -234,28 +186,12 @@ const deleteFileInForkedRepoByPath = async (
     // Log the commit message for the deleted file in forked repo
     console.log(message);
   } catch (error) {
-<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "DELETE", path);
-=======
-    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
-      throw error;
-    } else {
-      const errorToThrow = handleChangelogPRBridgeResponseError(
-        error,
-        owner,
-        branch,
-        "DELETE"
-      );
-      if (errorToThrow) {
-        throw errorToThrow;
-      }
-    }
->>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 };
 
@@ -291,28 +227,12 @@ async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
     // Log the commit message for the deleted file in forked repo
     console.log(data.commitMessage);
   } catch (error) {
-<<<<<<< HEAD
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error deleting file from forked repo ${owner}/${branch}:`,
       errorMessage
     );
     handleChangelogPRBridgeResponseErrors(error, "DELETE", directoryPath);
-=======
-    if (error.name === "MissingChangelogPullRequestBridgeUrlDomainError" || error.name === "MissingChangelogPullRequestBridgeApiKeyError") {
-      throw error;
-    } else {
-      const errorToThrow = handleChangelogPRBridgeResponseError(
-        error,
-        owner,
-        branch,
-        "DELETE"
-      );
-      if (errorToThrow) {
-        throw errorToThrow;
-      }
-    }
->>>>>>> f3873ac73b822996b2a066b18231486288d08e4f
   }
 }
 

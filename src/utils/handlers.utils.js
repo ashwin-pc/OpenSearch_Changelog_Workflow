@@ -3,42 +3,36 @@ import {
   CreateOrUpdateContentError,
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
-  UnauthorizedRequestToPullRequestBridgeServiceError,
+  UnauthorizedRequestToPRBridgeServiceError
+
 } from "../errors/index.js";
 
-export const handleChangelogPRBridgeResponseError = (
+export const handleChangelogPRBridgeResponseErrors = (
   error,
   crudOperation,
   path
 ) => {
-  const operationVerb =
-    crudOperation === "READ"
-      ? "fetching"
-      : crudOperation === "DELETE"
-      ? "deleting"
-      : "creating or updating";
-  const errorMessage = error.response?.data?.error?.message || error.message;
-  const statusCode = error.response?.status || error.status;
 
-  console.log(
-    `Error ${operationVerb} file from forked repo ${owner}/${branch}:`,
-    errorMessage
-  );
-  switch (statusCode) {
+  switch (error.status) {
     case 404:
       console.error(`File/Directory '${path}' not found.`);
       return;
     case 401:
-      return new UnauthorizedRequestToPullRequestBridgeServiceError();
+      throw new UnauthorizedRequestToPRBridgeServiceError();
     case 403:
-      return new GitHubAppSuspendedOrNotInstalledError();
+      throw new GitHubAppSuspendedOrNotInstalledError();
     default:
       if (crudOperation === "READ") {
-        return new GetContentError();
-      } else if (crudOperation === "DELETE") {
-        return new DeleteContentError();
-      } else {
-        return new CreateOrUpdateContentError();
+        throw new GetContentError();
+      }
+      else if (crudOperation === "CREATE_OR_UPDATE") {
+        throw new CreateOrUpdateContentError();
+      }
+      else if (crudOperation === "DELETE"){
+        throw new DeleteContentError();
+      }
+      else {
+        throw error;
       }
   }
 };
