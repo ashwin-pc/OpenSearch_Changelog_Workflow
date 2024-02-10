@@ -20,9 +20,9 @@ import {
  * @throws {Error} - If an error occurs while fetching the file.
  */
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
+  checkChangelogPrBridgeUrlDomainIsConfigured();
+  checkChangelogPrBridgeApiKeyIsConfigured();
   try {
-    checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       {
@@ -73,9 +73,9 @@ const getAllFilesFromForkedRepoByPath = async (
   branch,
   directoryPath
 ) => {
+  checkChangelogPrBridgeUrlDomainIsConfigured();
+  checkChangelogPrBridgeApiKeyIsConfigured();
   try {
-    checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
@@ -120,9 +120,9 @@ const createOrUpdateFileInForkedRepoByPath = async (
   content,
   message
 ) => {
+  checkChangelogPrBridgeUrlDomainIsConfigured();
+  checkChangelogPrBridgeApiKeyIsConfigured();
   try {
-    checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsConfigured();
     const encodedContent = Buffer.from(content).toString("base64");
     await axios.post(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
@@ -168,9 +168,9 @@ const deleteFileInForkedRepoByPath = async (
   path,
   message
 ) => {
+  checkChangelogPrBridgeUrlDomainIsConfigured();
+  checkChangelogPrBridgeApiKeyIsConfigured();
   try {
-    checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsConfigured();
     await axios.delete(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`, {
       headers: {
         "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
@@ -206,9 +206,9 @@ const deleteFileInForkedRepoByPath = async (
  * @throws {Error} - If an error occurs while deleting all files.
  */
 async function deleteAllFilesByPath(owner, repo, branch, directoryPath) {
+  checkChangelogPrBridgeUrlDomainIsConfigured();
+  checkChangelogPrBridgeApiKeyIsConfigured();
   try {
-    checkChangelogPrBridgeUrlDomainIsConfigured();
-    checkChangelogPrBridgeApiKeyIsConfigured();
     const { data } = await axios.delete(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/directory/files`,
       {
