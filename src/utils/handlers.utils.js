@@ -13,6 +13,7 @@ export const handleChangelogPRBridgeResponseErrors = (
   path
 ) => {
 
+  console.log("error.status", error.status)
   switch (error.status) {
     case 404:
       console.error(`File/Directory '${path}' not found.`);
