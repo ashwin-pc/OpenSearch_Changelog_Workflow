@@ -12,11 +12,7 @@ export const handleChangelogPRBridgeResponseErrors = (
   crudOperation,
   path
 ) => {
-  console.error(error.status);
-  console.error(error.statusCode);
-  console.error(typeof(error.status));
-  console.error(typeof(error.statusCode));
-  switch (error.statusCode) {
+  switch (error.response.status) {
     case 404:
       console.error(`File/Directory '${path}' not found.`);
       return;
