@@ -12,7 +12,7 @@ export const handleChangelogPRBridgeResponseErrors = (
   crudOperation,
   path
 ) => {
-  switch (error.response.status) {
+  switch (error.response?.status) {
     case 404:
       console.error(`File/Directory '${path}' not found.`);
       return;
@@ -20,6 +20,7 @@ export const handleChangelogPRBridgeResponseErrors = (
       throw new UnauthorizedRequestToPRBridgeServiceError();
     case 403:
       throw new GitHubAppSuspendedOrNotInstalledError();
+
     default:
       if (crudOperation === "READ") {
         throw new GetContentError();
