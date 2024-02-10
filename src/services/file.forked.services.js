@@ -128,9 +128,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       { content: encodedContent, message: message },
       {
-        headers: {
-          "X-API-Key": CHANGELOG_PR_BRIDGE_API_KEY,
-        },
+        
         params: {
           owner: owner,
           repo: repo,
