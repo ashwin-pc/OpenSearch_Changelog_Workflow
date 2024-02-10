@@ -142,8 +142,6 @@ const createOrUpdateFileInForkedRepoByPath = async (
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
-    console.log(CHANGELOG_PR_BRIDGE_API_BASE_URL)
-    console.log(error);
     const errorMessage = error.response?.data?.error?.message || error.message;
     console.error(
       `Error creating/updating file in forked repo ${owner}/${branch}:`,
