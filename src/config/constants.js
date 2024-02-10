@@ -10,7 +10,7 @@ export const CHANGELOG_PR_BRIDGE_API_BASE_URL = `${CHANGELOG_PR_BRIDGE_URL_DOMAI
 export const CHANGELOG_PR_BRIDGE_API_KEY =
   process.env.INPUT_CHANGELOG_PR_BRIDGE_API_KEY;
 
-export const GITHUB_APP_NAME = "Auto Changeset Commit App";
+export const GITHUB_APP_NAME = "OpenSearch Changeset Bot App";
 export const GITHUB_APP_INSTALLATION_LINK =
   "https://github.com/apps/opensearch-changeset-bot";
 export const AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME =
