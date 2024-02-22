@@ -6,6 +6,7 @@ import {
 
 import {
   forkedFileServices,
+  forkedAuthServices,
   labelServices,
   commentServices,
   authServices,
@@ -57,7 +58,7 @@ async function run() {
     } = extractPullRequestData());
 
     // Get the GitHub App installation ID from the forked repository
-    const githubAppInstallationInfo = await authServices.getGitHubAppInstallationInfoFromForkedRepo(
+    const githubAppInstallationInfo = await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
       headOwner,
       headRepo
     );
