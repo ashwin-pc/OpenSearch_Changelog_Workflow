@@ -25,7 +25,10 @@ async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOctokitClient();
 
+  // Define the path to the changeset file
   const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
+
+  // Define variables to store the extracted pull request data
   let baseOwner,
     baseRepo,
     baseBranch,
@@ -35,6 +38,9 @@ async function run() {
     prNumber,
     prDescription,
     prLink;
+
+  // Define variable to store the GitHub App installation id
+  let githubAppInstallationId = null;
 
   try {
     // Step 0 - Extract information from the payload
@@ -49,6 +55,14 @@ async function run() {
       prDescription,
       prLink,
     } = extractPullRequestData());
+
+    // Get the GitHub App installation ID from the forked repository
+    const githubAppInstallationInfo = await authServices.getGitHubAppInstallationIdFromForkedRepo(
+      headOwner,
+      headRepo
+    );
+    githubAppInstallationId = githubAppInstallationInfo?.id;
+    console.log(githubAppInstallationId)
 
     // Step 1 - Parse changelog entries and validate
     const changelogEntries = extractChangelogEntries(
