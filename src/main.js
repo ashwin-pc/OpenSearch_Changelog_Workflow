@@ -58,7 +58,7 @@ async function run() {
     } = extractPullRequestData());
 
     // Get the GitHub App installation ID from the forked repository
-    const githubAppInstallationInfo =
+    const { data: githubAppInstallationInfo } =
       await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
         headOwner,
         headRepo
