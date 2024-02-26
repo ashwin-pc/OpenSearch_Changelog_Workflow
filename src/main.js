@@ -62,7 +62,6 @@ async function run() {
     );
 
     // Step 2 - Handle "skip" option
-
     if (isSkipEntry(changesetEntriesMap)) {
       await labelServices.addLabel(
         octokit,
@@ -101,6 +100,7 @@ async function run() {
         headBranch,
         changesetFilePath(prNumber)
       );
+      console.log("Existing changeset file content:", existingChangesetFileContent);
     } catch (error) {
       // If the file does not exist, the GitHub API will throw an error. Handle this scenario accordingly.
       existingChangesetFileContent = null;
