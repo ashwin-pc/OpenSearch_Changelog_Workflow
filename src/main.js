@@ -91,28 +91,9 @@ async function run() {
       return;
     }
 
-    // Step 2.5 - Check if the changeset file already exists and compare content
-    let existingChangesetFileContent;
-    try {
-      existingChangesetFileContent = await forkedFileServices.getFileFromForkedRepoByPath(
-        headOwner,
-        headRepo,
-        headBranch,
-        changesetFilePath(prNumber)
-      );
-      console.log("Existing changeset file content:", existingChangesetFileContent);
-    } catch (error) {
-      // If the file does not exist, the GitHub API will throw an error. Handle this scenario accordingly.
-      existingChangesetFileContent = null;
-    }
-    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-    if (existingChangesetFileContent === changesetFileContent) {
-      // If the changeset file content is the same as the new content, no further action is required.
-      console.log("No changes detected in the changeset file. Skipping update.");
-      return;
-    }
 
     // Step 3 - Add or update the changeset file in head repo
+    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
     await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
       headOwner,

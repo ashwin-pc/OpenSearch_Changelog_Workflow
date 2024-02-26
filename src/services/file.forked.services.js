@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   CHANGELOG_PR_BRIDGE_API_BASE_URL,
   CHANGELOG_PR_BRIDGE_API_KEY,
+  CHANGELOG_PR_BRIDGE_URL_DOMAIN,
 } from "../config/constants.js";
 
 import {
@@ -22,9 +23,6 @@ import {
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   checkChangelogPrBridgeUrlDomainIsConfigured();
   checkChangelogPrBridgeApiKeyIsConfigured();
-
-  console.log("Fetching file from forked repo", owner, repo, branch, path);
-  console.log(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`);
   try {
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
@@ -127,7 +125,7 @@ const createOrUpdateFileInForkedRepoByPath = async (
   checkChangelogPrBridgeApiKeyIsConfigured();
   try {
     const encodedContent = Buffer.from(content).toString("base64");
-    await axios.post(
+    const response = await axios.post(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
       { content: encodedContent, message: message },
       {
@@ -142,6 +140,8 @@ const createOrUpdateFileInForkedRepoByPath = async (
         },
       }
     );
+
+    console.log('resp', response.data)
     // Log the commit message for the created or updated file in a forked repo
     console.log(message);
   } catch (error) {
