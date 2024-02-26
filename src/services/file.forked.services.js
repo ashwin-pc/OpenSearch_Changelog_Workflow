@@ -22,6 +22,9 @@ import {
 const getFileFromForkedRepoByPath = async (owner, repo, branch, path) => {
   checkChangelogPrBridgeUrlDomainIsConfigured();
   checkChangelogPrBridgeApiKeyIsConfigured();
+
+  console.log("Fetching file from forked repo", owner, repo, branch, path);
+  console.log(`${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`);
   try {
     const { data } = await axios.get(
       `${CHANGELOG_PR_BRIDGE_API_BASE_URL}/files`,
