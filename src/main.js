@@ -9,6 +9,7 @@ import {
   labelServices,
   commentServices,
   authServices,
+  fileServices,
 } from "./services/index.js";
 
 import {
@@ -122,6 +123,21 @@ async function run() {
   } catch (error) {
     const errorComment = formatPostComment({ input: error, type: "ERROR" });
 
+    if (error.name === "GitHubAppSuspendedOrNotInstalledError") {
+      // Step 5 - Check for manual changeset entry in PR contents
+      try {
+        const manualChangeset = await fileServices.getFileByPath(octokit, headOwner, headRepo, headBranch, changesetFilePath(prNumber))
+        console.log("Manual changeset entry found in PR contents");
+        console.log(manualChangeset);
+
+        if (manualChangeset) {
+          return;
+        }
+
+      } catch (error) {
+        // Do noting since this was just a backup check incase the app was not installed. The original error will be handled below
+      }
+    }
     // Add error comment to PR
     await commentServices.postComment(
       octokit,
