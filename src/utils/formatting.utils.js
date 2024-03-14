@@ -12,9 +12,15 @@
 export const formatPostComment = ({ input, type }) => {
   if (type === "ERROR" && input.shouldResultInPRComment) {
     const spacedName = input.name.replace(/([A-Z])/g, " $1").trim();
-    const outputErrorMessage =
+    let outputMessage;
+    if(type === "ERROR"){
+      outputMessage =
       `### ❌ ${spacedName}\n` + "\n" + `${input.message}\n`;
-    return outputErrorMessage;
+    }
+    else if (type == "WARNING"){
+      outputMessage = `### ⚠️ ${spacedName}\n` + "\n" + `${input.message}\n`
+    }
+    return outputMessage;
   }
   return input.message;
 };
