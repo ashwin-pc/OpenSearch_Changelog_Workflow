@@ -64,7 +64,10 @@ async function run() {
         headRepo
       );
     const { installationId } = githubAppInstallationInfo;
-    console.log(githubAppInstallationId);
+    console.log(installationId)
+    if (!installationId){
+      console.log(githubAppInstallationId);
+    }
 
     // Step 1 - Parse changelog entries and validate
     const changelogEntries = extractChangelogEntries(
@@ -137,8 +140,8 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-    console.error(error);
-    const errorComment = formatPostComment({ input: error, type: "ERROR" });
+
+    const postComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
     await commentServices.postComment(
@@ -146,7 +149,7 @@ async function run() {
       baseOwner,
       baseRepo,
       prNumber,
-      errorComment
+      postComment
     );
     // Add failed changeset label
     await labelServices.addLabel(
@@ -167,7 +170,7 @@ async function run() {
 
     // Delete changeset file if one was previously created
     if (
-      error.name !== "GitHubAppSuspendedOrNotInstalledError" &&
+      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
       error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
       error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
       error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
