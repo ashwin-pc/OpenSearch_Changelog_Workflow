@@ -58,16 +58,16 @@ async function run() {
     } = extractPullRequestData());
 
     // Get the GitHub App installation ID from the forked repository
-    // const { data: githubAppInstallationInfo } =
-    //   await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
-    //     headOwner,
-    //     headRepo
-    //   );
-    // const { installationId } = githubAppInstallationInfo;
-    // console.log(installationId)
-    // if (!installationId){
-    //   console.log(githubAppInstallationId);
-    // }
+    const { data: githubAppInstallationInfo } =
+      await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
+        headOwner,
+        headRepo
+      );
+    const { installationId } = githubAppInstallationInfo;
+    console.log(installationId)
+    if (!installationId){
+      console.log(githubAppInstallationId);
+    }
 
     // Step 1 - Parse changelog entries and validate
     const changelogEntries = extractChangelogEntries(
