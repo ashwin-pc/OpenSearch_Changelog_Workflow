@@ -14,7 +14,7 @@ export class GitHubAppSuspendedOrNotInstalledWarning {
    */
   constructor(prNumber) {
     const message =
-      `[${GITHUB_APP_NAME}](${GITHUB_APP_INSTALLATION_LINK}) is suspended or not installed in your forked repository. Please ensure **manually adding required changeset file _${prNumber}.yml_** under folder _changelogs/fragments_` +
+      `[${GITHUB_APP_NAME}](${GITHUB_APP_INSTALLATION_LINK}) is suspended or not installed in your forked repository. Please ensure **manual commit of required changeset file _${prNumber}.yml_** under folder _changelogs/fragments_` +
       `\n\n` +
       `For more information about formatting of changeset files, please visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     this.name = this.constructor.name;
