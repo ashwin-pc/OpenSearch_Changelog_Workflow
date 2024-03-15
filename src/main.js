@@ -25,12 +25,13 @@ import {
 
 import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 
-const run = async () => {
-  // Initialize Octokit client with the GitHub token
-  const octokit = authServices.getOctokitClient();
+// ****************************************************************************
+// I) MAIN
+// ****************************************************************************
 
-  // Define variable to store the GitHub App installation id
-  let prData =extractPullRequestData();
+const run = async () => {
+  const octokit = authServices.getOctokitClient();
+  let prData = extractPullRequestData();
 
   try {
     if (!(await isGitHubAppInstalledOrNotSuspended(prData))) {
@@ -38,41 +39,23 @@ const run = async () => {
       return;
     }
     await processChangelogEntries(octokit, prData);
-
   } catch (error) {
-    const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
-
-    // Add error comment to PR
-    await commentServices.postComment(
-      octokit,
-      prData.baseOwner,
-      prData.baseRepo,
-      prData.prNumber,
-      errorPostComment
-    );
-
-    // Add failed changeset label, and remove skip label if exists
-    await handleLabels(octokit, prData, "add-failed-label");
-
-    // Delete changeset file if one was previously created
-    if (
-      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
-      error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
-      error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
-    ) {
-      const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-      await forkedFileServices.deleteFileInForkedRepoByPath(
-        prData.headOwner,
-        prData.headRepo,
-        prData.headBranch,
-        getChangesetFilePath(prData.prNumber),
-        commitMessage
-      );
-    }
+    handleErrorChangelogEntries(error, octokit, prData);
     throw new Error("Changeset creation workflow failed.");
   }
 };
 
+run();
+
+// ****************************************************************************
+// II) HELPERS
+// ****************************************************************************
+
+
+
+// ----------------------------------------------------------
+// GitHub App Helpers Functions
+// ----------------------------------------------------------
 const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
@@ -109,8 +92,15 @@ const handleSkipEntry = async (octokit, prData) => {
 };
 
 const processChangelogEntries = async (octokit, prData) => {
-  const changelogEntries = extractChangelogEntries(prData.prDescription, processChangelogLine);
-  const changesetEntriesMap = getChangesetEntriesMap(changelogEntries, prData.prNumber, prData.prLink);
+  const changelogEntries = extractChangelogEntries(
+    prData.prDescription,
+    processChangelogLine
+  );
+  const changesetEntriesMap = getChangesetEntriesMap(
+    changelogEntries,
+    prData.prNumber,
+    prData.prLink
+  );
   if (isSkipEntry(changesetEntriesMap)) {
     await handleSkipEntry(octokit, prData);
     return;
@@ -126,9 +116,39 @@ const processChangelogEntries = async (octokit, prData) => {
     commitMessage
   );
   handleLabels(octokit, prData, "remove-all-labels");
-}
+};
 
+const handleErrorChangelogEntries = async (error, octokit, prData) => {
+  const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
+  // Add error comment to PR
+  await commentServices.postComment(
+    octokit,
+    prData.baseOwner,
+    prData.baseRepo,
+    prData.prNumber,
+    errorPostComment
+  );
+
+  // Add failed changeset label, and remove skip label if exists
+  await handleLabels(octokit, prData, "add-failed-label");
+
+  // Delete changeset file if one was previously created
+  if (
+    error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
+    error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
+    error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
+  ) {
+    const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
+    await forkedFileServices.deleteFileInForkedRepoByPath(
+      prData.headOwner,
+      prData.headRepo,
+      prData.headBranch,
+      getChangesetFilePath(prData.prNumber),
+      commitMessage
+    );
+  }
+};
 
 // ----------------------------------------------------------
 // Labels Helpers Functions
@@ -194,5 +214,3 @@ const handleLabels = async (octokit, prData, operation) => {
 function getChangesetFilePath(prNumber) {
   return `${CHANGESET_PATH}/${prNumber}.yml`;
 }
-
-run();
