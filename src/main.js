@@ -43,7 +43,7 @@ async function run() {
     prLink;
 
   // Define variable to store the GitHub App installation id
-  let githubAppInstallationId = null;
+  let prData;
 
   try {
     // Step 0.1 - Extract information from the payload
@@ -58,6 +58,8 @@ async function run() {
       prDescription,
       prLink,
     } = extractPullRequestData());
+
+    prData = extractPullRequestData();
 
     // Step 0.2 - Check if a GitHub App is installed in the forked repository
     // If not, post a warning comment and return so changeset creatiion is done manully
@@ -122,13 +124,7 @@ async function run() {
     // Step 2 - Handle "skip" option
 
     if (isSkipEntry(changesetEntriesMap)) {
-      await labelServices.addLabel(
-        octokit,
-        baseOwner,
-        baseRepo,
-        prNumber,
-        SKIP_LABEL
-      );
+
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
       await forkedFileServices.deleteFileInForkedRepoByPath(
@@ -139,14 +135,9 @@ async function run() {
         commitMessage
       );
 
-      // Clear 'failed changeset' label if exists
-      await labelServices.removeLabel(
-        octokit,
-        baseOwner,
-        baseRepo,
-        prNumber,
-        FAILED_CHANGESET_LABEL
-      );
+      // Add skip label, and remove failed changeset label if exists
+      await handleLabels(octokit, prData, "add-skip-label");
+
       return;
     }
 
@@ -163,21 +154,9 @@ async function run() {
       commitMessage
     );
 
-    // Step 4 - Remove "Skip-Changelog" and "failed changeset" labels if they exist
-    await labelServices.removeLabel(
-      octokit,
-      baseOwner,
-      baseRepo,
-      prNumber,
-      SKIP_LABEL
-    );
-    await labelServices.removeLabel(
-      octokit,
-      baseOwner,
-      baseRepo,
-      prNumber,
-      FAILED_CHANGESET_LABEL
-    );
+    // Step 4 - Remove failed changeset label and skip labels if they exist
+    handleLabels(octokit, prData, "remove-all-labels");
+
   } catch (error) {
     const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
@@ -189,22 +168,9 @@ async function run() {
       prNumber,
       errorPostComment
     );
-    // Add failed changeset label
-    await labelServices.addLabel(
-      octokit,
-      baseOwner,
-      baseRepo,
-      prNumber,
-      FAILED_CHANGESET_LABEL
-    );
-    // Clear skip label if exists
-    await labelServices.removeLabel(
-      octokit,
-      baseOwner,
-      baseRepo,
-      prNumber,
-      SKIP_LABEL
-    );
+
+    // Add failed changeset label, and remove skip label if exists
+    await handleLabels(octokit, prData, "add-failed-label");
 
     // Delete changeset file if one was previously created
     if (
@@ -224,5 +190,27 @@ async function run() {
     throw new Error("Changeset creation workflow failed.");
   }
 }
+
+
+const handleLabels = async (octokit, prData, operation) => {
+  switch (operation) {
+    case "add-skip-label":
+      await labelServices.addLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
+      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
+      break;
+    case "add-failed-label":
+      await labelServices.addLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
+      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
+      break;
+    case "remove-all-labels":
+      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
+      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
+      break;
+    default:
+      console.log(`Unknown operation: ${operation}`);
+  }
+}
+
+
 
 run();
