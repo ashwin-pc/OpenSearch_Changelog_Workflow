@@ -20,8 +20,11 @@ import {
   getChangesetFileContent,
   isSkipEntry,
   formatPostComment,
-  GitHubAppSuspendedOrNotInstalledWarning,
 } from "./utils/index.js";
+
+import {
+  GitHubAppSuspendedOrNotInstalledWarning
+} from "./warnings/index.js";
 
 async function run() {
   // Initialize Octokit client with the GitHub token
