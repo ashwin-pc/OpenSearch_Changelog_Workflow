@@ -97,7 +97,7 @@ async function run() {
         prData.headOwner,
         prData.headRepo,
         prData.headBranch,
-        getChangesetFilePath(prNumber),
+        getChangesetFilePath(prData.prNumber),
         commitMessage
       );
     }
