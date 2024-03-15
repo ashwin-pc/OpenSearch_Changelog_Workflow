@@ -30,47 +30,15 @@ const run = async () => {
   const octokit = authServices.getOctokitClient();
 
   // Define variable to store the GitHub App installation id
-  let prData;
+  let prData =extractPullRequestData();
 
   try {
-    // Step 0 - Extract information from the payload and validate GitHub App installation
-    prData = extractPullRequestData();
     if (!(await isGitHubAppInstalledOrNotSuspended(octokit, prData))) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }
+    await processChangelogEntries(octokit, prData);
 
-    // Step 1 - Parse changelog entries and validate
-    const changelogEntries = extractChangelogEntries(
-      prData.prDescription,
-      processChangelogLine
-    );
-    const changesetEntriesMap = getChangesetEntriesMap(
-      changelogEntries,
-      prData.prNumber,
-      prData.prLink
-    );
-
-    // Step 2 - Handle "skip" option
-    if (isSkipEntry(changesetEntriesMap)) {
-      await handleSkipEntry(octokit, prData);
-      return;
-    }
-
-    // Step 3 - Add or update the changeset file in head repo
-    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-    const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
-    await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
-      prData.headOwner,
-      prData.headRepo,
-      prData.headBranch,
-      getChangesetFilePath(prNumber),
-      changesetFileContent,
-      commitMessage
-    );
-
-    // Step 4 - Remove failed changeset label and skip labels if they exist
-    handleLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
@@ -126,7 +94,7 @@ const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
 };
 
 // ----------------------------------------------------------
-// Entries Util Functions
+// Entries Helpers Functions
 // ----------------------------------------------------------
 const handleSkipEntry = async (octokit, prData) => {
   const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
@@ -140,12 +108,30 @@ const handleSkipEntry = async (octokit, prData) => {
   await handleLabels(octokit, prData, "add-skip-label");
 };
 
-function getChangesetFilePath(prNumber) {
-  return `${CHANGESET_PATH}/${prNumber}.yml`;
+const processChangelogEntries = async (octokit, prData) => {
+  const changelogEntries = extractChangelogEntries(prData.prDescription, processChangelogLine);
+  const changesetEntriesMap = getChangesetEntriesMap(chnagelogEntries, prData.prNumber, prData.prLink);
+  if (isSkipEntry(changesetEntriesMap)) {
+    await handleSkipEntry(octokit, prData);
+    return;
+  }
+  const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
+  const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
+  await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
+    prData.headOwner,
+    prData.headRepo,
+    prData.headBranch,
+    getChangesetFilePath(prData.prNumber),
+    changesetFileContent,
+    commitMessage
+  );
+  handleLabels(octokit, prData, "remove-all-labels");
 }
 
+
+
 // ----------------------------------------------------------
-// Labels Util Functions
+// Labels Helpers Functions
 // ----------------------------------------------------------
 const handleLabels = async (octokit, prData, operation) => {
   switch (operation) {
@@ -201,5 +187,12 @@ const handleLabels = async (octokit, prData, operation) => {
       console.log(`Unknown operation: ${operation}`);
   }
 };
+
+// ----------------------------------------------------------
+// Other Helpers Functions
+// ----------------------------------------------------------
+function getChangesetFilePath(prNumber) {
+  return `${CHANGESET_PATH}/${prNumber}.yml`;
+}
 
 run();
