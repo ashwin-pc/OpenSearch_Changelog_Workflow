@@ -68,6 +68,7 @@ async function run() {
         headOwner,
         headRepo
       );
+    console.log(githubAppInstallationInfo);
     const { installationId } = githubAppInstallationInfo;
     if (!installationId) {
       console.log("GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required.")
