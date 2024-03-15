@@ -110,7 +110,7 @@ const handleSkipEntry = async (octokit, prData) => {
 
 const processChangelogEntries = async (octokit, prData) => {
   const changelogEntries = extractChangelogEntries(prData.prDescription, processChangelogLine);
-  const changesetEntriesMap = getChangesetEntriesMap(chnagelogEntries, prData.prNumber, prData.prLink);
+  const changesetEntriesMap = getChangesetEntriesMap(changelogEntries, prData.prNumber, prData.prLink);
   if (isSkipEntry(changesetEntriesMap)) {
     await handleSkipEntry(octokit, prData);
     return;
