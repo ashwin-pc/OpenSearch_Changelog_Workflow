@@ -112,7 +112,7 @@ const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
   );
-  const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
+  const warning = new GitHubAppSuspendedOrNotInstalledWarning(prData.prNumber);
   const warningPostComment = formatPostComment({
     input: warning,
     type: "WARNING",
