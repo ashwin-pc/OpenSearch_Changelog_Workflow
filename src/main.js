@@ -61,52 +61,8 @@ async function run() {
 
     prData = extractPullRequestData();
 
-    // Step 0.2 - Check if a GitHub App is installed in the forked repository
-    // If not, post a warning comment and return so changeset creatiion is done manully
-    const { data: githubAppInstallationInfo } =
-      await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
-        headOwner,
-        headRepo
-      );
 
-    if (
-      !githubAppInstallationInfo.installed ||
-      githubAppInstallationInfo.suspended
-    ) {
-      console.log(
-        "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-      );
-      const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
-      const warningPostComment = formatPostComment({
-        input: warning,
-        type: "WARNING",
-      });
-
-      // Add warning comment to PR
-      await commentServices.postComment(
-        octokit,
-        baseOwner,
-        baseRepo,
-        prNumber,
-        warningPostComment
-      );
-
-      await labelServices.removeLabel(
-        octokit,
-        baseOwner,
-        baseRepo,
-        prNumber,
-        FAILED_CHANGESET_LABEL
-      );
-
-      await labelServices.removeLabel(
-        octokit,
-        baseOwner,
-        baseRepo,
-        prNumber,
-        SKIP_LABEL
-      );
-
+    if (!isGitHubAppInstalledOrNotSuspended(octokit, prData)) {
       return;
     }
 
@@ -124,7 +80,6 @@ async function run() {
     // Step 2 - Handle "skip" option
 
     if (isSkipEntry(changesetEntriesMap)) {
-
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       // Delete of changeset file in forked repo if one was previously created
       await forkedFileServices.deleteFileInForkedRepoByPath(
@@ -156,7 +111,6 @@ async function run() {
 
     // Step 4 - Remove failed changeset label and skip labels if they exist
     handleLabels(octokit, prData, "remove-all-labels");
-
   } catch (error) {
     const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
@@ -191,26 +145,92 @@ async function run() {
   }
 }
 
-
 const handleLabels = async (octokit, prData, operation) => {
   switch (operation) {
     case "add-skip-label":
-      await labelServices.addLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
-      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
+      await labelServices.addLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        SKIP_LABEL
+      );
+      await labelServices.removeLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        FAILED_CHANGESET_LABEL
+      );
       break;
     case "add-failed-label":
-      await labelServices.addLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
-      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
+      await labelServices.addLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        FAILED_CHANGESET_LABEL
+      );
+      await labelServices.removeLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        SKIP_LABEL
+      );
       break;
     case "remove-all-labels":
-      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, SKIP_LABEL);
-      await labelServices.removeLabel(octokit, prData.baseOwner, prData.baseRepo, prData.prNumber, FAILED_CHANGESET_LABEL);
+      await labelServices.removeLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        SKIP_LABEL
+      );
+      await labelServices.removeLabel(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        FAILED_CHANGESET_LABEL
+      );
       break;
     default:
       console.log(`Unknown operation: ${operation}`);
   }
+};
+
+async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
+  const githubAppInstallationInfo =
+    await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
+      headOwner,
+      headRepo
+    );
+
+  if (
+    !githubAppInstallationInfo.installed ||
+    githubAppInstallationInfo.suspended
+  ) {
+    console.log(
+      "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+    );
+    const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
+    const warningPostComment = formatPostComment({
+      input: warning,
+      type: "WARNING",
+    });
+    await commentServices.postComment(
+      octokit,
+      prData.baseOwner,
+      prData.baseRepo,
+      prData.prNumber,
+      warningPostComment
+    );
+
+    await handleLabels(octokit, prData, "remove-all-labels");
+    return false;
+  }
+  return true;
 }
-
-
 
 run();
