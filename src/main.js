@@ -48,7 +48,7 @@ async function run() {
   let githubAppInstallationId = null;
 
   try {
-    // Step 0 - Extract information from the payload
+    // Step 0.1 - Extract information from the payload
     ({
       baseOwner,
       baseRepo,
@@ -61,15 +61,16 @@ async function run() {
       prLink,
     } = extractPullRequestData());
 
-    // Get the GitHub App installation ID from the forked repository
+    // Step 0.2 - Check if a GitHub App is installed in the forked repository
+    // If not, post a warning comment and return so changeset creatiion is done manully
     const { data: githubAppInstallationInfo } =
       await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
         headOwner,
         headRepo
       );
     const { installationId } = githubAppInstallationInfo;
-    console.log(installationId);
     if (!installationId) {
+      console.log("GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required.")
       const warning = new GitHubAppSuspendedOrNotInstalledWarning();
       const warningPostComment = formatPostComment({
         input: warning,
