@@ -81,6 +81,8 @@ async function run() {
         prNumber,
         warningPostComment
       );
+
+      return
     }
 
     // Step 1 - Parse changelog entries and validate
