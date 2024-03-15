@@ -10,17 +10,19 @@
 
  */
 export const formatPostComment = ({ input, type }) => {
-  if (type === "ERROR" && input.shouldResultInPRComment) {
-    const spacedName = input.name.replace(/([A-Z])/g, " $1").trim();
-    let outputMessage;
-    if(type === "ERROR"){
-      outputMessage =
-      `### ❌ ${spacedName}\n` + "\n" + `${input.message}\n`;
+  if (input.shouldResultInPRComment) {
+    if (type === "ERROR") {
+      const errorTitle = input.name.replace(/([A-Z])/g, " $1").trim();
+      const errorBody = input.message;
+      const errorMessage = `### ❌ ${errorTitle}\n` + "\n" + `${errorBody}\n`;
+      return errorMessage;
+    } else if (type == "WARNING") {
+      const warningTitle = input.name.replace(/([A-Z])/g, " $1").trim();
+      const warningBody = input.message;
+      const warningMessage =
+        `### ⚠️ ${warningTitle}\n` + "\n" + `${warningBody}\n`;
+      return warningMessage;
     }
-    else if (type == "WARNING"){
-      outputMessage = `### ⚠️ ${spacedName}\n` + "\n" + `${input.message}\n`
-    }
-    return outputMessage;
   }
   return input.message;
 };

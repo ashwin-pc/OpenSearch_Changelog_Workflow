@@ -20,6 +20,7 @@ import {
   getChangesetFileContent,
   isSkipEntry,
   formatPostComment,
+  GitHubAppSuspendedOrNotInstalledWarning,
 } from "./utils/index.js";
 
 async function run() {
@@ -64,9 +65,22 @@ async function run() {
         headRepo
       );
     const { installationId } = githubAppInstallationInfo;
-    console.log(installationId)
-    if (!installationId){
-      console.log(githubAppInstallationId);
+    console.log(installationId);
+    if (!installationId) {
+      const warning = new GitHubAppSuspendedOrNotInstalledWarning();
+      const warningPostComment = formatPostComment({
+        input: warning,
+        type: "WARNING",
+      });
+
+      // Add error comment to PR
+      await commentServices.postComment(
+        octokit,
+        baseOwner,
+        baseRepo,
+        prNumber,
+        warningPostComment
+      );
     }
 
     // Step 1 - Parse changelog entries and validate
@@ -140,8 +154,7 @@ async function run() {
       FAILED_CHANGESET_LABEL
     );
   } catch (error) {
-
-    const postComment = formatPostComment({ input: error, type: "ERROR" });
+    const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
     // Add error comment to PR
     await commentServices.postComment(
@@ -149,7 +162,7 @@ async function run() {
       baseOwner,
       baseRepo,
       prNumber,
-      postComment
+      errorPostComment
     );
     // Add failed changeset label
     await labelServices.addLabel(
