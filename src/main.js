@@ -92,7 +92,7 @@ async function run() {
       error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
       error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
     ) {
-      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
+      const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
       await forkedFileServices.deleteFileInForkedRepoByPath(
         prData.headOwner,
         prData.headRepo,
