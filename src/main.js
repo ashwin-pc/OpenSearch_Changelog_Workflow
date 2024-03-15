@@ -25,7 +25,7 @@ import {
 
 import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 
-async function run() {
+const run = async () => {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOctokitClient();
 
@@ -35,8 +35,9 @@ async function run() {
   try {
     // Step 0 - Extract information from the payload and validate GitHub App installation
     prData = extractPullRequestData();
-    console.log(isGitHubAppInstalledOrNotSuspended(octokit, prData))
-    if (!isGitHubAppInstalledOrNotSuspended(octokit, prData)) {
+    let isGitHubAppOperational = await isGitHubAppInstalledOrNotSuspended(octokit, prData);
+    console.log("isGitHubAppOperational: ", isGitHubAppOperational);
+    if (!isGitHubAppOperational) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }
