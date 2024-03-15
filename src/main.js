@@ -28,20 +28,6 @@ async function run() {
   // Initialize Octokit client with the GitHub token
   const octokit = authServices.getOctokitClient();
 
-  // Define the path to the changeset file
-  const changesetFilePath = (prNumber) => `${CHANGESET_PATH}/${prNumber}.yml`;
-
-  // Define variables to store the extracted pull request data
-  let baseOwner,
-    baseRepo,
-    baseBranch,
-    headOwner,
-    headRepo,
-    headBranch,
-    prNumber,
-    prDescription,
-    prLink;
-
   // Define variable to store the GitHub App installation id
   let prData;
 
@@ -121,7 +107,7 @@ async function run() {
 
 
 
-async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
+const isGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
   const githubAppInstallationInfo =
     await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
       prData.headOwner,
@@ -153,9 +139,6 @@ async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
   }
   return true;
 }
-
-run();
-
 
 // ----------------------------------------------------------
 // Entries Util Functions
@@ -233,3 +216,5 @@ const handleLabels = async (octokit, prData, operation) => {
       console.log(`Unknown operation: ${operation}`);
   }
 };
+
+run();
