@@ -33,7 +33,7 @@ const run = async () => {
   let prData =extractPullRequestData();
 
   try {
-    if (!(await isGitHubAppInstalledOrNotSuspended(octokit, prData))) {
+    if (!(await isGitHubAppInstalledOrNotSuspended(prData))) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }
