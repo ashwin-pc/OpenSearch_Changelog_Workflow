@@ -35,9 +35,7 @@ const run = async () => {
   try {
     // Step 0 - Extract information from the payload and validate GitHub App installation
     prData = extractPullRequestData();
-    let isGitHubAppOperational = await isGitHubAppInstalledOrNotSuspended(octokit, prData);
-    console.log("isGitHubAppOperational: ", isGitHubAppOperational);
-    if (!isGitHubAppOperational) {
+    if (!(await isGitHubAppInstalledOrNotSuspended(octokit, prData))) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }
@@ -73,7 +71,6 @@ const run = async () => {
 
     // Step 4 - Remove failed changeset label and skip labels if they exist
     handleLabels(octokit, prData, "remove-all-labels");
-
   } catch (error) {
     const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
@@ -106,7 +103,7 @@ const run = async () => {
     }
     throw new Error("Changeset creation workflow failed.");
   }
-}
+};
 
 const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
   console.log(
