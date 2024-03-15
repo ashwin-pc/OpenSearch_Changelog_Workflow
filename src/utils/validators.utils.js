@@ -16,6 +16,8 @@ import {
   MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
 
+import { forkedAuthServices } from "../services/index.js";
+
 /**
  * Validates and formats a set of changelog entries associated with a pull request (PR).
  *
@@ -76,14 +78,29 @@ export const isSkipEntry = (entryMap) => {
   }
 };
 
+export const isGithubAppSuspendedOrNotInstalled = async (prData) => {
+  const githubAppInstallationInfo =
+    await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
+      prData.headOwner,
+      prData.headRepo
+    );
+
+  if (
+    githubAppInstallationInfo.installed ||
+    !githubAppInstallationInfo.suspended
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 export const checkChangelogPrBridgeUrlDomainIsConfigured = () => {
   if (
     !CHANGELOG_PR_BRIDGE_URL_DOMAIN ||
     CHANGELOG_PR_BRIDGE_URL_DOMAIN.trim() === ""
   ) {
-    console.error(
-      "CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not configured."
-    );
+    console.error("CHANGELOG_PR_BRIDGE_URL_DOMAIN constant is not configured.");
     throw new MissingChangelogPullRequestBridgeUrlDomainError();
   }
 };

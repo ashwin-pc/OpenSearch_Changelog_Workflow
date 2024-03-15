@@ -19,6 +19,7 @@ import {
   getChangesetEntriesMap,
   getChangesetFileContent,
   isSkipEntry,
+  isGitHubAppInstalledOrNotSuspended,
   formatPostComment,
 } from "./utils/index.js";
 
@@ -35,6 +36,7 @@ async function run() {
     // Step 0 - Extract information from the payload and validate GitHub App installation
     prData = extractPullRequestData();
     if (!isGitHubAppInstalledOrNotSuspended(octokit, prData)) {
+      await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }
 
@@ -50,21 +52,19 @@ async function run() {
     );
 
     // Step 2 - Handle "skip" option
-
     if (isSkipEntry(changesetEntriesMap)) {
       await handleSkipEntry(octokit, prData);
       return;
     }
 
     // Step 3 - Add or update the changeset file in head repo
-
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
     await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
       prData.headOwner,
       prData.headRepo,
       prData.headBranch,
-      changesetFilePath(prNumber),
+      getChangesetFilePath(prNumber),
       changesetFileContent,
       commitMessage
     );
@@ -97,7 +97,7 @@ async function run() {
         prData.headOwner,
         prData.headRepo,
         prData.headBranch,
-        changesetFilePath(prNumber),
+        getChangesetFilePath(prNumber),
         commitMessage
       );
     }
@@ -105,40 +105,25 @@ async function run() {
   }
 }
 
+const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
+  console.log(
+    "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+  );
+  const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
+  const warningPostComment = formatPostComment({
+    input: warning,
+    type: "WARNING",
+  });
+  await commentServices.postComment(
+    octokit,
+    prData.baseOwner,
+    prData.baseRepo,
+    prData.prNumber,
+    warningPostComment
+  );
 
-
-const isGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
-  const githubAppInstallationInfo =
-    await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
-      prData.headOwner,
-      prData.headRepo
-    );
-
-  if (
-    !githubAppInstallationInfo.installed ||
-    githubAppInstallationInfo.suspended
-  ) {
-    console.log(
-      "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-    );
-    const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
-    const warningPostComment = formatPostComment({
-      input: warning,
-      type: "WARNING",
-    });
-    await commentServices.postComment(
-      octokit,
-      prData.baseOwner,
-      prData.baseRepo,
-      prData.prNumber,
-      warningPostComment
-    );
-
-    await handleLabels(octokit, prData, "remove-all-labels");
-    return false;
-  }
-  return true;
-}
+  await handleLabels(octokit, prData, "remove-all-labels");
+};
 
 // ----------------------------------------------------------
 // Entries Util Functions
