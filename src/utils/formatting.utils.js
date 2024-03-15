@@ -23,8 +23,6 @@ export const formatPostComment = ({ input, type }) => {
   }
   return input.message;
 };
- input.message;
-};
 
 /**
  * Capitalizes the first letter of a given string.
