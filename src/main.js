@@ -193,7 +193,6 @@ async function run() {
     // Delete changeset file if one was previously created
     if (
       error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
-      error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
       error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
       error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
     ) {
