@@ -46,53 +46,27 @@ async function run() {
   let prData;
 
   try {
-    // Step 0.1 - Extract information from the payload
-    ({
-      baseOwner,
-      baseRepo,
-      baseBranch,
-      headOwner,
-      headRepo,
-      headBranch,
-      prNumber,
-      prDescription,
-      prLink,
-    } = extractPullRequestData());
-
+    // Step 0 - Extract information from the payload and validate GitHub App installation
     prData = extractPullRequestData();
-
-
     if (!isGitHubAppInstalledOrNotSuspended(octokit, prData)) {
       return;
     }
 
     // Step 1 - Parse changelog entries and validate
     const changelogEntries = extractChangelogEntries(
-      prDescription,
+      prData.prDescription,
       processChangelogLine
     );
     const changesetEntriesMap = getChangesetEntriesMap(
       changelogEntries,
-      prNumber,
-      prLink
+      prData.prNumber,
+      prData.prLink
     );
 
     // Step 2 - Handle "skip" option
 
     if (isSkipEntry(changesetEntriesMap)) {
-      const commitMessage = `Changeset file for PR #${prNumber} deleted`;
-      // Delete of changeset file in forked repo if one was previously created
-      await forkedFileServices.deleteFileInForkedRepoByPath(
-        headOwner,
-        headRepo,
-        headBranch,
-        changesetFilePath(prNumber),
-        commitMessage
-      );
-
-      // Add skip label, and remove failed changeset label if exists
-      await handleLabels(octokit, prData, "add-skip-label");
-
+      await handleSkipEntry(octokit, prData);
       return;
     }
 
@@ -101,9 +75,9 @@ async function run() {
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
     await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
-      headOwner,
-      headRepo,
-      headBranch,
+      prData.headOwner,
+      prData.headRepo,
+      prData.headBranch,
       changesetFilePath(prNumber),
       changesetFileContent,
       commitMessage
@@ -117,9 +91,9 @@ async function run() {
     // Add error comment to PR
     await commentServices.postComment(
       octokit,
-      baseOwner,
-      baseRepo,
-      prNumber,
+      prData.baseOwner,
+      prData.baseRepo,
+      prData.prNumber,
       errorPostComment
     );
 
@@ -134,9 +108,9 @@ async function run() {
     ) {
       const commitMessage = `Changeset file for PR #${prNumber} deleted`;
       await forkedFileServices.deleteFileInForkedRepoByPath(
-        headOwner,
-        headRepo,
-        headBranch,
+        prData.headOwner,
+        prData.headRepo,
+        prData.headBranch,
         changesetFilePath(prNumber),
         commitMessage
       );
@@ -145,6 +119,66 @@ async function run() {
   }
 }
 
+
+
+async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
+  const githubAppInstallationInfo =
+    await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
+      prData.headOwner,
+      prData.headRepo
+    );
+
+  if (
+    !githubAppInstallationInfo.installed ||
+    githubAppInstallationInfo.suspended
+  ) {
+    console.log(
+      "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+    );
+    const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
+    const warningPostComment = formatPostComment({
+      input: warning,
+      type: "WARNING",
+    });
+    await commentServices.postComment(
+      octokit,
+      prData.baseOwner,
+      prData.baseRepo,
+      prData.prNumber,
+      warningPostComment
+    );
+
+    await handleLabels(octokit, prData, "remove-all-labels");
+    return false;
+  }
+  return true;
+}
+
+run();
+
+
+// ----------------------------------------------------------
+// Entries Util Functions
+// ----------------------------------------------------------
+const handleSkipEntry = async (octokit, prData) => {
+  const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
+  await forkedFileServices.deleteFileInForkedRepoByPath(
+    prData.headOwner,
+    prData.headRepo,
+    prData.headBranch,
+    getChangesetFilePath(prData.prNumber),
+    commitMessage
+  );
+  await handleLabels(octokit, prData, "add-skip-label");
+};
+
+function getChangesetFilePath(prNumber) {
+  return `${CHANGESET_PATH}/${prNumber}.yml`;
+}
+
+// ----------------------------------------------------------
+// Labels Util Functions
+// ----------------------------------------------------------
 const handleLabels = async (octokit, prData, operation) => {
   switch (operation) {
     case "add-skip-label":
@@ -199,38 +233,3 @@ const handleLabels = async (octokit, prData, operation) => {
       console.log(`Unknown operation: ${operation}`);
   }
 };
-
-async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
-  const githubAppInstallationInfo =
-    await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
-      prData.headOwner,
-      prData.headRepo
-    );
-
-  if (
-    !githubAppInstallationInfo.installed ||
-    githubAppInstallationInfo.suspended
-  ) {
-    console.log(
-      "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-    );
-    const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
-    const warningPostComment = formatPostComment({
-      input: warning,
-      type: "WARNING",
-    });
-    await commentServices.postComment(
-      octokit,
-      prData.baseOwner,
-      prData.baseRepo,
-      prData.prNumber,
-      warningPostComment
-    );
-
-    await handleLabels(octokit, prData, "remove-all-labels");
-    return false;
-  }
-  return true;
-}
-
-run();
