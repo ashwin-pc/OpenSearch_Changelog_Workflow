@@ -45,7 +45,7 @@ const run = async () => {
   }
 };
 
-
+run();
 
 // ****************************************************************************
 // II) HELPERS
@@ -214,5 +214,3 @@ const handleLabels = async (octokit, prData, operation) => {
 function getChangesetFilePath(prNumber) {
   return `${CHANGESET_PATH}/${prNumber}.yml`;
 }
-
-run();
