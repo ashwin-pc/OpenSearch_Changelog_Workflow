@@ -54,25 +54,26 @@ const run = async () => {
     );
 
     // Step 2 - Handle "skip" option
-    if (isSkipEntry(changesetEntriesMap)) {
-      await handleSkipEntry(octokit, prData);
-      return;
-    }
+    // if (isSkipEntry(changesetEntriesMap)) {
+    //   await handleSkipEntry(octokit, prData);
+    //   return;
+    // }
 
-    // Step 3 - Add or update the changeset file in head repo
-    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-    const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
-    await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
-      prData.headOwner,
-      prData.headRepo,
-      prData.headBranch,
-      getChangesetFilePath(prNumber),
-      changesetFileContent,
-      commitMessage
-    );
+    // // Step 3 - Add or update the changeset file in head repo
+    // const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
+    // const commitMessage = `Changeset file for PR #${prNumber} created/updated`;
+    // await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
+    //   prData.headOwner,
+    //   prData.headRepo,
+    //   prData.headBranch,
+    //   getChangesetFilePath(prNumber),
+    //   changesetFileContent,
+    //   commitMessage
+    // );
 
-    // Step 4 - Remove failed changeset label and skip labels if they exist
-    handleLabels(octokit, prData, "remove-all-labels");
+    // // Step 4 - Remove failed changeset label and skip labels if they exist
+    // handleLabels(octokit, prData, "remove-all-labels");
+
   } catch (error) {
     const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
 
