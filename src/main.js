@@ -68,6 +68,10 @@ async function run() {
         headOwner,
         headRepo
       );
+    console.log("GitHub App Installation Info: ", githubAppInstallationInfo);
+    console.log("GitHub App Installed?: ", githubAppInstallationInfo.installed);
+    console.log("GitHub App Suspended?: ", githubAppInstallationInfo.suspended);
+    
     if (!githubAppInstallationInfo.installed || !githubAppInstallationInfo.suspended) {
       console.log("GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required.")
       const warning = new GitHubAppSuspendedOrNotInstalledWarning();
@@ -76,7 +80,7 @@ async function run() {
         type: "WARNING",
       });
 
-      // Add error comment to PR
+      // Add warning comment to PR
       await commentServices.postComment(
         octokit,
         baseOwner,
