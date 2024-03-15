@@ -22,9 +22,7 @@ import {
   formatPostComment,
 } from "./utils/index.js";
 
-import {
-  GitHubAppSuspendedOrNotInstalledWarning
-} from "./warnings/index.js";
+import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 
 async function run() {
   // Initialize Octokit client with the GitHub token
@@ -68,12 +66,14 @@ async function run() {
         headOwner,
         headRepo
       );
-    console.log("GitHub App Installation Info: ", githubAppInstallationInfo);
-    console.log("GitHub App Installed?: ", githubAppInstallationInfo.installed);
-    console.log("GitHub App Suspended?: ", githubAppInstallationInfo.suspended);
 
-    if (!githubAppInstallationInfo.installed || githubAppInstallationInfo.suspended) {
-      console.log("GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required.")
+    if (
+      !githubAppInstallationInfo.installed ||
+      githubAppInstallationInfo.suspended
+    ) {
+      console.log(
+        "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+      );
       const warning = new GitHubAppSuspendedOrNotInstalledWarning(prNumber);
       const warningPostComment = formatPostComment({
         input: warning,
@@ -89,7 +89,23 @@ async function run() {
         warningPostComment
       );
 
-      return
+      await labelServices.removeLabel(
+        octokit,
+        baseOwner,
+        baseRepo,
+        prNumber,
+        FAILED_CHANGESET_LABEL
+      );
+
+      await labelServices.removeLabel(
+        octokit,
+        baseOwner,
+        baseRepo,
+        prNumber,
+        SKIP_LABEL
+      );
+
+      return;
     }
 
     // Step 1 - Parse changelog entries and validate
