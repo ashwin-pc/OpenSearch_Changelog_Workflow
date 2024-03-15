@@ -78,7 +78,15 @@ export const isSkipEntry = (entryMap) => {
   }
 };
 
-export const isGithubAppSuspendedOrNotInstalled = async (prData) => {
+/**
+ * Validates the GitHub App installation status in the forked repository.
+ * If the GitHub App is not installed or is suspended, the function returns false.
+ * Otherwise, it returns true.
+ * @param {Object} prData - An object containing the pull request data.
+ * @returns {Boolean} - True if the GitHub App is installed and not suspended, false otherwise.
+ */
+
+export const isGitHubAppInstalledOrNotSuspended = async (prData) => {
   const githubAppInstallationInfo =
     await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
       prData.headOwner,
