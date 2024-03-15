@@ -203,8 +203,8 @@ const handleLabels = async (octokit, prData, operation) => {
 async function isGitHubAppInstalledOrNotSuspended(octokit, prData) {
   const githubAppInstallationInfo =
     await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
-      headOwner,
-      headRepo
+      prData.headOwner,
+      prData.headRepo
     );
 
   if (
