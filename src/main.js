@@ -35,6 +35,7 @@ async function run() {
   try {
     // Step 0 - Extract information from the payload and validate GitHub App installation
     prData = extractPullRequestData();
+    console.log(isGitHubAppInstalledOrNotSuspended(octokit, prData))
     if (!isGitHubAppInstalledOrNotSuspended(octokit, prData)) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
