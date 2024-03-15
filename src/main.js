@@ -40,12 +40,12 @@ const run = async () => {
     }
     await processChangelogEntries(octokit, prData);
   } catch (error) {
-    handleErrorChangelogEntries(error, octokit, prData);
+    await handleErrorChangelogEntries(error, octokit, prData);
     throw new Error("Changeset creation workflow failed.");
   }
 };
 
-run();
+
 
 // ****************************************************************************
 // II) HELPERS
@@ -214,3 +214,5 @@ const handleLabels = async (octokit, prData, operation) => {
 function getChangesetFilePath(prNumber) {
   return `${CHANGESET_PATH}/${prNumber}.yml`;
 }
+
+run();

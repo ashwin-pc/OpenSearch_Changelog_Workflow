@@ -87,7 +87,6 @@ export const isSkipEntry = (entryMap) => {
  */
 
 export const isGitHubAppInstalledOrNotSuspended = async (prData) => {
-  console.log(prData)
   const { data: githubAppInstallationInfo } =
     await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
       prData.headOwner,
