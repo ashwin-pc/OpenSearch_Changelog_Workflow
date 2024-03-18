@@ -19,7 +19,7 @@ import {
   getChangesetEntriesMap,
   getChangesetFileContent,
   isSkipEntry,
-  isGitHubAppInstalledAndNotSuspended,
+  isGitHubAppNotInstalledOrSuspended,
   formatPostComment,
 } from "./utils/index.js";
 
@@ -32,10 +32,9 @@ import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
-
   try {
-    if (!(await isGitHubAppInstalledAndNotSuspended(prData))) {
-      await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
+    if (await isGitHubAppNotInstalledOrSuspended(prData)) {
+      await handleGitHubAppNotInstalledOrSuspended(octokit, prData);
       return;
     }
     await processChangelogEntries(octokit, prData);
@@ -51,12 +50,10 @@ run();
 // II) HELPERS
 // ****************************************************************************
 
-
-
 // ----------------------------------------------------------
 // GitHub App Helpers Functions
 // ----------------------------------------------------------
-const handleGitHubAppInstalledOrNotSuspended = async (octokit, prData) => {
+const handleGitHubAppNotInstalledOrSuspended = async (octokit, prData) => {
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
   );
