@@ -19,7 +19,7 @@ import {
   getChangesetEntriesMap,
   getChangesetFileContent,
   isSkipEntry,
-  isGitHubAppInstalledOrNotSuspended,
+  isGitHubAppInstalledAndNotSuspended,
   formatPostComment,
 } from "./utils/index.js";
 
@@ -34,7 +34,7 @@ const run = async () => {
   let prData = extractPullRequestData();
 
   try {
-    if (!(await isGitHubAppInstalledOrNotSuspended(prData))) {
+    if (!(await isGitHubAppInstalledAndNotSuspended(prData))) {
       await handleGitHubAppInstalledOrNotSuspended(octokit, prData);
       return;
     }

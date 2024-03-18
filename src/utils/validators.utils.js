@@ -86,14 +86,14 @@ export const isSkipEntry = (entryMap) => {
  * @returns {Boolean} - True if the GitHub App is installed and not suspended, false otherwise.
  */
 
-export const isGitHubAppInstalledOrNotSuspended = async (prData) => {
+export const isGitHubAppInstalledAndNotSuspended = async (prData) => {
   const { data: githubAppInstallationInfo } =
     await forkedAuthServices.getGitHubAppInstallationInfoFromForkedRepo(
       prData.headOwner,
       prData.headRepo
     );
   if (
-    githubAppInstallationInfo.installed ||
+    githubAppInstallationInfo.installed &&
     githubAppInstallationInfo.suspended === false
   ) {
     return true;
