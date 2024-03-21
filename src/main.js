@@ -81,7 +81,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
     handleLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     await handleErrorChangelogEntries(error, octokit, prData);
-    throw new Error("Automatic creation of changeset file failed.");
+    throw new Error("Automatic creation of changeset file failed.", error);
   }
 };
 
@@ -116,7 +116,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
       handleLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
       await postErrorMessageAboutMissingChangesetFile(octokit, prData);
-      throw new Error("Changeset file required to be added manually.");
+      throw new Error("Changeset file required to be added manually.", error);
     }
   }
 };
