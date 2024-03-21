@@ -23,7 +23,7 @@ const isFileInCommitedChanges = async (
       repo,
       pull_number: prNumber,
     });
-    console.log(files)
+    console.log(data)
 
     // Check if the specified file is in the list
     const fileExists = files.some((file) => file.filename === path);
