@@ -74,7 +74,7 @@ export const extractChangelogEntries = (
         if (processed.line) entries.push(processed.line.trim());
         return { entries, state: processed.state };
       }, initialAcc).entries;
-    
+
     // Throw error if no changelog entries are found
     if(changelogEntries.length === 0) {
       throw new EmptyChangelogSectionError();
@@ -85,6 +85,7 @@ export const extractChangelogEntries = (
         changelogEntries.length === 1 ? "entry" : "entries"
       }:`
     );
+    console.log(changelogEntries);
     for (const eachEntry of changelogEntries){
         console.log(`${eachEntry}`);
     }
