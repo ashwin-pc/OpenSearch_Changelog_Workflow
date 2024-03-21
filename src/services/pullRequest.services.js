@@ -22,6 +22,7 @@ const isFileInCommitedChanges = async (
       owner,
       repo,
       pull_number: prNumber,
+      per_page: 1
     });
     console.log(response)
     const files = response.data;
