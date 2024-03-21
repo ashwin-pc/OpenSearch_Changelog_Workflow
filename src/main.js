@@ -37,12 +37,12 @@ const run = async () => {
 
   // If Github App is not installed or suspended, use manual approach to create changeset file
   if (await isGitHubAppNotInstalledOrSuspended(prData)) {
-    console.log("GitHub App is not installed or suspended in the forked repository. Proceding for manual changeset creation.");
+    console.log("GitHub App is not installed or suspended in the forked repository.\n Proceding with checks for manual changeset creation.");
     await handleManualChangesetCreation(octokit, prData);
   }
   // Else, use automated approach to create changeset file
   else {
-    console.log("GitHub App is installed and not suspended in the forked repository. Proceding for automatic changeset creation.");
+    console.log("GitHub App is installed and not suspended in the forked repository.\n Proceding fwith checks in changelog PR description and automatic creation of changeset file.");
     await handleAutomaticChangesetCreation(octokit, prData);
   }
 };
