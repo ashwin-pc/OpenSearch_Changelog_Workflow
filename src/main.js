@@ -124,12 +124,12 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
 
 const handleManualChangesetCreation = async (octokit, prData) => {
   // Post info message about adding changeset file manually if PR opened or reopened
-  if (prData.action == "opened" || prData.action == "reopened") {
+  if (prData.prAction == "opened" || prData.prAction == "reopened") {
     await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
     throw new Error("Waiting for changeset file to be added manually.");
   }
   // Else, post error message indicating changeset file is missing
-  else if (prData.action == "edited" || prData.action == "synchronize") {
+  else if (prData.prAction == "edited" || prData.prAction == "synchronize") {
     throw new Error("Changeset file to be added manually.");
   }
 };
