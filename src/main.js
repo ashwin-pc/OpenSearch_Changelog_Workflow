@@ -10,7 +10,7 @@ import {
   labelServices,
   commentServices,
   authServices,
-  pullRequestServices
+  pullRequestServices,
 } from "./services/index.js";
 
 import {
@@ -109,13 +109,14 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         await handleSkipEntry(octokit, prData);
         return;
       }
-      const changesetFile = await pullRequestServices.isFileInPRChanges(
-        prData.headOwner,
-        prData.headRepo,
-        prData.prNumber,
-        getChangesetFilePath(prData.prNumber)
-      );
-      console.log(changesetFile)
+      const changesetFile =
+        await pullRequestServices.getFileInPullRequestChanges(
+          prData.headOwner,
+          prData.headRepo,
+          prData.prNumber,
+          getChangesetFilePath(prData.prNumber)
+        );
+      console.log(changesetFile);
       handleLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
       await postErrorMessageAboutMissingChangesetFile(octokit, prData);
