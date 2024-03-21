@@ -9,7 +9,13 @@
  * @returns {Promise<object>} - An object containing the file details.
  * @throws {Error} - If an error occurs while fetching the file.
  */
-const getFileInCommitedChanges = async (octokit, owner, repo, prNumber, path) => {
+const isFileInCommitedChanges = async (
+  octokit,
+  owner,
+  repo,
+  prNumber,
+  path
+) => {
   try {
     // Get the list of files for the pull request
     const { data: files } = await octokit.rest.pulls.listFiles({
@@ -17,16 +23,17 @@ const getFileInCommitedChanges = async (octokit, owner, repo, prNumber, path) =>
       repo,
       pull_number: prNumber,
     });
+    console.log(files)
 
     // Check if the specified file is in the list
-    const fileExists = files.some(file => file.filename === path);
+    const fileExists = files.some((file) => file.filename === path);
     return fileExists;
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.error("An error occurred:", error);
     throw error; // Rethrow the error for further handling if necessary
   }
-}
+};
 
 export const pullRequestServices = {
-  getFileInCommitedChanges
+  isFileInCommitedChanges,
 };

@@ -109,15 +109,13 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         await handleSkipEntry(octokit, prData);
         return;
       }
-      const changesetFile =
-        await pullRequestServices.getFileInCommitedChanges(
-          octokit,
-          prData.baseOwner,
-          prData.baseRepo,
-          prData.prNumber,
-          getChangesetFilePath(prData.prNumber)
-        );
-      console.log(changesetFile);
+      await pullRequestServices.isFileInCommitedChanges(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        getChangesetFilePath(prData.prNumber)
+      );
       handleLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
       await postErrorMessageAboutMissingChangesetFile(octokit, prData);
