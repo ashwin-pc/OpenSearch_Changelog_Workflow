@@ -179,9 +179,9 @@ const postErrorMessageAboutMissingChangesetFile = async (octokit, prData) => {
   console.log(
     `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
   );
-
+  const error = new ChangesetFileNotAddedYetError(prData.prNumber);
   const errorPostComment = formatPostComment({
-    input: new ChangesetFileNotAddedYetError,
+    input: error,
     type: "ERROR",
   });
   await commentServices.postComment(
