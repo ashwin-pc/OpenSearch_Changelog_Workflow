@@ -109,16 +109,19 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         await handleSkipEntry(octokit, prData);
         return;
       }
-      await pullRequestServices.isFileInCommitedChanges(
+      const changesetFileExist = await pullRequestServices.isFileInCommitedChanges(
         octokit,
         prData.baseOwner,
         prData.baseRepo,
         prData.prNumber,
         getChangesetFilePath(prData.prNumber)
       );
+      if(!changesetFileExist) {
+        throw new ChangesetFileNotAddedYetError(prData.prNumber);
+      }
       handleLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
-      await postErrorMessageAboutMissingChangesetFile(octokit, prData);
+      await postErrorMessageAboutMissingChangesetFile(error, octokit, prData);
       throw new Error("Changeset file required to be added manually.", error);
     }
   }
@@ -185,9 +188,9 @@ const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
   );
-  const warning = new ManualChangesetCreationReminderInfo(prData.prNumber);
-  const warningPostComment = formatPostComment({
-    input: warning,
+  const info = new ManualChangesetCreationReminderInfo(prData.prNumber);
+  const infoPostComment = formatPostComment({
+    input: info,
     type: "INFO",
   });
   await commentServices.postComment(
@@ -195,17 +198,17 @@ const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
     prData.baseOwner,
     prData.baseRepo,
     prData.prNumber,
-    warningPostComment
+    infoPostComment
   );
 
   await handleLabels(octokit, prData, "remove-all-labels");
 };
 
-const postErrorMessageAboutMissingChangesetFile = async (octokit, prData) => {
+const postErrorMessageAboutMissingChangesetFile = async (error, octokit, prData) => {
   console.log(
     `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
   );
-  const error = new ChangesetFileNotAddedYetError(prData.prNumber);
+
   const errorPostComment = formatPostComment({
     input: error,
     type: "ERROR",
