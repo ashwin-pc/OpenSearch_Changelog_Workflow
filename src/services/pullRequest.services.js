@@ -12,7 +12,6 @@
 const getFileInCommitedChanges = async (octokit, owner, repo, prNumber, path) => {
   try {
     // Get the list of files for the pull request
-    console.log(octokit.rest)
     const { data: files } = await octokit.rest.pulls.listFiles({
       owner,
       repo,

@@ -111,6 +111,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
       }
       const changesetFile =
         await pullRequestServices.getFileInCommitedChanges(
+          octokit,
           prData.headOwner,
           prData.headRepo,
           prData.prNumber,
