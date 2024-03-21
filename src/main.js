@@ -177,11 +177,11 @@ const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
 
 const postErrorMessageAboutMissingChangesetFile = async (octokit, prData) => {
   console.log(
-    `Changeset file _${prData.prNumber}.yml_ is missing in the forked repository.`
+    `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
   );
 
   const errorPostComment = formatPostComment({
-    input: ChangesetFileNotAddedYetError,
+    input: new ChangesetFileNotAddedYetError,
     type: "ERROR",
   });
   await commentServices.postComment(
