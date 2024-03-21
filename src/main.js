@@ -32,6 +32,7 @@ import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
+  console.log(prData)
   try {
     if (await isGitHubAppNotInstalledOrSuspended(prData)) {
       await handleGitHubAppNotInstalledOrSuspended(octokit, prData);

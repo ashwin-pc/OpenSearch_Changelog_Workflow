@@ -32,6 +32,7 @@ export const extractPullRequestData = () => {
       prNumber: pr_payload.number,
       prDescription: pr_payload.body,
       prLink: pr_payload.html_url,
+      prAction: pr_payload.action,
     };
   } catch (error) {
     console.error(`Error extracting data from pull request: ${error.message}`);
