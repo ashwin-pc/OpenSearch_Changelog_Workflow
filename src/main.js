@@ -23,7 +23,7 @@ import {
   formatPostComment,
 } from "./utils/index.js";
 
-import { GitHubAppSuspendedOrNotInstalledInfo } from "./infos/index.js";
+import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
 
 // ****************************************************************************
 // I) MAIN
@@ -59,7 +59,7 @@ const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
   );
-  const warning = new GitHubAppSuspendedOrNotInstalledInfo(prData.prNumber);
+  const warning = new ManualChangesetCreationReminderInfo(prData.prNumber);
   const warningPostComment = formatPostComment({
     input: warning,
     type: "INFO",
