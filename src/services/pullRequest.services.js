@@ -15,7 +15,7 @@ const getFileInCommitedChanges = async (octokit, owner, repo, prNumber, path) =>
     const { data: files } = await octokit.rest.pulls.listFiles({
       owner,
       repo,
-      prNumber,
+      pull_number: prNumber,
     });
 
     // Check if the specified file is in the list
