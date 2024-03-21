@@ -34,7 +34,7 @@ const run = async () => {
   let prData = extractPullRequestData();
   try {
     if (
-      (prData.action == "opened" || prData.action == "reopened") &&
+      
       (await isGitHubAppNotInstalledOrSuspended(prData))
     ) {
       await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
