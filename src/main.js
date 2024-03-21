@@ -35,21 +35,12 @@ const run = async () => {
 
   // If Github App is not installed or suspended
   if (await isGitHubAppNotInstalledOrSuspended(prData)) {
-    // Post info message about adding changeset file manually if PR opened or reopened
-    if (prData.action == "opened" || prData.action == "reopened"){
-      await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
-      throw new Error("Waiting for changeset file to be added manually.")
-    }
-    // Else, post error message indicating changeset file is missing
-    else if (prData.action == "edited"){
-
-    }
+    await handleManualChangesetCreation(octokit, prData);
   }
   // Else, use automated approach to create changeset file
-  else{
-    await processChangelogEntries(octokit, prData);
+  else {
+    await handleAutomaticChangesetCreation(octokit, prData);
   }
-
 };
 
 run();
@@ -99,39 +90,48 @@ const handleSkipEntry = async (octokit, prData) => {
   await handleLabels(octokit, prData, "add-skip-label");
 };
 
-const processChangelogEntries = async (octokit, prData) => {
-  try{
-
-
-  const changelogEntries = extractChangelogEntries(
-    prData.prDescription,
-    processChangelogLine
-  );
-  const changesetEntriesMap = getChangesetEntriesMap(
-    changelogEntries,
-    prData.prNumber,
-    prData.prLink
-  );
-  if (isSkipEntry(changesetEntriesMap)) {
-    await handleSkipEntry(octokit, prData);
-    return;
-  }
-  const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
-  const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
-  await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
-    prData.headOwner,
-    prData.headRepo,
-    prData.headBranch,
-    getChangesetFilePath(prData.prNumber),
-    changesetFileContent,
-    commitMessage
-  );
-  handleLabels(octokit, prData, "remove-all-labels");
+const handleAutomaticChangesetCreation = async (octokit, prData) => {
+  try {
+    const changelogEntries = extractChangelogEntries(
+      prData.prDescription,
+      processChangelogLine
+    );
+    const changesetEntriesMap = getChangesetEntriesMap(
+      changelogEntries,
+      prData.prNumber,
+      prData.prLink
+    );
+    if (isSkipEntry(changesetEntriesMap)) {
+      await handleSkipEntry(octokit, prData);
+      return;
+    }
+    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
+    const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
+    await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
+      prData.headOwner,
+      prData.headRepo,
+      prData.headBranch,
+      getChangesetFilePath(prData.prNumber),
+      changesetFileContent,
+      commitMessage
+    );
+    handleLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     await handleErrorChangelogEntries(error, octokit, prData);
     throw new Error("Changeset creation workflow failed.");
   }
+};
 
+const handleManualChangesetCreation = async (octokit, prData) => {
+  // Post info message about adding changeset file manually if PR opened or reopened
+  if (prData.action == "opened" || prData.action == "reopened") {
+    await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
+    throw new Error("Waiting for changeset file to be added manually.");
+  }
+  // Else, post error message indicating changeset file is missing
+  else if (prData.action == "edited" || prData.action == "synchronize") {
+    throw new Error("Changeset file to be added manually.");
+  }
 };
 
 const handleErrorChangelogEntries = async (error, octokit, prData) => {
