@@ -8,13 +8,15 @@ import {
 /**
  * Represents an error when the GitHub App is suspended or not installed in the repository.
  */
-export class GitHubAppSuspendedOrNotInstalledWarning {
+export class GitHubAppSuspendedOrNotInstalledInfo {
   /**
    * Constructs the GitHubAppSuspendedOrNotInstalledError instance.
    */
   constructor(prNumber) {
     const message =
-      `[${GITHUB_APP_NAME}](${GITHUB_APP_INSTALLATION_LINK}) is suspended or not installed in your forked repository. Please ensure **manual commit of required changeset file _${prNumber}.yml_** under folder _changelogs/fragments_` +
+      `Please ensure **manual commit for changeset file _${prNumber}.yml_** under folder _changelogs/fragments_ to complete this PR` +
+      `\n\n` +
+      `If you want to use the available GitHub App [GITHUB_APP_NAME](${GITHUB_APP_NAME})to avoid manual creation of changeset file you can install it in your forked repository following this [link](${GITHUB_APP_INSTALLATION_LINK}). ` +
       `\n\n` +
       `For more information about formatting of changeset files, please visit [${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_NAME}](${AUTO_CHANGESET_AND_RELEASE_NOTES_TOOL_DOCS}).`;
     this.name = this.constructor.name;

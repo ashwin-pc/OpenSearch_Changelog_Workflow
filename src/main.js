@@ -23,7 +23,7 @@ import {
   formatPostComment,
 } from "./utils/index.js";
 
-import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
+import { GitHubAppSuspendedOrNotInstalledInfo } from "./infos/index.js";
 
 // ****************************************************************************
 // I) MAIN
@@ -32,10 +32,12 @@ import { GitHubAppSuspendedOrNotInstalledWarning } from "./warnings/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
-  console.log(prData)
   try {
-    if (await isGitHubAppNotInstalledOrSuspended(prData)) {
-      await handleGitHubAppNotInstalledOrSuspended(octokit, prData);
+    if (
+      (prData.action == "opened" || prData.action == "reopened") &&
+      (await isGitHubAppNotInstalledOrSuspended(prData))
+    ) {
+      await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
       return;
     }
     await processChangelogEntries(octokit, prData);
@@ -54,14 +56,17 @@ run();
 // ----------------------------------------------------------
 // GitHub App Helpers Functions
 // ----------------------------------------------------------
-const handleGitHubAppNotInstalledOrSuspended = async (octokit, prData) => {
+const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
+  octokit,
+  prData
+) => {
   console.log(
     "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
   );
-  const warning = new GitHubAppSuspendedOrNotInstalledWarning(prData.prNumber);
+  const warning = new GitHubAppSuspendedOrNotInstalledInfo(prData.prNumber);
   const warningPostComment = formatPostComment({
     input: warning,
-    type: "WARNING",
+    type: "INFO",
   });
   await commentServices.postComment(
     octokit,

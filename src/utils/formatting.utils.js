@@ -18,7 +18,7 @@ export const formatPostComment = ({ input, type }) => {
       .slice(0, -1)
       .join(" ");
     const body = input.message;
-    const prefix = type === "ERROR" ? "❌" : type === "WARNING" ? "⚠️" : "";
+    const prefix = type === "ERROR" ? "❌" : type === "INFO" ? "ℹ️" : "";
     return prefix ? `### ${prefix} ${title}\n\n${body}\n` : input.message;
   }
   return input.message;
