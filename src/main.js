@@ -32,20 +32,24 @@ import { GitHubAppSuspendedOrNotInstalledInfo } from "./infos/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
-  try {
-    if (
-      
-      (await isGitHubAppNotInstalledOrSuspended(prData))
-    ) {
+
+  // If Github App is not installed or suspended
+  if (await isGitHubAppNotInstalledOrSuspended(prData)) {
+    // Post info message about adding changeset file manually if PR opened or reopened
+    if (prData.action == "opened" || prData.action == "reopened"){
       await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
-      return;
+      throw new Error("Waiting for changeset file to be added manually.")
     }
-    await processChangelogEntries(octokit, prData);
-  } catch (error) {
-    console.log(error)
-    await handleErrorChangelogEntries(error, octokit, prData);
-    throw new Error("Changeset creation workflow failed.");
+    // Else, post error message indicating changeset file is missing
+    else if (prData.action == "edited"){
+
+    }
   }
+  // Else, use automated approach to create changeset file
+  else{
+    await processChangelogEntries(octokit, prData);
+  }
+
 };
 
 run();
@@ -96,6 +100,9 @@ const handleSkipEntry = async (octokit, prData) => {
 };
 
 const processChangelogEntries = async (octokit, prData) => {
+  try{
+
+
   const changelogEntries = extractChangelogEntries(
     prData.prDescription,
     processChangelogLine
@@ -120,6 +127,11 @@ const processChangelogEntries = async (octokit, prData) => {
     commitMessage
   );
   handleLabels(octokit, prData, "remove-all-labels");
+  } catch (error) {
+    await handleErrorChangelogEntries(error, octokit, prData);
+    throw new Error("Changeset creation workflow failed.");
+  }
+
 };
 
 const handleErrorChangelogEntries = async (error, octokit, prData) => {
