@@ -17,19 +17,25 @@ const isFileInCommitedChanges = async (
   path
 ) => {
   try {
-    // Get the list of files for the pull request
-    const response = await octokit.rest.pulls.listFiles({
-      owner,
-      repo,
-      pull_number: prNumber,
-      per_page: 1
-    });
-    console.log(response)
-    const files = response.data;
+    let page = 1;
+    let files;
+    do {
+      // Get the list of files for the pull request for the current page
+      ({ data: files } = await octokit.rest.pulls.listFiles({
+        owner,
+        repo,
+        pull_number: prNumber,
+        page,
+      }));
+      // Increment page for next iteration
+      page++;
+      // Check if the specified file is in the list
+      if (files.some((file) => file.filename === path)) {
+        return true; // File found, no need to check further
+      }
+    } while (files.length !== 0); // Continue if the current page was not empty
 
-    // Check if the specified file is in the list
-    const fileExists = files.some((file) => file.filename === path);
-    return fileExists;
+    return false; // File not found in any pages
   } catch (error) {
     console.error("An error occurred:", error);
     throw error; // Rethrow the error for further handling if necessary
