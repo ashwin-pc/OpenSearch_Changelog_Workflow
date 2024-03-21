@@ -25,7 +25,10 @@ import {
 } from "./utils/index.js";
 
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
-import { ChangesetFileNotAddedYetError } from "./errors/index.js";
+import {
+  ChangesetFileNotAddedYetError,
+  ChangesetFileMustNotExistWithSkipEntryOption,
+} from "./errors/index.js";
 
 // ****************************************************************************
 // I) MAIN
@@ -74,7 +77,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
       changesetCreationMode
     );
     if (isSkipEntry(changesetEntriesMap)) {
-      await handleSkipEntry(octokit, prData);
+      await handleSkipEntry(octokit, prData, changesetCreationMode);
       return;
     }
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
@@ -115,9 +118,8 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         prData.prLink,
         changesetCreationMode
       );
-      console.log(changesetEntriesMap)
       if (isSkipEntry(changesetEntriesMap)) {
-        await handleSkipEntry(octokit, prData);
+        await handleSkipEntry(octokit, prData, changesetCreationMode);
         return;
       }
       const changesetFileExist =
@@ -142,16 +144,33 @@ const handleManualChangesetCreation = async (octokit, prData) => {
 // ----------------------------------------------------------
 // Entries Helpers Functions
 // ----------------------------------------------------------
-const handleSkipEntry = async (octokit, prData) => {
+const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
   const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-  await forkedFileServices.deleteFileInForkedRepoByPath(
-    prData.headOwner,
-    prData.headRepo,
-    prData.headBranch,
-    getChangesetFilePath(prData.prNumber),
-    commitMessage
-  );
-  await handleLabels(octokit, prData, "add-skip-label");
+  if (changesetCreationMode === "automatic") {
+    await forkedFileServices.deleteFileInForkedRepoByPath(
+      prData.headOwner,
+      prData.headRepo,
+      prData.headBranch,
+      getChangesetFilePath(prData.prNumber),
+      commitMessage
+    );
+    await handleLabels(octokit, prData, "add-skip-label");
+  } else {
+    const changesetFileExist =
+      await pullRequestServices.isFileInCommitedChanges(
+        octokit,
+        prData.baseOwner,
+        prData.baseRepo,
+        prData.prNumber,
+        getChangesetFilePath(prData.prNumber)
+      );
+    if (!changesetFileExist) {
+      await handleLabels(octokit, prData, "add-failed-label");
+      throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
+    } else {
+      await handleLabels(octokit, prData, "add-skip-label");
+    }
+  }
 };
 
 // ----------------------------------------------------------

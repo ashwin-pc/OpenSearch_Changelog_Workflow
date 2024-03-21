@@ -8,7 +8,21 @@ export class ChangesetFileNotAddedYetError extends Error {
    */
   constructor(prNumber){
     const message = `Please ensure **manual commit for changeset file _${prNumber}.yml_** under folder _changelogs/fragments_ to complete this PR. File still missing.`;
-    
+
+    super(message);
+    this.name = this.constructor.name;
+    this.shouldResultInPRComment = true;
+  }
+}
+
+export class ChangesetFileMustNotExistWithSkipEntryOption extends Error {
+  /**
+   * Constructs the ChangesetFileMustNotExistWithSkipEntryOption instance.
+   * @param {prNumber} prNumber - The pull request number.
+   */
+  constructor(prNumber){
+    const message = `Changeset file _${prNumber}.yml_ under folder _changelogs/fragments_ must not exist if the changelog section in PR description includes a "skip" entry option.`;
+
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
