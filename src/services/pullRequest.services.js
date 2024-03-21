@@ -9,7 +9,7 @@
  * @returns {Promise<object>} - An object containing the file details.
  * @throws {Error} - If an error occurs while fetching the file.
  */
-const getFileInPullRequestChanges = async (octokit, owner, repo, prNumber, path) => {
+const getFileInCommitedChanges = async (octokit, owner, repo, prNumber, path) => {
   try {
     // Get the list of files for the pull request
     const { data: files } = await octokit.pulls.listFiles({
