@@ -20,7 +20,7 @@ export const extractPullRequestData = () => {
     console.log(
       `Extracting data for PR #${pr_payload.number} in ${pr_payload.base.repo.owner.login}/${pr_payload.base.repo.name}`
     );
-
+    console.log(pr_payload)
     // Return relevant PR data including user's username
     return {
       baseOwner: pr_payload.base.repo.owner.login,
