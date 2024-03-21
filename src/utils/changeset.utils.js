@@ -33,17 +33,12 @@ export const getChangesetEntriesMap = (
   const totalEntries = changelogEntries.length;
   for (const changelogEntry of changelogEntries) {
     let prefix, trimmedLog;
-
+    console.log(prefix, trimmedLog);
     try {
-      if ((changesetCreationMode == "automatic") || (changesetCreationMode == "manual" && prefix != "" && trimmedLog != "")) {
-        ({ prefix, trimmedLog } = isValidChangelogEntry(
-          changelogEntry,
-          totalEntries
-        ));
-      }
-      else {
-        return changesetEntryMap;
-      }
+      ({ prefix, trimmedLog } = isValidChangelogEntry(
+        changelogEntry,
+        totalEntries
+      ));
     } catch (error) {
       console.error("Error: " + error.message);
       throw error;
