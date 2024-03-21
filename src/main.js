@@ -89,6 +89,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   // Post info message about adding changeset file manually if PR opened or reopened
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
     await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
+    await handleLabels(octokit, prData, "add-failed-label");
     throw new Error("Waiting for changeset file to be added manually.");
   }
   // Else, post error message indicating changeset file is missing
