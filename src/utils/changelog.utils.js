@@ -1,5 +1,8 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-import { EmptyChangelogSectionError, InvalidChangelogHeadingError } from "../errors/index.js";
+import {
+  EmptyChangelogSectionError,
+  InvalidChangelogHeadingError,
+} from "../errors/index.js";
 
 /**
  * Processes a line from a changelog section, handling comment blocks and trimming non-comment lines.
@@ -49,7 +52,7 @@ export const extractChangelogEntries = (
 ) => {
   try {
     // Throw error if PR description is missing
-    if(!prDescription) {
+    if (!prDescription) {
       throw new InvalidChangelogHeadingError();
     }
     // Match the changelog section using the defined regex
@@ -58,7 +61,7 @@ export const extractChangelogEntries = (
     // changelogSection[0]: Full regex match including '## Changelog' and following content.
     // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
     // Throw error if '## Changelog' header is missing or malformed
-    if(!changelogSection) {
+    if (!changelogSection) {
       throw new InvalidChangelogHeadingError();
     }
 
@@ -75,8 +78,11 @@ export const extractChangelogEntries = (
         return { entries, state: processed.state };
       }, initialAcc).entries;
 
+    console.log(changelogSection[0]);
+    console.log(changelogEntries);
+
     // Throw error if no changelog entries are found
-    if(changelogEntries.length === 0) {
+    if (changelogEntries.length === 0) {
       throw new EmptyChangelogSectionError();
     }
 
@@ -85,8 +91,8 @@ export const extractChangelogEntries = (
         changelogEntries.length === 1 ? "entry" : "entries"
       }:`
     );
-    for (const eachEntry of changelogEntries){
-        console.log(`${eachEntry}`);
+    for (const eachEntry of changelogEntries) {
+      console.log(`${eachEntry}`);
     }
     return changelogEntries;
   } catch (error) {
