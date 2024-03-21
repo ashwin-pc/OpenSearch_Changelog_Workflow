@@ -33,7 +33,6 @@ export const getChangesetEntriesMap = (
   const totalEntries = changelogEntries.length;
   for (const changelogEntry of changelogEntries) {
     let prefix, trimmedLog;
-    console.log(prefix, trimmedLog);
     try {
       ({ prefix, trimmedLog } = isValidChangelogEntry(
         changelogEntry,

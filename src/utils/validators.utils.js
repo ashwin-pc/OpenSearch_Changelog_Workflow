@@ -51,20 +51,23 @@ export const isValidChangelogEntry = (
     ENTRY_FORMATTING_PATTERN_REGEX
   );
   const trimmedLog = log ? log.trim() : "";
-  if (prefix !== "skip" && !log) {
-    throw new EmptyEntryDescriptionError(prefix);
+
+  if (marker !== "-") {
+    throw new ChangelogEntryMissingHyphenError();
+  } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
+    if (changesetCreationMode === "automatic") {
+      throw new InvalidPrefixError(prefix);
+    } else {
+      throw new InvalidPrefixErrorForManualMode(prefix);
+    }
   } else if (prefix === "skip" && totalEntries > 1) {
     throw new CategoryWithSkipOptionError();
+  } else if (prefix !== "skip" && !log) {
+    throw new EmptyEntryDescriptionError(prefix);
+  } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
+    throw new EntryTooLongError(log.length);
   }
-  if (changesetCreationMode === "automatic") {
-    if (marker !== "-") {
-      throw new ChangelogEntryMissingHyphenError();
-    } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
-      throw new InvalidPrefixError(prefix);
-    } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
-      throw new EntryTooLongError(log.length);
-    }
-  }
+
   return { prefix, trimmedLog };
 };
 
