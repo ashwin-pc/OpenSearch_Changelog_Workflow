@@ -31,10 +31,12 @@ const isFileInCommitedChanges = async (
       page++;
       // Check if the specified file is in the list
       if (files.some((file) => file.filename === path)) {
+        console.log(`File '${path}' found in pull request #${prNumber}`);
         return true; // File found, no need to check further
       }
     } while (files.length !== 0); // Continue if the current page was not empty
 
+    console.log(`File '${path}' not found in pull request #${prNumber}`);
     return false; // File not found in any pages
   } catch (error) {
     console.error("An error occurred:", error);
