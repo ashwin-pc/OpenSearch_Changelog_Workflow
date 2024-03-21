@@ -93,8 +93,31 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   }
   // Else, post error message indicating changeset file is missing
   else if (prData.prAction == "edited" || prData.prAction == "synchronize") {
-    await postErrorMessageAboutMissingChangesetFile(octokit, prData);
-    throw new Error("Changeset file required to be added manually.");
+    try {
+      const changelogEntries = extractChangelogEntries(
+        prData.prDescription,
+        processChangelogLine
+      );
+      const changesetEntriesMap = getChangesetEntriesMap(
+        changelogEntries,
+        prData.prNumber,
+        prData.prLink
+      );
+      if (isSkipEntry(changesetEntriesMap)) {
+        await handleSkipEntry(octokit, prData);
+        return;
+      }
+      await forkedFileServices.getFileFromForkedRepoByPath(
+        prData.headOwner,
+        prData.headRepo,
+        prData.headBranch,
+        getChangesetFilePath(prData.prNumber)
+      );
+      handleLabels(octokit, prData, "remove-all-labels");
+    } catch (error) {
+      await postErrorMessageAboutMissingChangesetFile(octokit, prData);
+      throw new Error("Changeset file required to be added manually.");
+    }
   }
 };
 
