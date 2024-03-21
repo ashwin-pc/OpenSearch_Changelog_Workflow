@@ -115,6 +115,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         prData.prLink,
         changesetCreationMode
       );
+      console.log(changesetEntriesMap)
       if (isSkipEntry(changesetEntriesMap)) {
         await handleSkipEntry(octokit, prData);
         return;
