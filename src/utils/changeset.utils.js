@@ -23,16 +23,27 @@ import { capitalize } from "./formatting.utils.js";
  *                     If the prefix is "skip", the object will map an empty string to "skip".
  * @throws {Error} - An error related to changelog entry validation.
  */
-export const getChangesetEntriesMap = (changelogEntries, prNumber, prLink) => {
+export const getChangesetEntriesMap = (
+  changelogEntries,
+  prNumber,
+  prLink,
+  changesetCreationMode
+) => {
   const changesetEntryMap = {};
   const totalEntries = changelogEntries.length;
   for (const changelogEntry of changelogEntries) {
     let prefix, trimmedLog;
+
     try {
-      ({ prefix, trimmedLog } = isValidChangelogEntry(
-        changelogEntry,
-        totalEntries
-      ));
+      if ((changesetCreationMode == "automatic") || (changesetCreationMode == "manual" && prefix != "" && trimmedLog != "")) {
+        ({ prefix, trimmedLog } = isValidChangelogEntry(
+          changelogEntry,
+          totalEntries
+        ));
+      }
+      else {
+        return changesetEntryMap;
+      }
     } catch (error) {
       console.error("Error: " + error.message);
       throw error;
