@@ -27,6 +27,6 @@ const getFileInPullRequestChanges = async (octokit, owner, repo, prNumber, path)
   }
 }
 
-export const oullRequestServices = {
-  getFileInPullRequestChanges
+export const pullRequestServices = {
+  getFileInCommitedChanges
 };
