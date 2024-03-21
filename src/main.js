@@ -110,7 +110,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         return;
       }
       const changesetFile =
-        await pullRequestServices.getFileInPullRequestChanges(
+        await pullRequestServices.getFileInCommitedChanges(
           prData.headOwner,
           prData.headRepo,
           prData.prNumber,
