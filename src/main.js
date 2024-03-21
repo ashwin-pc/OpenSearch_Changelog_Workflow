@@ -42,6 +42,7 @@ const run = async () => {
     }
     await processChangelogEntries(octokit, prData);
   } catch (error) {
+    console.log(error)
     await handleErrorChangelogEntries(error, octokit, prData);
     throw new Error("Changeset creation workflow failed.");
   }
