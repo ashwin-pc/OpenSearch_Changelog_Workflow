@@ -30,6 +30,9 @@ export const getChangesetEntriesMap = (
   changesetCreationMode
 ) => {
   const changesetEntryMap = {};
+  if (changelogEntries.length === 0  && changesetCreationMode === "manual") {
+    return changesetEntryMap;
+  }
   const totalEntries = changelogEntries.length;
   for (const changelogEntry of changelogEntries) {
     let prefix, trimmedLog;
