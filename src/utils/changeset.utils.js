@@ -37,7 +37,8 @@ export const getChangesetEntriesMap = (
     try {
       ({ prefix, trimmedLog } = isValidChangelogEntry(
         changelogEntry,
-        totalEntries
+        totalEntries,
+        changesetCreationMode
       ));
     } catch (error) {
       console.error("Error: " + error.message);

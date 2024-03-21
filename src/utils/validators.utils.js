@@ -42,21 +42,28 @@ import { forkedAuthServices } from "../services/index.js";
  * @throws {EmptyEntryDescriptionError} - When the changelog entry description is empty.
  * @throws {EntryTooLongError} - When the changelog entry exceeds the maximum allowed length.
  */
-export const isValidChangelogEntry = (changelogEntry, totalEntries) => {
+export const isValidChangelogEntry = (
+  changelogEntry,
+  totalEntries,
+  changesetCreationMode
+) => {
   const [, marker, prefix, log] = changelogEntry.match(
     ENTRY_FORMATTING_PATTERN_REGEX
   );
   const trimmedLog = log ? log.trim() : "";
   if (prefix !== "skip" && !log) {
     throw new EmptyEntryDescriptionError(prefix);
-  } else if (marker !== "-") {
-    throw new ChangelogEntryMissingHyphenError();
-  } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
-    throw new InvalidPrefixError(prefix);
   } else if (prefix === "skip" && totalEntries > 1) {
     throw new CategoryWithSkipOptionError();
-  } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
-    throw new EntryTooLongError(log.length);
+  }
+  if (changesetCreationMode === "automatic") {
+    if (marker !== "-") {
+      throw new ChangelogEntryMissingHyphenError();
+    } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
+      throw new InvalidPrefixError(prefix);
+    } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
+      throw new EntryTooLongError(log.length);
+    }
   }
   return { prefix, trimmedLog };
 };
