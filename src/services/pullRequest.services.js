@@ -18,12 +18,13 @@ const isFileInCommitedChanges = async (
 ) => {
   try {
     // Get the list of files for the pull request
-    const { data: files } = await octokit.rest.pulls.listFiles({
+    const response = await octokit.rest.pulls.listFiles({
       owner,
       repo,
       pull_number: prNumber,
     });
-    console.log(data)
+    console.log(response)
+    const files = response.data;
 
     // Check if the specified file is in the list
     const fileExists = files.some((file) => file.filename === path);
