@@ -24,6 +24,7 @@ import {
 } from "./utils/index.js";
 
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
+import { ChangesetFileNotAddedYetError } from "./errors/index.js";
 
 // ****************************************************************************
 // I) MAIN
@@ -33,7 +34,7 @@ const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
 
-  // If Github App is not installed or suspended
+  // If Github App is not installed or suspended, use manual approach to create changeset file
   if (await isGitHubAppNotInstalledOrSuspended(prData)) {
     await handleManualChangesetCreation(octokit, prData);
   }
@@ -50,46 +51,8 @@ run();
 // ****************************************************************************
 
 // ----------------------------------------------------------
-// GitHub App Helpers Functions
+// Chnageset Creation Helpers Functions
 // ----------------------------------------------------------
-const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
-  octokit,
-  prData
-) => {
-  console.log(
-    "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-  );
-  const warning = new ManualChangesetCreationReminderInfo(prData.prNumber);
-  const warningPostComment = formatPostComment({
-    input: warning,
-    type: "INFO",
-  });
-  await commentServices.postComment(
-    octokit,
-    prData.baseOwner,
-    prData.baseRepo,
-    prData.prNumber,
-    warningPostComment
-  );
-
-  await handleLabels(octokit, prData, "remove-all-labels");
-};
-
-// ----------------------------------------------------------
-// Entries Helpers Functions
-// ----------------------------------------------------------
-const handleSkipEntry = async (octokit, prData) => {
-  const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-  await forkedFileServices.deleteFileInForkedRepoByPath(
-    prData.headOwner,
-    prData.headRepo,
-    prData.headBranch,
-    getChangesetFilePath(prData.prNumber),
-    commitMessage
-  );
-  await handleLabels(octokit, prData, "add-skip-label");
-};
-
 const handleAutomaticChangesetCreation = async (octokit, prData) => {
   try {
     const changelogEntries = extractChangelogEntries(
@@ -118,7 +81,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
     handleLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     await handleErrorChangelogEntries(error, octokit, prData);
-    throw new Error("Changeset creation workflow failed.");
+    throw new Error("Automatic creation of changeset file failed.");
   }
 };
 
@@ -130,9 +93,29 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   }
   // Else, post error message indicating changeset file is missing
   else if (prData.prAction == "edited" || prData.prAction == "synchronize") {
-    throw new Error("Changeset file to be added manually.");
+    await postErrorMessageAboutMissingChangesetFile(octokit, prData);
+    throw new Error("Changeset file required to be added manually.");
   }
 };
+
+// ----------------------------------------------------------
+// Entries Helpers Functions
+// ----------------------------------------------------------
+const handleSkipEntry = async (octokit, prData) => {
+  const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
+  await forkedFileServices.deleteFileInForkedRepoByPath(
+    prData.headOwner,
+    prData.headRepo,
+    prData.headBranch,
+    getChangesetFilePath(prData.prNumber),
+    commitMessage
+  );
+  await handleLabels(octokit, prData, "add-skip-label");
+};
+
+// ----------------------------------------------------------
+// Error Helpers Functions
+// ----------------------------------------------------------
 
 const handleErrorChangelogEntries = async (error, octokit, prData) => {
   const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
@@ -164,6 +147,51 @@ const handleErrorChangelogEntries = async (error, octokit, prData) => {
       commitMessage
     );
   }
+};
+
+// ----------------------------------------------------------
+// Pull Request Post Helpers Functions
+// ----------------------------------------------------------
+const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
+  octokit,
+  prData
+) => {
+  console.log(
+    "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+  );
+  const warning = new ManualChangesetCreationReminderInfo(prData.prNumber);
+  const warningPostComment = formatPostComment({
+    input: warning,
+    type: "INFO",
+  });
+  await commentServices.postComment(
+    octokit,
+    prData.baseOwner,
+    prData.baseRepo,
+    prData.prNumber,
+    warningPostComment
+  );
+
+  await handleLabels(octokit, prData, "remove-all-labels");
+};
+
+const postErrorMessageAboutMissingChangesetFile = async (octokit, prData) => {
+  console.log(
+    `Changeset file _${prData.prNumber}.yml_ is missing in the forked repository.`
+  );
+
+  const errorPostComment = formatPostComment({
+    input: ChangesetFileNotAddedYetError,
+    type: "ERROR",
+  });
+  await commentServices.postComment(
+    octokit,
+    prData.baseOwner,
+    prData.baseRepo,
+    prData.prNumber,
+    errorPostComment
+  );
+  await handleLabels(octokit, prData, "add-failed-label");
 };
 
 // ----------------------------------------------------------
@@ -225,7 +253,7 @@ const handleLabels = async (octokit, prData, operation) => {
 };
 
 // ----------------------------------------------------------
-// Other Helpers Functions
+// Path Helpers Functions
 // ----------------------------------------------------------
 function getChangesetFilePath(prNumber) {
   return `${CHANGESET_PATH}/${prNumber}.yml`;
