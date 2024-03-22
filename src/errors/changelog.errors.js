@@ -70,9 +70,9 @@ export class InvalidPrefixError extends Error {
 /**
  * Represents an error when a specified prefix is not "skip" in manual mode.
  */
-export class InvalidPrefixErrorForManualMode extends Error {
+export class InvalidPrefixForManualChnagesetCreationError extends Error {
   /**
-   * Constructs the InvalidPrefixErrorForManualMode instance.
+   * Constructs the InvalidPrefixForManualChnagesetCreationError instance.
    * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
@@ -86,7 +86,7 @@ export class InvalidPrefixErrorForManualMode extends Error {
 /**
  * Represents an error when a category is incorrectly included with a 'skip' option.
  */
-export class InvalidaAdditionalPrefixWithSkipEntryOptionError extends Error {
+export class InvalidAdditionalPrefixWithSkipEntryOptionError extends Error {
   /**
    * Constructs the CategoryWithSkipError instance.
    */

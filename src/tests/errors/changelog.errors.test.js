@@ -4,7 +4,7 @@ import {
   InvalidChangelogHeadingError,
   EntryTooLongError,
   InvalidPrefixError,
-  InvalidaAdditionalPrefixWithSkipEntryOptionError,
+  InvalidAdditionalPrefixWithSkipEntryOptionError,
   ChangelogEntryMissingHyphenError,
   EmptyChangelogSectionError,
   EmptyEntryDescriptionError,
@@ -52,12 +52,12 @@ describe("Changelog Errors Tests", () => {
     expect(error.shouldResultInPRComment).toBe(true);
   });
 
-  test("InvalidaAdditionalPrefixWithSkipEntryOptionError default message", () => {
-    const error = new InvalidaAdditionalPrefixWithSkipEntryOptionError();
+  test("InvalidAdditionalPrefixWithSkipEntryOptionError default message", () => {
+    const error = new InvalidAdditionalPrefixWithSkipEntryOptionError();
     expect(error.message).toBe(
       "If your Changelog section includes the 'skip' option, it cannot also contain other changelog entries. Please revise your Changelog section."
     );
-    expect(error.name).toBe("InvalidaAdditionalPrefixWithSkipEntryOptionError");
+    expect(error.name).toBe("InvalidAdditionalPrefixWithSkipEntryOptionError");
     expect(error.shouldResultInPRComment).toBe(true);
   });
 
