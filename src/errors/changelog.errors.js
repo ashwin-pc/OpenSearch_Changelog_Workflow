@@ -85,6 +85,20 @@ export class InvalidPrefixError extends Error {
   }
 }
 
+export class InvalidPrefixErrorForManualMode extends Error {
+  /**
+   * Constructs the InvalidPrefixErrorForManualMode instance.
+   * @param {string} [foundPrefix] - The prefix provided by the user.
+   */
+  constructor(foundPrefix) {
+    const message = `Invalid description prefix. Found "${foundPrefix}". Only "skip" entry option is permitted if manual changeset creation is followed.`;
+    super(message);
+    this.name = this.constructor.name;
+    this.shouldResultInPRComment = true;
+  }
+
+}
+
 /**
  * Represents an error when a category is incorrectly included with a 'skip' option.
  */
