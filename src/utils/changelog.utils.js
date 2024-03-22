@@ -60,6 +60,7 @@ export const extractChangelogEntries = (
     // Output -> Array of length 2:
     // changelogSection[0]: Full regex match including '## Changelog' and following content.
     // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
+    
     // Throw error if '## Changelog' header is missing or malformed
     if (!changelogSection) {
       throw new InvalidChangelogHeadingError();
@@ -78,12 +79,14 @@ export const extractChangelogEntries = (
         return { entries, state: processed.state };
       }, initialAcc).entries;
 
-    console.log(changelogSection[0]);
-    console.log(changelogEntries);
-
     // Throw error if no changelog entries are found
     if (changelogEntries.length === 0) {
-      throw new EmptyChangelogSectionError();
+      if(changesetCreationMode === "manual") {
+        throw new EmptyChangelogSectionError();
+      }
+      else {
+        return [];
+      }
     }
 
     console.log(

@@ -68,7 +68,8 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
   try {
     const changelogEntries = extractChangelogEntries(
       prData.prDescription,
-      processChangelogLine
+      processChangelogLine,
+      changesetCreationMode
     );
     const changesetEntriesMap = getChangesetEntriesMap(
       changelogEntries,
@@ -110,7 +111,8 @@ const handleManualChangesetCreation = async (octokit, prData) => {
     try {
       const changelogEntries = extractChangelogEntries(
         prData.prDescription,
-        processChangelogLine
+        processChangelogLine,
+        changesetCreationMode
       );
       const changesetEntriesMap = getChangesetEntriesMap(
         changelogEntries,
