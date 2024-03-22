@@ -13,10 +13,6 @@ export class InvalidChangelogHeadingError extends Error {
   ) {
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -34,10 +30,6 @@ export class EmptyChangelogSectionError extends Error {
   ) {
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -57,10 +49,6 @@ export class EntryTooLongError extends Error {
     } longer than the maximum allowed length of ${MAX_ENTRY_LENGTH} characters. Please revise your entry to be within the maximum length.`;
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -77,10 +65,6 @@ export class InvalidPrefixError extends Error {
     const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -112,10 +96,6 @@ export class CategoryWithSkipOptionError extends Error {
   ) {
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -131,10 +111,6 @@ export class ChangelogEntryMissingHyphenError extends Error {
   constructor(message = "Changelog entries must begin with a hyphen (-).") {
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
@@ -151,10 +127,6 @@ export class EmptyEntryDescriptionError extends Error {
     const message = `Description for "${foundPrefix}" entry cannot be empty.`;
     super(message);
     this.name = this.constructor.name;
-    /**
-     * Indicates whether this error should trigger a comment in the pull request.
-     * @type {boolean}
-     */
     this.shouldResultInPRComment = true;
   }
 }
