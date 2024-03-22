@@ -59,7 +59,7 @@ export class EntryTooLongError extends Error {
 export class InvalidPrefixError extends Error {
   /**
    * Constructs the InvalidPrefixError instance.
-   * @param {string} [foundPrefix] - The prefix provided by the user.
+   * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
     const message = `Invalid description prefix. Found "${foundPrefix}". Expected "breaking", "deprecate", "feat", "fix", "infra", "doc", "chore", "refactor", "security", "skip", or "test".`;
@@ -69,10 +69,13 @@ export class InvalidPrefixError extends Error {
   }
 }
 
+/**
+ * Represents an error when a specified prefix is not "skip" in manual mode.
+ */
 export class InvalidPrefixErrorForManualMode extends Error {
   /**
    * Constructs the InvalidPrefixErrorForManualMode instance.
-   * @param {string} [foundPrefix] - The prefix provided by the user.
+   * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
     const message = `Invalid description prefix. Found "${foundPrefix}". Only "skip" entry option is permitted if manual changeset creation is followed.`;
@@ -106,9 +109,10 @@ export class CategoryWithSkipOptionError extends Error {
 export class ChangelogEntryMissingHyphenError extends Error {
   /**
    * Constructs the ChangelogEntryMissingHyphenError instance.
-   * @param {string} [message="Changelog entries must begin with a hyphen (-)."] - Custom error message.
+   * @param {string} message - Custom error message.
    */
-  constructor(message = "Changelog entries must begin with a hyphen (-).") {
+  constructor() {
+    const message = "Changelog entries must begin with a hyphen (-).";
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
@@ -121,7 +125,7 @@ export class ChangelogEntryMissingHyphenError extends Error {
 export class EmptyEntryDescriptionError extends Error {
   /**
    * Constructs the EmptyDescriptionError instance.
-   * @param {string} [foundPrefix] - The prefix provided by the user.
+   * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
     const message = `Description for "${foundPrefix}" entry cannot be empty.`;
