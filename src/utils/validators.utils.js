@@ -53,20 +53,24 @@ export const isValidChangelogEntry = (
   );
   const trimmedLog = log ? log.trim() : "";
 
-  if (marker !== "-") {
-    throw new ChangelogEntryMissingHyphenError();
-  } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
-    if (changesetCreationMode === "automatic") {
-      throw new InvalidPrefixError(prefix);
-    } else {
+  if (changesetCreationMode === "manual") {
+    if (marker !== "-") {
+      throw new ChangelogEntryMissingHyphenError();
+    } else if (prefix.toLowerCase() !== "skip") {
       throw new InvalidPrefixForManualChnagesetCreationError(prefix);
     }
-  } else if (prefix === "skip" && totalEntries > 1) {
-    throw new InvalidAdditionalPrefixWithSkipEntryOptionError();
-  } else if (prefix !== "skip" && !log) {
-    throw new EmptyEntryDescriptionError(prefix);
-  } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
-    throw new EntryTooLongError(log.length);
+  } else {
+    if (marker !== "-") {
+      throw new ChangelogEntryMissingHyphenError();
+    } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
+      throw new InvalidPrefixError(prefix);
+    } else if (prefix === "skip" && totalEntries > 1) {
+      throw new InvalidAdditionalPrefixWithSkipEntryOptionError();
+    } else if (prefix !== "skip" && !log) {
+      throw new EmptyEntryDescriptionError(prefix);
+    } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
+      throw new EntryTooLongError(log.length);
+    }
   }
 
   return { prefix, trimmedLog };
