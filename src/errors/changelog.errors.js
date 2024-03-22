@@ -20,9 +20,9 @@ export class InvalidChangelogHeadingError extends Error {
 /**
  * Represents an error for an empty changelog section in a PR description.
  */
-export class InvalidaAdditionalPrefixWithSkipEntryOptionError extends Error {
+export class EmptyChangelogSectionError extends Error {
   /**
-   * Constructs the InvalidaAdditionalPrefixWithSkipEntryOptionError instance.
+   * Constructs the EmptyChangelogSectionError instance.
    * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."] - Custom error message.
    */
   constructor(
@@ -93,7 +93,8 @@ export class InvalidaAdditionalPrefixWithSkipEntryOptionError extends Error {
    * Constructs the CategoryWithSkipError instance.
    */
   constructor() {
-    const message = "If your Changelog section includes the 'skip' entry option, it cannot also include other changelog entry prefixes. The option 'skip' must be alone, when used. Please revise your Changelog section again.";
+    const message =
+      "If your Changelog section includes the 'skip' entry option, it cannot also include other changelog entry prefixes. The option 'skip' must be alone, when used. Please revise your Changelog section again.";
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
