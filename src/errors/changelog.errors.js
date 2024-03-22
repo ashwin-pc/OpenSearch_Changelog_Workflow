@@ -6,11 +6,10 @@ import { MAX_ENTRY_LENGTH } from "../config/constants.js";
 export class InvalidChangelogHeadingError extends Error {
   /**
    * Constructs the InvalidChangelogHeadingError instance.
-   * @param {string} [message="The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with with proper spelling, capitalization, spacing, and Markdown syntax."] - Custom error message.
    */
-  constructor(
-    message = "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with proper spelling, capitalization, spacing, and Markdown syntax."
-  ) {
+  constructor() {
+    const message =
+      "The '## Changelog' heading in your PR description is either missing or malformed. Please make sure that your PR description includes a '## Changelog' heading with proper spelling, capitalization, spacing, and Markdown syntax.";
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
@@ -23,11 +22,10 @@ export class InvalidChangelogHeadingError extends Error {
 export class EmptyChangelogSectionError extends Error {
   /**
    * Constructs the EmptyChangelogSectionError instance.
-   * @param {string} [message="The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."] - Custom error message.
    */
-  constructor(
-    message = "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."
-  ) {
+  constructor() {
+    const message =
+      "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section.";
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
@@ -40,7 +38,7 @@ export class EmptyChangelogSectionError extends Error {
 export class EntryTooLongError extends Error {
   /**
    * Constructs the EntryTooLongError instance.
-   * @param {string} [entryLength] - The length of the entry provided by the user.
+   * @param {string} entryLength - The length of the entry provided by the user.
    */
   constructor(entryLength) {
     const characterOverage = entryLength - MAX_ENTRY_LENGTH;
@@ -107,7 +105,6 @@ export class InvalidaAdditionalPrefixWithSkipEntryOptionError extends Error {
 export class ChangelogEntryMissingHyphenError extends Error {
   /**
    * Constructs the ChangelogEntryMissingHyphenError instance.
-   * @param {string} message - Custom error message.
    */
   constructor() {
     const message = "Changelog entries must begin with a hyphen (-).";
