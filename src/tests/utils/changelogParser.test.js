@@ -3,7 +3,7 @@ import {
   extractChangelogEntries,
 } from "../../utils/changelogParser.js";
 import {
-  InvalidaAdditionalPrefixWithSkipEntryOptionError,
+  EmptyChangelogSectionError,
   InvalidChangelogHeadingError,
 } from "../../errors/index.js";
 
@@ -82,7 +82,7 @@ describe("Changelog Parser Tests", () => {
       expect(mockProcessLine).not.toHaveBeenCalled();
     });
 
-    test("should throw InvalidaAdditionalPrefixWithSkipEntryOptionError if `## Changelog` section is missing changelog entries", () => {
+    test("should throw EmptyChangelogSectionError if `## Changelog` section is missing changelog entries", () => {
       const emptyChangelogSectionFollowedByAHeading =
         "## Changelog\n" + "\n" + "\n" + "\n" + "## Next Heading\n";
       mockProcessLine
@@ -98,7 +98,7 @@ describe("Changelog Parser Tests", () => {
           emptyChangelogSectionFollowedByAHeading,
           mockProcessLine
         )
-      ).toThrow(InvalidaAdditionalPrefixWithSkipEntryOptionError);
+      ).toThrow(EmptyChangelogSectionError);
       expect(mockProcessLine).toHaveBeenCalledTimes(6);
     });
 
