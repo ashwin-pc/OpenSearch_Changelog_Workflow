@@ -11,7 +11,7 @@ import {
   InvalidPrefixError,
   EmptyEntryDescriptionError,
   EntryTooLongError,
-  CategoryWithSkipOptionError,
+  InvalidaAdditionalPrefixWithSkipEntryOptionError,
   MissingChangelogPullRequestBridgeApiKeyError,
   MissingChangelogPullRequestBridgeUrlDomainError,
 } from "../errors/index.js";
@@ -38,7 +38,7 @@ import { forkedAuthServices } from "../services/index.js";
  *                     If the prefix is "skip", the object will map an empty string to "skip".
  * @throws {ChangelogEntryMissingHyphenError} - When the changelog entry does not match the expected format.
  * @throws {InvalidPrefixError} - When the prefix is not included in the predefined list of valid prefixes.
- * @throws {CategoryWithSkipOptionError} - When the changelog entry contains additional category prefixes along with the "skip" option.
+ * @throws {InvalidaAdditionalPrefixWithSkipEntryOptionError} - When the changelog entry contains additional category prefixes along with the "skip" option.
  * @throws {EmptyEntryDescriptionError} - When the changelog entry description is empty.
  * @throws {EntryTooLongError} - When the changelog entry exceeds the maximum allowed length.
  */
@@ -61,7 +61,7 @@ export const isValidChangelogEntry = (
       throw new InvalidPrefixErrorForManualMode(prefix);
     }
   } else if (prefix === "skip" && totalEntries > 1) {
-    throw new CategoryWithSkipOptionError();
+    throw new InvalidaAdditionalPrefixWithSkipEntryOptionError();
   } else if (prefix !== "skip" && !log) {
     throw new EmptyEntryDescriptionError(prefix);
   } else if (trimmedLog.length > MAX_ENTRY_LENGTH) {
