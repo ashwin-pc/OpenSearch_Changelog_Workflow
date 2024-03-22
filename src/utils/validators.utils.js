@@ -9,7 +9,7 @@ import {
 import {
   ChangelogEntryMissingHyphenError,
   InvalidPrefixError,
-  InvalidPrefixForManualChnagesetCreationError,
+  InvalidPrefixForManualChangesetCreationError,
   InvalidAdditionalPrefixWithSkipEntryOptionError,
   EmptyEntryDescriptionError,
   EntryTooLongError,
@@ -57,7 +57,7 @@ export const isValidChangelogEntry = (
     if (marker !== "-") {
       throw new ChangelogEntryMissingHyphenError();
     } else if (prefix.toLowerCase() !== "skip") {
-      throw new InvalidPrefixForManualChnagesetCreationError(prefix);
+      throw new InvalidPrefixForManualChangesetCreationError(prefix);
     }
   } else {
     if (marker !== "-") {

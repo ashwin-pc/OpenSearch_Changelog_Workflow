@@ -70,9 +70,9 @@ export class InvalidPrefixError extends Error {
 /**
  * Represents an error when a specified prefix is not "skip" in manual mode.
  */
-export class InvalidPrefixForManualChnagesetCreationError extends Error {
+export class InvalidPrefixForManualChangesetCreationError extends Error {
   /**
-   * Constructs the InvalidPrefixForManualChnagesetCreationError instance.
+   * Constructs the InvalidPrefixForManualChangesetCreationError instance.
    * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
