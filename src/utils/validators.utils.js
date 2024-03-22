@@ -56,11 +56,12 @@ export const isValidChangelogEntry = (
   if (marker !== "-") {
     throw new ChangelogEntryMissingHyphenError();
   } else if (!CHANGELOG_ENTRY_PREFIXES.includes(prefix.toLowerCase())) {
-    if (changesetCreationMode === "automatic") {
-      throw new InvalidPrefixError(prefix);
-    } else {
-      throw new InvalidPrefixErrorForManualMode(prefix);
-    }
+    throw new InvalidPrefixError(prefix);
+    // if (changesetCreationMode === "automatic") {
+    //   throw new InvalidPrefixError(prefix);
+    // } else {
+    //   throw new InvalidPrefixErrorForManualMode(prefix);
+    // }
   } else if (prefix === "skip" && totalEntries > 1) {
     throw new InvalidaAdditionalPrefixWithSkipEntryOptionError();
   } else if (prefix !== "skip" && !log) {
