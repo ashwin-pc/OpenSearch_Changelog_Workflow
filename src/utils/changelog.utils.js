@@ -48,7 +48,8 @@ export const processChangelogLine = (line, state) => {
  */
 export const extractChangelogEntries = (
   prDescription,
-  processChangelogLine
+  processChangelogLine,
+  changesetCreationMode
 ) => {
   try {
     // Throw error if PR description is missing
