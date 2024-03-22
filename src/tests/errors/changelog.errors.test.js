@@ -7,7 +7,7 @@ import {
   CategoryWithSkipOptionError,
   ChangelogEntryMissingHyphenError,
   EmptyEntryDescriptionError,
-  EmptyChangelogSectionError,
+  InvalidaAdditionalPrefixWithSkipEntryOptionError,
 } from "../../errors/index.js";
 
 describe("Changelog Errors Tests", () => {
@@ -20,12 +20,12 @@ describe("Changelog Errors Tests", () => {
     expect(error.shouldResultInPRComment).toBe(true);
   });
 
-  test("EmptyChangelogSectionError default message", () => {
-    const error = new EmptyChangelogSectionError();
+  test("InvalidaAdditionalPrefixWithSkipEntryOptionError default message", () => {
+    const error = new InvalidaAdditionalPrefixWithSkipEntryOptionError();
     expect(error.message).toBe(
       "The Changelog section in your PR description is empty. Please add a valid changelog entry or entries. If you did add a changelog entry, check to make sure that it was not accidentally included inside the comment block in the Changelog section."
     );
-    expect(error.name).toBe("EmptyChangelogSectionError");
+    expect(error.name).toBe("InvalidaAdditionalPrefixWithSkipEntryOptionError");
     expect(error.shouldResultInPRComment).toBe(true);
   });
 
