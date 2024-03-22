@@ -1,6 +1,6 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
 import {
-  InvalidaAdditionalPrefixWithSkipEntryOptionError,
+  EmptyChangelogSectionError,
   InvalidChangelogHeadingError,
 } from "../errors/index.js";
 
@@ -82,9 +82,10 @@ export const extractChangelogEntries = (
 
     // Throw error if no changelog entries are found
     if (changelogEntries.length === 0) {
-      if (changesetCreationMode === "manual") {
-        throw new InvalidaAdditionalPrefixWithSkipEntryOptionError();
-      } else {
+      if(changesetCreationMode === "automatic") {
+        throw new EmptyChangelogSectionError();
+      }
+      else {
         return [];
       }
     }
