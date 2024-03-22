@@ -94,7 +94,7 @@ export class InvalidaAdditionalPrefixWithSkipEntryOptionError extends Error {
    */
   constructor() {
     const message =
-      "If your Changelog section includes the 'skip' entry option, it cannot also include other changelog entry prefixes. The option 'skip' must be alone, when used. Please revise your Changelog section again.";
+      "If your Changelog section includes the 'skip' entry option, it cannot also include other changelog entry prefixes. The option 'skip' must be alone when used. Please review your Changelog section again.";
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
