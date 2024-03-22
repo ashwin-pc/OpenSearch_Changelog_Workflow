@@ -9,6 +9,7 @@ import {
 import {
   ChangelogEntryMissingHyphenError,
   InvalidPrefixError,
+  InvalidPrefixErrorForManualMode,
   EmptyEntryDescriptionError,
   EntryTooLongError,
   InvalidaAdditionalPrefixWithSkipEntryOptionError,
