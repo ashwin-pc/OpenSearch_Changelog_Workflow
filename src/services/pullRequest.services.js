@@ -25,7 +25,6 @@ const isFileInCommitedChanges = async (
         owner,
         repo,
         pull_number: prNumber,
-        per_page: 1,
         page,
       }));
       // Increment page for next iteration
