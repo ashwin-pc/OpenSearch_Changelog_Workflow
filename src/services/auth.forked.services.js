@@ -7,11 +7,11 @@ import {
   handleChangelogPRBridgeResponseErrors,
 } from "../utils/index.js";
 /**
- * Get a file in a given path in a forked GitHub repository.
+ * Get the github app installation info from the forked repo
  *
  * @param {string} owner - The repository owner.
  * @param {string} repo - The repository name.
- * @returns {Promise<object>} - An object containing the file details.
+ * @returns {Promise<object>} - An object containing the app info.
  * @throws {Error} - If an error occurs while fetching the file.
  */
 const getGitHubAppInstallationInfoFromForkedRepo = async (owner, repo) => {
