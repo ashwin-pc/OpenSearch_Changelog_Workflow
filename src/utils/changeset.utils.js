@@ -5,16 +5,9 @@ import { capitalize } from "./formatting.utils.js";
 /**
  * Validates and formats a set of changelog entries associated with a pull request (PR).
  *
- * This function iterates over an array of changelog entries, validating each entry against a regex pattern
- * and ensuring compliance with format, prefix validity, and length constraints. Valid entries are formatted
- * and linked to the specified PR. The function handles special cases like the "skip" prefix and throws custom
- * exceptions for various error conditions.
- *
  * - If the prefix is "skip", it immediately returns an object with an empty string associated with "skip".
- * - For valid entries, it capitalizes the log description, formats it with the PR number and link, and
- *   stores it in a map with the prefix as the key.
- * - In case of errors (invalid prefix, empty description, entry too long, format mismatch), the function
- *   throws custom exceptions.
+ * - For valid entries, it capitalizes the log description, formats it with the PR number and link, and stores it in a map with the prefix as the key.
+ * - In case of errors (invalid prefix, empty description, entry too long, format mismatch), the function throws custom exceptions.
  *
  * @param {string[]} changelogEntries - An array of changelog entry strings to be validated and formatted.
  * @param {string} prNumber - The number of the PR associated with these changelog entries.
