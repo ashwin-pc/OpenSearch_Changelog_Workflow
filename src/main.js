@@ -152,10 +152,10 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
       prData.prNumber,
       getChangesetFilePath(prData.prNumber)
     );
-  console.log(changesetFileExistInCommit);
+
   // If changeset file exists
   if (changesetFileExistInCommit) {
-    // For automatic changeset creation, delete changeset file
+    // For automatic changeset creation, delete changeset file and add skip label to PR
     if (changesetCreationMode === "automatic") {
       const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
       await forkedFileServices.deleteFileInForkedRepoByPath(
@@ -165,16 +165,16 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
         getChangesetFilePath(prData.prNumber),
         commitMessage
       );
+      await handlePullRequestLabels(octokit, prData, "add-skip-label");
     }
-    // Handle Manual Changeset Creation
+    // For manual changeset creation, add failed label to PR and throw error
     else {
-      // For manual changeset creation, add failed label to PR and throw error
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
     }
   }
 
-  // Else, if changesetFile does not exist, just add skip label to PR
+  // Else, if changesetFile does not exist, just add skip label to PR (for both automatic and manual changeset creation)
   else {
     await handlePullRequestLabels(octokit, prData, "add-skip-label");
   }
