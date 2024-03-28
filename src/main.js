@@ -17,7 +17,9 @@ import {
   isSkipEntry,
   isGitHubAppNotInstalledOrSuspended,
   formatPostComment,
+  handleSkipEntry,
   handlePullRequestLabels,
+  getChangesetFilePath,
 } from "./utils/index.js";
 
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
@@ -140,47 +142,6 @@ const handleManualChangesetCreation = async (octokit, prData) => {
 };
 
 // ----------------------------------------------------------
-// Entries Helpers Functions
-// ----------------------------------------------------------
-const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
-  // Check if changeset file exists in the commited changes
-  const changesetFileExistInCommit =
-    await pullRequestServices.isFileInCommitedChanges(
-      octokit,
-      prData.baseOwner,
-      prData.baseRepo,
-      prData.prNumber,
-      getChangesetFilePath(prData.prNumber)
-    );
-
-  // If changeset file exists
-  if (changesetFileExistInCommit) {
-    // For automatic changeset creation, delete changeset file and add skip label to PR
-    if (changesetCreationMode === "automatic") {
-      const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-      await forkedFileServices.deleteFileInForkedRepoByPath(
-        prData.headOwner,
-        prData.headRepo,
-        prData.headBranch,
-        getChangesetFilePath(prData.prNumber),
-        commitMessage
-      );
-      await handlePullRequestLabels(octokit, prData, "add-skip-label");
-    }
-    // For manual changeset creation, add failed label to PR and throw error
-    else {
-      await handlePullRequestLabels(octokit, prData, "add-failed-label");
-      throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
-    }
-  }
-
-  // Else, if changesetFile does not exist, just add skip label to PR (for both automatic and manual changeset creation)
-  else {
-    await handlePullRequestLabels(octokit, prData, "add-skip-label");
-  }
-};
-
-// ----------------------------------------------------------
 // Error Helpers Functions
 // ----------------------------------------------------------
 
@@ -268,6 +229,3 @@ const postErrorMessageAboutMissingChangesetFile = async (
 // ----------------------------------------------------------
 // Path Helpers Functions
 // ----------------------------------------------------------
-function getChangesetFilePath(prNumber) {
-  return `${CHANGESET_PATH}/${prNumber}.yml`;
-}
