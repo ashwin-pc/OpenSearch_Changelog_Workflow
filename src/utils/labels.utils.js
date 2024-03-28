@@ -1,4 +1,4 @@
-import { FAILED_CHANGESET_LABEL, SKIP_LABEL } from "./config/constants.js";
+import { FAILED_CHANGESET_LABEL, SKIP_LABEL } from "../config/constants.js";
 
 /**
  * Handles the labels of a PR based on the operation.
