@@ -164,6 +164,7 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
         prData.prNumber,
         getChangesetFilePath(prData.prNumber)
       );
+      console.log("changesetFileExist", changesetFileExist);
     if (changesetFileExist) {
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
