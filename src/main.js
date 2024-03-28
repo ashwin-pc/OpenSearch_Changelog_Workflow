@@ -1,13 +1,10 @@
 import {
   CHANGESET_PATH,
-  FAILED_CHANGESET_LABEL,
-  SKIP_LABEL,
 } from "./config/constants.js";
 
 import {
   forkedFileServices,
   forkedAuthServices,
-  labelServices,
   commentServices,
   authServices,
   pullRequestServices,
