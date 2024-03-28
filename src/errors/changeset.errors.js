@@ -21,7 +21,7 @@ export class ChangesetFileMustNotExistWithSkipEntryOption extends Error {
    * @param {prNumber} prNumber - The pull request number.
    */
   constructor(prNumber){
-    const message = `Changeset file _${prNumber}.yml_ under folder _changelogs/fragments_ must not exist if the changelog section in PR description includes a "skip" entry option. Please remove the file and try again.`;
+    const message = `Changeset file _${prNumber}.yml_ under folder _changelogs/fragments_ must not exist if *##Changelog* section in PR description includes a "skip" entry option. Please remove the changeset file and try again.`;
 
     super(message);
     this.name = this.constructor.name;
