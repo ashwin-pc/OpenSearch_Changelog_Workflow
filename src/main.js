@@ -22,6 +22,7 @@ import {
   isSkipEntry,
   isGitHubAppNotInstalledOrSuspended,
   formatPostComment,
+  handlePullRequestLabels,
 } from "./utils/index.js";
 
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
@@ -91,7 +92,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
       changesetFileContent,
       commitMessage
     );
-    handleLabels(octokit, prData, "remove-all-labels");
+    handlePullRequestLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     await handleErrorChangelogEntries(error, octokit, prData);
     throw new Error("Automatic creation of changeset file failed.", error);
@@ -103,7 +104,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   const changesetCreationMode = "manual";
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
     await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
-    await handleLabels(octokit, prData, "add-failed-label");
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
     throw new Error("Waiting for changeset file to be added manually.");
   }
   // Else, post error message indicating changeset file is missing
@@ -135,7 +136,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
       if (!changesetFileExist) {
         throw new ChangesetFileNotAddedYetError(prData.prNumber);
       }
-      handleLabels(octokit, prData, "remove-all-labels");
+      handlePullRequestLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
       await postErrorMessageAboutMissingChangesetFile(error, octokit, prData);
       throw new Error("Changeset file required to be added manually.", error);
@@ -156,7 +157,7 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
       getChangesetFilePath(prData.prNumber),
       commitMessage
     );
-    await handleLabels(octokit, prData, "add-skip-label");
+    await handlePullRequestLabels(octokit, prData, "add-skip-label");
   } else {
     const changesetFileExist =
       await pullRequestServices.isFileInCommitedChanges(
@@ -167,10 +168,10 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
         getChangesetFilePath(prData.prNumber)
       );
     if (changesetFileExist) {
-      await handleLabels(octokit, prData, "add-failed-label");
+      await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
     } else {
-      await handleLabels(octokit, prData, "add-skip-label");
+      await handlePullRequestLabels(octokit, prData, "add-skip-label");
     }
   }
 };
@@ -192,7 +193,7 @@ const handleErrorChangelogEntries = async (error, octokit, prData) => {
   );
 
   // Add failed changeset label, and remove skip label if exists
-  await handleLabels(octokit, prData, "add-failed-label");
+  await handlePullRequestLabels(octokit, prData, "add-failed-label");
 
   // Delete changeset file if one was previously created
   if (
@@ -234,7 +235,7 @@ const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
     infoPostComment
   );
 
-  await handleLabels(octokit, prData, "remove-all-labels");
+  await handlePullRequestLabels(octokit, prData, "remove-all-labels");
 };
 
 const postErrorMessageAboutMissingChangesetFile = async (
@@ -257,65 +258,7 @@ const postErrorMessageAboutMissingChangesetFile = async (
     prData.prNumber,
     errorPostComment
   );
-  await handleLabels(octokit, prData, "add-failed-label");
-};
-
-// ----------------------------------------------------------
-// Labels Helpers Functions
-// ----------------------------------------------------------
-const handleLabels = async (octokit, prData, operation) => {
-  switch (operation) {
-    case "add-skip-label":
-      await labelServices.addLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        SKIP_LABEL
-      );
-      await labelServices.removeLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        FAILED_CHANGESET_LABEL
-      );
-      break;
-    case "add-failed-label":
-      await labelServices.addLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        FAILED_CHANGESET_LABEL
-      );
-      await labelServices.removeLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        SKIP_LABEL
-      );
-      break;
-    case "remove-all-labels":
-      await labelServices.removeLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        SKIP_LABEL
-      );
-      await labelServices.removeLabel(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        FAILED_CHANGESET_LABEL
-      );
-      break;
-    default:
-      console.error(`Unknown operation: ${operation}`);
-  }
+  await handlePullRequestLabels(octokit, prData, "add-failed-label");
 };
 
 // ----------------------------------------------------------
