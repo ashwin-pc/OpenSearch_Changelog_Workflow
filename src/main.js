@@ -1,6 +1,4 @@
-import {
-  CHANGESET_PATH,
-} from "./config/constants.js";
+import { CHANGESET_PATH } from "./config/constants.js";
 
 import {
   forkedFileServices,
@@ -145,32 +143,40 @@ const handleManualChangesetCreation = async (octokit, prData) => {
 // Entries Helpers Functions
 // ----------------------------------------------------------
 const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
-  const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-  if (changesetCreationMode === "automatic") {
-    await forkedFileServices.deleteFileInForkedRepoByPath(
-      prData.headOwner,
-      prData.headRepo,
-      prData.headBranch,
-      getChangesetFilePath(prData.prNumber),
-      commitMessage
+  // Check if changeset file exists in the commited changes
+  const changesetFileExistInCommit =
+    await pullRequestServices.isFileInCommitedChanges(
+      octokit,
+      prData.baseOwner,
+      prData.baseRepo,
+      prData.prNumber,
+      getChangesetFilePath(prData.prNumber)
     );
-    await handlePullRequestLabels(octokit, prData, "add-skip-label");
-  } else {
-    const changesetFileExist =
-      await pullRequestServices.isFileInCommitedChanges(
-        octokit,
-        prData.baseOwner,
-        prData.baseRepo,
-        prData.prNumber,
-        getChangesetFilePath(prData.prNumber)
+
+  // If changeset file exists
+  if (changesetFileExistInCommit) {
+    // For automatic changeset creation, delete changeset file
+    if (changesetCreationMode === "automatic") {
+      const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
+      await forkedFileServices.deleteFileInForkedRepoByPath(
+        prData.headOwner,
+        prData.headRepo,
+        prData.headBranch,
+        getChangesetFilePath(prData.prNumber),
+        commitMessage
       );
-      console.log("changesetFileExist", changesetFileExist);
-    if (changesetFileExist) {
+    }
+    // Handle Manual Changeset Creation
+    else {
+      // For manual changeset creation, add failed label to PR and throw error 
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
-    } else {
-      await handlePullRequestLabels(octokit, prData, "add-skip-label");
     }
+  }
+
+  // Else, if changesetFile does not exist, just add skip label to PR
+  else {
+    await handlePullRequestLabels(octokit, prData, "add-skip-label");
   }
 };
 
