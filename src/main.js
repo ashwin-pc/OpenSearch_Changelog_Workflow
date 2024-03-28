@@ -46,7 +46,7 @@ const run = async () => {
   // Else, use automated approach to create changeset file
   else {
     console.log(
-      "GitHub App is installed and not suspended in the forked repository.\nProceding fwith checks in changelog PR description and automatic creation of changeset file."
+      "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
     );
     await handleAutomaticChangesetCreation(octokit, prData);
   }
