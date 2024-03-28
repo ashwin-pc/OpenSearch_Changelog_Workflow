@@ -314,7 +314,7 @@ const handleLabels = async (octokit, prData, operation) => {
       );
       break;
     default:
-      console.log(`Unknown operation: ${operation}`);
+      console.error(`Unknown operation: ${operation}`);
   }
 };
 
