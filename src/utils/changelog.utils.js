@@ -62,9 +62,14 @@ export const extractChangelogEntries = (
       changesetCreationMode
     );
 
-    for (const eachEntry of changelogEntries) {
-      console.log(`${eachEntry}`);
-    }
+    // Log the extracted changelog entries
+    console.log(
+      `Found ${changelogEntries.length} changelog ${
+        changelogEntries.length === 1 ? "entry" : "entries"
+      }:`
+    );
+    changelogEntries.forEach((entry) => console.log(entry));
+
     return changelogEntries;
   } catch (error) {
     console.error("Error: " + error.message);
@@ -123,13 +128,6 @@ function processChangelogEntries(
   if (changelogEntries.length === 0 && changesetCreationMode === "automatic") {
     throw new EmptyChangelogSectionError();
   }
-
-  console.log(
-    `Found ${changelogEntries.length} changelog ${
-      changelogEntries.length === 1 ? "entry" : "entries"
-    }:`
-  );
-  changelogEntries.forEach((entry) => console.log(entry));
 
   return changelogEntries;
 }
