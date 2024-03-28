@@ -152,7 +152,7 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
       prData.prNumber,
       getChangesetFilePath(prData.prNumber)
     );
-
+  console.log(changesetFileExistInCommit);
   // If changeset file exists
   if (changesetFileExistInCommit) {
     // For automatic changeset creation, delete changeset file
@@ -168,7 +168,7 @@ const handleSkipEntry = async (octokit, prData, changesetCreationMode) => {
     }
     // Handle Manual Changeset Creation
     else {
-      // For manual changeset creation, add failed label to PR and throw error 
+      // For manual changeset creation, add failed label to PR and throw error
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
     }
