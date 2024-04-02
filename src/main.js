@@ -100,7 +100,15 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   // Post info message about adding changeset file manually if PR opened or reopened
   const changesetCreationMode = "manual";
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
-    await postInfoMessageAboutGitHubAppAndAutomationProcess(octokit, prData);
+    const commentInput = new ManualChangesetCreationReminderInfo(
+      prData.prNumber
+    );
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "github-app-info"
+    );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
     throw new Error("Waiting for changeset file to be added manually.");
   }
@@ -135,7 +143,14 @@ const handleManualChangesetCreation = async (octokit, prData) => {
       }
       handlePullRequestLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
-      await postErrorMessageAboutMissingChangesetFile(error, octokit, prData);
+      const commentInput = error;
+      await handlePullRequestComment(
+        octokit,
+        prData,
+        commentInput,
+        "missing-changeset-file-error"
+      );
+      await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new Error("Changeset file required to be added manually.", error);
     }
   }
@@ -146,18 +161,12 @@ const handleManualChangesetCreation = async (octokit, prData) => {
 // ----------------------------------------------------------
 
 const handleErrorChangelogEntries = async (error, octokit, prData) => {
-  const errorPostComment = formatPostComment({ input: error, type: "ERROR" });
-
-  // Add error comment to PR
-  await commentServices.postComment(
+  await handlePullRequestComment(
+    error,
     octokit,
-    prData.baseOwner,
-    prData.baseRepo,
-    prData.prNumber,
-    errorPostComment
+    prData,
+    "changelog-entry-error"
   );
-
-  // Add failed changeset label, and remove skip label if exists
   await handlePullRequestLabels(octokit, prData, "add-failed-label");
 
   // Delete changeset file if one was previously created
@@ -177,55 +186,47 @@ const handleErrorChangelogEntries = async (error, octokit, prData) => {
   }
 };
 
-// ----------------------------------------------------------
-// Pull Request Post Helpers Functions
-// ----------------------------------------------------------
-const postInfoMessageAboutGitHubAppAndAutomationProcess = async (
+const handlePullRequestComment = async (
   octokit,
-  prData
+  prData,
+  commentInput,
+  operation
 ) => {
-  console.log(
-    "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-  );
-  const info = new ManualChangesetCreationReminderInfo(prData.prNumber);
-  const infoPostComment = formatPostComment({
-    input: info,
-    type: "INFO",
+  let commentType;
+  switch (operation) {
+    case "changelog-entry-error":
+      commentType = "ERROR";
+      console.error(
+        `Error processing changelog entries in PR #${prData.prNumber}.`
+      );
+      break;
+    case "missing-changeset-file-error":
+      commentType = "ERROR";
+      console.error(
+        `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
+      );
+      break;
+    case "github-app-info":
+      commentType = "INFO";
+      console.log(
+        "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
+      );
+      break;
+    default:
+      console.error(`Unknown operation: ${operation}`);
+      return;
+  }
+
+  const pullRequestComment = formatPostComment({
+    input: commentInput,
+    type: commentType,
   });
+
   await commentServices.postComment(
     octokit,
     prData.baseOwner,
     prData.baseRepo,
     prData.prNumber,
-    infoPostComment
+    pullRequestComment
   );
-
-  await handlePullRequestLabels(octokit, prData, "remove-all-labels");
 };
-
-const postErrorMessageAboutMissingChangesetFile = async (
-  error,
-  octokit,
-  prData
-) => {
-  console.log(
-    `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
-  );
-
-  const errorPostComment = formatPostComment({
-    input: error,
-    type: "ERROR",
-  });
-  await commentServices.postComment(
-    octokit,
-    prData.baseOwner,
-    prData.baseRepo,
-    prData.prNumber,
-    errorPostComment
-  );
-  await handlePullRequestLabels(octokit, prData, "add-failed-label");
-};
-
-// ----------------------------------------------------------
-// Path Helpers Functions
-// ----------------------------------------------------------
