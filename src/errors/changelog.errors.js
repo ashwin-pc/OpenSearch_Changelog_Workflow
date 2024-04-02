@@ -76,9 +76,10 @@ export class InvalidPrefixForManualChangesetCreationError extends Error {
    * @param {string} foundPrefix - The prefix provided by the user.
    */
   constructor(foundPrefix) {
-    const message = `Invalid description prefix. Found "${foundPrefix}". Only "skip" entry option is permitted for manual commit of changeset files.`
-    `\n\n` +
-    `If you were trying to skip the changelog entry, please use the "skip" entry option in the ##Changelog section of your PR description.`
+    const message =
+      `Invalid description prefix. Found "${foundPrefix}". Only "skip" entry option is permitted for manual commit of changeset files.` +
+      `\n\n` +
+      `If you were trying to skip the changelog entry, please use the "skip" entry option in the ##Changelog section of your PR description.`;
     super(message);
     this.name = this.constructor.name;
     this.shouldResultInPRComment = true;
