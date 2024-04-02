@@ -25,7 +25,6 @@ import {
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
 import {
   ChangesetFileNotAddedYetError,
-  ChangesetFileMustNotExistWithSkipEntryOption,
 } from "./errors/index.js";
 
 // ****************************************************************************
