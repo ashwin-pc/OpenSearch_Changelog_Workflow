@@ -91,7 +91,15 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
     );
     handlePullRequestLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
-    await handleErrorChangelogEntries(error, octokit, prData);
+    const commentInput = error;
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "changelog-entry-error"
+    );
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
+    await handleDeletionChangesetFileOnChangelogEntryError(prData, error);
     throw new Error("Automatic creation of changeset file failed.", error);
   }
 };
@@ -160,15 +168,10 @@ const handleManualChangesetCreation = async (octokit, prData) => {
 // Error Helpers Functions
 // ----------------------------------------------------------
 
-const handleErrorChangelogEntries = async (error, octokit, prData) => {
-  await handlePullRequestComment(
-    error,
-    octokit,
-    prData,
-    "changelog-entry-error"
-  );
-  await handlePullRequestLabels(octokit, prData, "add-failed-label");
-
+const handleDeletionChangesetFileOnChangelogEntryError = async (
+  prData,
+  error
+) => {
   // Delete changeset file if one was previously created
   if (
     error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
