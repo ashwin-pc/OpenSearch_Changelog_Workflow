@@ -4,5 +4,5 @@ export * from "./changeset.utils.js";
 export * from "./validators.utils.js";
 export * from "./formatting.utils.js";
 export * from "./handlers.utils.js";
-export * from "./labels.utils.js"
+export * from "./label.utils.js"
 export * from "./path.utils.js"
