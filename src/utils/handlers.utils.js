@@ -275,9 +275,10 @@ export const handleChangelogEntriesParsing = async (
       "changeset-check-error"
     );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
-    throw new Error(
+    console.error(
       `Error during check for ${changesetCreationMode} changeset creation.`
     );
+    throw error;
   }
 };
 
@@ -311,7 +312,8 @@ export const handleAutomaticChangesetCreation = async (
     );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
     await handleDeletionChangesetFileOnChangelogEntryError(prData, error);
-    throw new Error("Error during check for automatic changeset creation.");
+    console.error("Error during check for automatic changeset creation.");
+    throw error;
   }
 };
 
@@ -356,7 +358,8 @@ export const handleManualChangesetCreation = async (octokit, prData) => {
         "changeset-check-error"
       );
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
-      throw new Error("Error during check for manual changeset creation.");
+      console.error("Error during check for manual changeset creation.");
+      throw error;
     }
   }
 };
