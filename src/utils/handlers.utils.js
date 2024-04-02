@@ -115,7 +115,6 @@ export const handleSkipEntry = async (
     }
     // For manual changeset creation, add failed label to PR and throw error
     else {
-      await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
     }
   }
