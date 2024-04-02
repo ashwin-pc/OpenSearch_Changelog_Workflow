@@ -57,9 +57,7 @@ export const isValidChangelogEntry = (
     if (marker !== "-") {
       throw new ChangelogEntryMissingHyphenError();
     } else if (prefix.toLowerCase() !== "skip") {
-      const error = new InvalidPrefixForManualChangesetCreationError(prefix);
-      console.log(error)
-      throw error;
+      throw new InvalidPrefixForManualChangesetCreationError(prefix);
     }
   } else {
     if (marker !== "-") {

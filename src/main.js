@@ -196,13 +196,11 @@ const handlePullRequestComment = async (
   switch (operation) {
     case "changeset-check-error":
       commentType = "ERROR";
-      console.error(`Error:  ${commentInput.message}}.`);
+      console.error(`Posting error comment on PR #${prData.prNumber}...`);
       break;
     case "github-app-info":
       commentType = "INFO";
-      console.log(
-        "GitHub App is not installed or suspended in the forked repository. Manual changeset creation is required."
-      );
+      console.log(`Posting info comment on PR #${prData.prNumber}...`);
       break;
     default:
       console.error(`Unknown operation: ${operation}`);
