@@ -68,10 +68,6 @@ const run = async () => {
 
 run();
 
-// ****************************************************************************
-// II) HELPERS
-// ****************************************************************************
-
 // ----------------------------------------------------------
 // Chnageset Creation Helpers Functions
 // ----------------------------------------------------------
@@ -80,7 +76,6 @@ const handleAutomaticChangesetCreation = async (
   prData,
   changesetEntriesMap
 ) => {
-  const changesetCreationMode = "automatic";
   try {
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
@@ -112,7 +107,6 @@ const handleManualChangesetCreation = async (
   prData
 ) => {
   // Post info message about adding changeset file manually if PR opened or reopened
-  const changesetCreationMode = "manual";
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
     const commentInput = new ManualChangesetCreationReminderInfo(
       prData.prNumber
