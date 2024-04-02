@@ -238,6 +238,7 @@ export const handleChangelogPRBridgeResponseErrors = (
 };
 
 export const handleChangelogEntriesParsing = async (
+  octokit,
   prData,
   changesetCreationMode
 ) => {

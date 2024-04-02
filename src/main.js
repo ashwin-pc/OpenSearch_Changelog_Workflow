@@ -26,6 +26,7 @@ const run = async () => {
   try {
     prData = extractPullRequestData();
     changesetEntriesMap = await handleChangelogEntriesParsing(
+      octokit,
       prData,
       changesetCreationMode
     );
