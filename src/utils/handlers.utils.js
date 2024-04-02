@@ -12,6 +12,7 @@ import {
 import {
   getChangesetEntriesMap,
   getChangesetFilePath,
+  getChangesetFileContent
 } from "./changeset.utils.js";
 import { formatPostComment } from "./formatting.utils.js";
 import {
