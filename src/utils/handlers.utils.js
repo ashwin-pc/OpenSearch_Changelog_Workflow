@@ -1,6 +1,6 @@
 import { pullRequestServices, forkedFileServices } from "../services/index.js";
 import { handlePullRequestLabels } from "./label.utils.js";
-import { getChangesetFilePath } from "./path.utils.js";
+import { getChangesetFilePath } from "./changeset.utils.js";
 
 import {
   GetContentError,
