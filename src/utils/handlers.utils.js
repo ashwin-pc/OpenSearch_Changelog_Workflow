@@ -5,7 +5,14 @@ import {
   labelServices,
   commentServices,
 } from "../services/index.js";
-import { getChangesetFilePath } from "./changeset.utils.js";
+import {
+  extractChangelogEntries,
+  processChangelogLine,
+} from "./changelog.utils.js";
+import {
+  getChangesetEntriesMap,
+  getChangesetFilePath,
+} from "./changeset.utils.js";
 import { formatPostComment } from "./formatting.utils.js";
 import {
   GetContentError,
