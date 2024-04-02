@@ -199,7 +199,7 @@ const handlePullRequestComment = async (
     case "changeset-check-error":
       commentType = "ERROR";
       console.error(
-        `Error:  ${error.message}}.`
+        `Error:  ${commentInput.message}}.`
       );
       break;
     case "github-app-info":
