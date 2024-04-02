@@ -72,7 +72,7 @@ export const extractChangelogEntries = (
 
     return changelogEntries;
   } catch (error) {
-    console.error("Error: " + error.message);
+    console.error("Error during extraction of changelog entries");
     throw error;
   }
 };
