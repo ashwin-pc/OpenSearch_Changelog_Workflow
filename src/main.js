@@ -53,7 +53,7 @@ const run = async () => {
       );
     }
   } catch (error) {
-    console.log(`Error:`);
+    console.log(`Error: ${error.message}`);
   } finally {
     console.log("Check process complete.");
   }
