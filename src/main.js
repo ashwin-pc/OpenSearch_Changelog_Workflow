@@ -1,4 +1,3 @@
-
 import {
   forkedFileServices,
   authServices,
@@ -17,7 +16,6 @@ import {
   handlePullRequestLabels,
   handlePullRequestComment,
   handleDeletionChangesetFileOnChangelogEntryError,
-
   getChangesetFilePath,
 } from "./utils/index.js";
 
@@ -31,20 +29,39 @@ import { ChangesetFileNotAddedYetError } from "./errors/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
+  const changelogEntries = extractChangelogEntries(
+    prData.prDescription,
+    processChangelogLine,
+    changesetCreationMode
+  );
+  const changesetEntriesMap = getChangesetEntriesMap(
+    changelogEntries,
+    prData.prNumber,
+    prData.prLink,
+    changesetCreationMode
+  );
+  if (isSkipEntry(changesetEntriesMap)) {
+    await handleSkipEntry(octokit, prData, changesetCreationMode);
+    return;
+  }
 
   // If Github App is not installed or suspended, use manual approach to create changeset file
   if (await isGitHubAppNotInstalledOrSuspended(prData)) {
     console.log(
       "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
     );
-    await handleManualChangesetCreation(octokit, prData);
+    await handleManualChangesetCreation(octokit, prData, changesetEntriesMap);
   }
   // Else, use automated approach to create changeset file
   else {
     console.log(
       "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
     );
-    await handleAutomaticChangesetCreation(octokit, prData);
+    await handleAutomaticChangesetCreation(
+      octokit,
+      prData,
+      changesetEntriesMap
+    );
   }
 };
 
@@ -57,24 +74,13 @@ run();
 // ----------------------------------------------------------
 // Chnageset Creation Helpers Functions
 // ----------------------------------------------------------
-const handleAutomaticChangesetCreation = async (octokit, prData) => {
+const handleAutomaticChangesetCreation = async (
+  octokit,
+  prData,
+  changesetEntriesMap
+) => {
   const changesetCreationMode = "automatic";
   try {
-    const changelogEntries = extractChangelogEntries(
-      prData.prDescription,
-      processChangelogLine,
-      changesetCreationMode
-    );
-    const changesetEntriesMap = getChangesetEntriesMap(
-      changelogEntries,
-      prData.prNumber,
-      prData.prLink,
-      changesetCreationMode
-    );
-    if (isSkipEntry(changesetEntriesMap)) {
-      await handleSkipEntry(octokit, prData, changesetCreationMode);
-      return;
-    }
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
     await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
@@ -100,7 +106,11 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
   }
 };
 
-const handleManualChangesetCreation = async (octokit, prData) => {
+const handleManualChangesetCreation = async (
+  octokit,
+  prData,
+  changesetEntriesMap
+) => {
   // Post info message about adding changeset file manually if PR opened or reopened
   const changesetCreationMode = "manual";
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
@@ -119,21 +129,6 @@ const handleManualChangesetCreation = async (octokit, prData) => {
   // Else, post error message indicating changeset file is missing
   else if (prData.prAction == "edited" || prData.prAction == "synchronize") {
     try {
-      const changelogEntries = extractChangelogEntries(
-        prData.prDescription,
-        processChangelogLine,
-        changesetCreationMode
-      );
-      const changesetEntriesMap = getChangesetEntriesMap(
-        changelogEntries,
-        prData.prNumber,
-        prData.prLink,
-        changesetCreationMode
-      );
-      if (isSkipEntry(changesetEntriesMap)) {
-        await handleSkipEntry(octokit, prData, changesetCreationMode);
-        return;
-      }
       const changesetFileExist =
         await pullRequestServices.isFileInCommitedChanges(
           octokit,
