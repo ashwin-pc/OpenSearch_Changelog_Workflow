@@ -19,8 +19,8 @@ const run = async () => {
   // Step 1 - Define oc
   const octokit = authServices.getOctokitClient();
   const changesetCreationMode = isGitHubAppNotInstalledOrSuspended(octokit)
-    ? "manual"
-    : "automatic";
+    ? "automatic"
+    : "manual";
   let prData, changesetEntriesMap;
 
   try {
