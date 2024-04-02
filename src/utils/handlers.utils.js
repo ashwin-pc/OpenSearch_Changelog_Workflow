@@ -3,7 +3,7 @@ import {
   pullRequestServices,
   forkedFileServices,
   labelServices,
-  commentServices
+  commentServices,
 } from "../services/index.js";
 import { getChangesetFilePath } from "./changeset.utils.js";
 import { formatPostComment } from "./formatting.utils.js";
@@ -13,8 +13,10 @@ import {
   DeleteContentError,
   GitHubAppSuspendedOrNotInstalledError,
   UnauthorizedRequestToPRBridgeServiceError,
-  ChangesetFileMustNotExistWithSkipEntryOption
+  ChangesetFileMustNotExistWithSkipEntryOption,
+  ChangesetFileNotAddedYetError,
 } from "../errors/index.js";
+import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
 
 /**
  * Handles the labels of a PR based on the operation.
@@ -149,8 +151,6 @@ export const handleDeletionChangesetFileOnChangelogEntryError = async (
   }
 };
 
-
-
 /** Handles the "skip" entry in a changeset file.
  * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
  * @param {Object} prData - An object containing PR data (i.e. baseOwner, baseRepo, baseBranch, prNumber, etc.)
@@ -234,5 +234,121 @@ export const handleChangelogPRBridgeResponseErrors = (
       } else {
         throw error;
       }
+  }
+};
+
+export const handleChangelogEntriesParsing = async (
+  prData,
+  changesetCreationMode
+) => {
+  try {
+    const changelogEntries = extractChangelogEntries(
+      prData.prDescription,
+      processChangelogLine,
+      changesetCreationMode
+    );
+    const changesetEntriesMap = getChangesetEntriesMap(
+      changelogEntries,
+      prData.prNumber,
+      prData.prLink,
+      changesetCreationMode
+    );
+    if (isSkipEntry(changesetEntriesMap)) {
+      await handleSkipEntry(octokit, prData, changesetCreationMode);
+      return;
+    }
+    return changesetEntriesMap;
+  } catch (error) {
+    const commentInput = error;
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "changeset-check-error"
+    );
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
+    throw new Error(
+      `Error during check for ${changesetCreationMode} changeset creation.`
+    );
+  }
+};
+
+export const handleAutomaticChangesetCreation = async (
+  octokit,
+  prData,
+  changesetEntriesMap
+) => {
+  console.log(
+    "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
+  );
+  try {
+    const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
+    const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
+    await forkedFileServices.createOrUpdateFileInForkedRepoByPath(
+      prData.headOwner,
+      prData.headRepo,
+      prData.headBranch,
+      getChangesetFilePath(prData.prNumber),
+      changesetFileContent,
+      commitMessage
+    );
+    handlePullRequestLabels(octokit, prData, "remove-all-labels");
+  } catch (error) {
+    const commentInput = error;
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "changeset-check-error"
+    );
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
+    await handleDeletionChangesetFileOnChangelogEntryError(prData, error);
+    throw new Error("Error during check for automatic changeset creation.");
+  }
+};
+
+export const handleManualChangesetCreation = async (octokit, prData) => {
+  console.log(
+    "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
+  );
+  if (prData.prAction == "opened" || prData.prAction == "reopened") {
+    const commentInput = new ManualChangesetCreationReminderInfo(
+      prData.prNumber
+    );
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "github-app-info"
+    );
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
+    throw new Error("Waiting for changeset file to be added manually.");
+  }
+  // Else, post error message indicating changeset file is missing
+  else if (prData.prAction == "edited" || prData.prAction == "synchronize") {
+    try {
+      const changesetFileExist =
+        await pullRequestServices.isFileInCommitedChanges(
+          octokit,
+          prData.baseOwner,
+          prData.baseRepo,
+          prData.prNumber,
+          getChangesetFilePath(prData.prNumber)
+        );
+      if (!changesetFileExist) {
+        throw new ChangesetFileNotAddedYetError(prData.prNumber);
+      }
+      handlePullRequestLabels(octokit, prData, "remove-all-labels");
+    } catch (error) {
+      const commentInput = error;
+      await handlePullRequestComment(
+        octokit,
+        prData,
+        commentInput,
+        "changeset-check-error"
+      );
+      await handlePullRequestLabels(octokit, prData, "add-failed-label");
+      throw new Error("Error during check for manual changeset creation.");
+    }
   }
 };
