@@ -23,6 +23,7 @@ import {
  * @returns {Promise<void>} - A promise that resolves when the operation is complete.
  */
 export const handlePullRequestLabels = async (octokit, prData, operation) => {
+  console.error(`Updating labels on PR #${prData.prNumber}...`);
   switch (operation) {
     case "add-skip-label":
       await labelServices.addLabel(
