@@ -86,7 +86,7 @@ export const handlePullRequestLabels = async (octokit, prData, operation) => {
  * @param {string} operation - The operation to perform on the comment.
  * @returns {Promise<void>} - A promise that resolves when the operation is complete.
  */
-const handlePullRequestComment = async (
+export const handlePullRequestComment = async (
   octokit,
   prData,
   commentInput,
@@ -127,7 +127,7 @@ const handlePullRequestComment = async (
  * @param {Error} error - The error object (i.e. InvalidPrefixError, EntryTooLongError, etc.)
  * @returns {Promise<void>} - A promise that resolves when the operation is complete.
  */
-const handleDeletionChangesetFileOnChangelogEntryError = async (
+export const handleDeletionChangesetFileOnChangelogEntryError = async (
   prData,
   error
 ) => {
