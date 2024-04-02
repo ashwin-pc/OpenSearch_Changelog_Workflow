@@ -199,7 +199,7 @@ const handlePullRequestComment = async (
     case "changeset-check-error":
       commentType = "ERROR";
       console.error(
-        `Error checking correctness for changeset creation in PR #${prData.prNumber}.`
+        `Error:  ${error.message}}.`
       );
       break;
     case "github-app-info":
