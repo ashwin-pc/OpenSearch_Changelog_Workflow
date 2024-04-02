@@ -14,8 +14,6 @@ import {
   UnauthorizedRequestToPRBridgeServiceError,
 } from "../errors/index.js";
 
-
-
 /**
  * Handles the labels of a PR based on the operation.
  * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
@@ -78,7 +76,6 @@ export const handlePullRequestLabels = async (octokit, prData, operation) => {
   }
 };
 
-
 /** Handles the "skip" entry in a changeset file.
  * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
  * @param {Object} prData - An object containing PR data (i.e. baseOwner, baseRepo, baseBranch, prNumber, etc.)
@@ -127,7 +124,6 @@ export const handleSkipEntry = async (
     await handlePullRequestLabels(octokit, prData, "add-skip-label");
   }
 };
-
 
 /**
  * Handles the error type to throw depending on the error sent by the Changelog PR Bridge service and the CRUD operation to perform on a changeset file in forked repo.
