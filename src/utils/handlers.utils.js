@@ -3,6 +3,7 @@ import {
   pullRequestServices,
   forkedFileServices,
   labelServices,
+  commentServices
 } from "../services/index.js";
 import { getChangesetFilePath } from "./changeset.utils.js";
 import { formatPostComment } from "./formatting.utils.js";
