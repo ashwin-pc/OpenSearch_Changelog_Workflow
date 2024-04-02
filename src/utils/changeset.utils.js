@@ -36,7 +36,7 @@ export const getChangesetEntriesMap = (
         changesetCreationMode
       ));
     } catch (error) {
-      console.error("Error: " + error.message);
+      console.error("Error validating changelog entries");
       throw error;
     }
 
