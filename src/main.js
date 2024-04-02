@@ -16,7 +16,6 @@ import {
   getChangesetFileContent,
   isSkipEntry,
   isGitHubAppNotInstalledOrSuspended,
-  formatPostComment,
   handleSkipEntry,
   handlePullRequestLabels,
   handlePullRequestComment,

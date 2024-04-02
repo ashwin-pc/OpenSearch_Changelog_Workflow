@@ -5,7 +5,7 @@ import {
   labelServices,
 } from "../services/index.js";
 import { getChangesetFilePath } from "./changeset.utils.js";
-
+import { formatPostComment } from "./formatting.utils.js";
 import {
   GetContentError,
   CreateOrUpdateContentError,
