@@ -27,55 +27,81 @@ import { ChangesetFileNotAddedYetError } from "./errors/index.js";
 // ****************************************************************************
 
 const run = async () => {
-  const octokit = authServices.getOctokitClient();
-  let prData = extractPullRequestData();
-  const changesetCreationMode = await isGitHubAppNotInstalledOrSuspended(prData) ? "automatic" : "manual";
-  const changelogEntries = extractChangelogEntries(
-    prData.prDescription,
-    processChangelogLine,
-    changesetCreationMode
-  );
-  const changesetEntriesMap = getChangesetEntriesMap(
-    changelogEntries,
-    prData.prNumber,
-    prData.prLink,
-    changesetCreationMode
-  );
-  if (isSkipEntry(changesetEntriesMap)) {
-    await handleSkipEntry(octokit, prData, changesetCreationMode);
-    return;
-  }
 
-  // If Github App is not installed or suspended, use manual approach to create changeset file
-  if (changesetCreationMode === "automatic") {
-    console.log(
-      "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
-    );
-    await handleManualChangesetCreation(octokit, prData, changesetEntriesMap);
-  }
-  // Else, use automated approach to create changeset file
-  else {
-    console.log(
-      "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
-    );
-    await handleAutomaticChangesetCreation(
-      octokit,
+  // Step 1 - Define oc
+  const octokit = authServices.getOctokitClient();
+  const changesetCreationMode = isGitHubAppNotInstalledOrSuspended(octokit)
+    ? "manual"
+    : "automatic";
+  let prData, changesetEntriesMap;
+
+  try {
+    prData = extractPullRequestData();
+    changesetEntriesMap = await handleChangelogEntriesParsing(
       prData,
-      changesetEntriesMap
+      changesetCreationMode
     );
+    // If changeset creation mode is manual, handle manual changeset creation
+    if (changesetCreationMode === "automatic")
+      await handleManualChangesetCreation(octokit, prData, changesetEntriesMap);
+    // Else, use automated approach to create changeset file
+    else {
+      await handleAutomaticChangesetCreation(
+        octokit,
+        prData,
+        changesetEntriesMap
+      );
+    }
+  } catch (error) {
+    console.log(`Error:`);
+  } finally {
+    console.log("Check process complete.");
   }
 };
 
 run();
 
-// ----------------------------------------------------------
-// Chnageset Creation Helpers Functions
-// ----------------------------------------------------------
+const handleChangelogEntriesParsing = async (prData, changesetCreationMode) => {
+  try {
+    const changelogEntries = extractChangelogEntries(
+      prData.prDescription,
+      processChangelogLine,
+      changesetCreationMode
+    );
+    const changesetEntriesMap = getChangesetEntriesMap(
+      changelogEntries,
+      prData.prNumber,
+      prData.prLink,
+      changesetCreationMode
+    );
+    if (isSkipEntry(changesetEntriesMap)) {
+      await handleSkipEntry(octokit, prData, changesetCreationMode);
+      return;
+    }
+    return changesetEntriesMap;
+  } catch (error) {
+    const commentInput = error;
+    await handlePullRequestComment(
+      octokit,
+      prData,
+      commentInput,
+      "changeset-check-error"
+    );
+    await handlePullRequestLabels(octokit, prData, "add-failed-label");
+    throw new Error(
+      `Error during check for ${changesetCreationMode} changeset creation.`
+    );
+  }
+};
+
 const handleAutomaticChangesetCreation = async (
   octokit,
   prData,
   changesetEntriesMap
 ) => {
+  console.log(
+    "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
+  );
   try {
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
     const commitMessage = `Changeset file for PR #${prData.prNumber} created/updated`;
@@ -102,11 +128,10 @@ const handleAutomaticChangesetCreation = async (
   }
 };
 
-const handleManualChangesetCreation = async (
-  octokit,
-  prData
-) => {
-  // Post info message about adding changeset file manually if PR opened or reopened
+const handleManualChangesetCreation = async (octokit, prData) => {
+  console.log(
+    "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
+  );
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
     const commentInput = new ManualChangesetCreationReminderInfo(
       prData.prNumber
