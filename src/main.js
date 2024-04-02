@@ -42,9 +42,9 @@ const run = async () => {
       );
     }
   } catch (error) {
-    console.error();(`Error: ${error.message}`);
+    console.error(`Error: ${error.message}`);
   } finally {
-    console.log("Check process complete.");
+    console.log("Changelog parsing process complete.");
   }
 };
 
