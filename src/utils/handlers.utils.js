@@ -300,7 +300,7 @@ export const handleAutomaticChangesetCreation = async (
       changesetFileContent,
       commitMessage
     );
-    handlePullRequestLabels(octokit, prData, "remove-all-labels");
+    await handlePullRequestLabels(octokit, prData, "remove-all-labels");
   } catch (error) {
     const commentInput = error;
     await handlePullRequestComment(
@@ -346,7 +346,7 @@ export const handleManualChangesetCreation = async (octokit, prData) => {
       if (!changesetFileExist) {
         throw new ChangesetFileNotAddedYetError(prData.prNumber);
       }
-      handlePullRequestLabels(octokit, prData, "remove-all-labels");
+      await handlePullRequestLabels(octokit, prData, "remove-all-labels");
     } catch (error) {
       const commentInput = error;
       await handlePullRequestComment(
