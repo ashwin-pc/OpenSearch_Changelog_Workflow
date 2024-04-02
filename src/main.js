@@ -95,7 +95,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
       octokit,
       prData,
       commentInput,
-      "changelog-entry-error"
+      "changeset-check-error"
     );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
     await handleDeletionChangesetFileOnChangelogEntryError(prData, error);
@@ -155,7 +155,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         octokit,
         prData,
         commentInput,
-        "missing-changeset-file-error"
+        "changeset-check-error"
       );
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
       throw new Error("Changeset file required to be added manually.", error);
@@ -196,16 +196,10 @@ const handlePullRequestComment = async (
 ) => {
   let commentType;
   switch (operation) {
-    case "changelog-entry-error":
+    case "changeset-check-error":
       commentType = "ERROR";
       console.error(
-        `Error processing changelog entries in PR #${prData.prNumber}.`
-      );
-      break;
-    case "missing-changeset-file-error":
-      commentType = "ERROR";
-      console.error(
-        `Changeset file ${prData.prNumber}.yml is missing in the forked repository.`
+        `Error checking correctness for changeset creation in PR #${prData.prNumber}.`
       );
       break;
     case "github-app-info":
