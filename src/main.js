@@ -19,6 +19,9 @@ import {
   formatPostComment,
   handleSkipEntry,
   handlePullRequestLabels,
+  handlePullRequestComment,
+  handleDeletionChangesetFileOnChangelogEntryError,
+
   getChangesetFilePath,
 } from "./utils/index.js";
 
@@ -159,64 +162,4 @@ const handleManualChangesetCreation = async (octokit, prData) => {
       throw new Error("Error during check for manual changeset creation.");
     }
   }
-};
-
-// ----------------------------------------------------------
-// Error Helpers Functions
-// ----------------------------------------------------------
-
-const handleDeletionChangesetFileOnChangelogEntryError = async (
-  prData,
-  error
-) => {
-  // Delete changeset file if one was previously created
-  if (
-    error.name !== "MissingChangelogPullRequestBridgeUrlDomainError" &&
-    error.name !== "MissingChangelogPullRequestBridgeApiKeyError" &&
-    error.name !== "UnauthorizedRequestToPullRequestBridgeServiceError"
-  ) {
-    const commitMessage = `Changeset file for PR #${prData.prNumber} deleted`;
-    await forkedFileServices.deleteFileInForkedRepoByPath(
-      prData.headOwner,
-      prData.headRepo,
-      prData.headBranch,
-      getChangesetFilePath(prData.prNumber),
-      commitMessage
-    );
-  }
-};
-
-const handlePullRequestComment = async (
-  octokit,
-  prData,
-  commentInput,
-  operation
-) => {
-  let commentType;
-  switch (operation) {
-    case "changeset-check-error":
-      commentType = "ERROR";
-      console.error(`Posting error comment on PR #${prData.prNumber}...`);
-      break;
-    case "github-app-info":
-      commentType = "INFO";
-      console.log(`Posting info comment on PR #${prData.prNumber}...`);
-      break;
-    default:
-      console.error(`Unknown operation: ${operation}`);
-      return;
-  }
-
-  const pullRequestComment = formatPostComment({
-    input: commentInput,
-    type: commentType,
-  });
-
-  await commentServices.postComment(
-    octokit,
-    prData.baseOwner,
-    prData.baseRepo,
-    prData.prNumber,
-    pullRequestComment
-  );
 };
