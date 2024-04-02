@@ -23,9 +23,7 @@ import {
 } from "./utils/index.js";
 
 import { ManualChangesetCreationReminderInfo } from "./infos/index.js";
-import {
-  ChangesetFileNotAddedYetError,
-} from "./errors/index.js";
+import { ChangesetFileNotAddedYetError } from "./errors/index.js";
 
 // ****************************************************************************
 // I) MAIN
@@ -99,7 +97,7 @@ const handleAutomaticChangesetCreation = async (octokit, prData) => {
     );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
     await handleDeletionChangesetFileOnChangelogEntryError(prData, error);
-    throw new Error("Automatic creation of changeset file failed.", error);
+    throw new Error("Error during check for automatic changeset creation.");
   }
 };
 
@@ -158,7 +156,7 @@ const handleManualChangesetCreation = async (octokit, prData) => {
         "changeset-check-error"
       );
       await handlePullRequestLabels(octokit, prData, "add-failed-label");
-      throw new Error("Changeset file required to be added manually.", error);
+      throw new Error("Error during check for manual changeset creation.");
     }
   }
 };
@@ -198,9 +196,7 @@ const handlePullRequestComment = async (
   switch (operation) {
     case "changeset-check-error":
       commentType = "ERROR";
-      console.error(
-        `Error:  ${commentInput.message}}.`
-      );
+      console.error(`Error:  ${commentInput.message}}.`);
       break;
     case "github-app-info":
       commentType = "INFO";
