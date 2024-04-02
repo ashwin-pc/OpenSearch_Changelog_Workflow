@@ -29,6 +29,7 @@ import { ChangesetFileNotAddedYetError } from "./errors/index.js";
 const run = async () => {
   const octokit = authServices.getOctokitClient();
   let prData = extractPullRequestData();
+  const changesetCreationMode = await isGitHubAppNotInstalledOrSuspended(prData) ? "automatic" : "manual";
   const changelogEntries = extractChangelogEntries(
     prData.prDescription,
     processChangelogLine,
@@ -46,7 +47,7 @@ const run = async () => {
   }
 
   // If Github App is not installed or suspended, use manual approach to create changeset file
-  if (await isGitHubAppNotInstalledOrSuspended(prData)) {
+  if (changesetCreationMode === "automatic") {
     console.log(
       "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
     );
@@ -108,8 +109,7 @@ const handleAutomaticChangesetCreation = async (
 
 const handleManualChangesetCreation = async (
   octokit,
-  prData,
-  changesetEntriesMap
+  prData
 ) => {
   // Post info message about adding changeset file manually if PR opened or reopened
   const changesetCreationMode = "manual";
