@@ -30,10 +30,8 @@ const run = async () => {
       prData,
       changesetCreationMode
     );
-    // If changeset creation mode is manual, handle manual changeset creation
-    if (changesetCreationMode === "automatic")
+    if (changesetCreationMode === "manual")
       await handleManualChangesetCreation(octokit, prData, changesetEntriesMap);
-    // Else, use automated approach to create changeset file
     else {
       await handleAutomaticChangesetCreation(
         octokit,
