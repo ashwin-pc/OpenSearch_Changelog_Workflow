@@ -19,7 +19,7 @@ async function postComment(octokit, owner, repo, issueOrPullRequestNumber, comme
       body: comment,
     });
 
-    console.log(`Comment posted successfully on Issue/PR #${issueOrPullRequestNumber}`);
+    console.log(`Comment posted successfully.`);
   } catch (error) {
     console.error("Error posting comment:", error.message);
     throw error;
