@@ -25,7 +25,6 @@ import {
   ChangesetFileNotAddedYetError,
 } from "../errors/index.js";
 import { ManualChangesetCreationReminderInfo } from "../infos/index.js";
-import { isSkipEntry } from "./validators.utils.js";
 
 /**
  * Handles the labels of a PR based on the operation.
@@ -263,7 +262,7 @@ export const handleChangelogEntriesParsing = async (
       prData.prLink,
       changesetCreationMode
     );
-    
+
     return changesetEntriesMap;
   } catch (error) {
     const commentInput = error;
