@@ -63,11 +63,15 @@ export const extractChangelogEntries = (
     );
 
     // Log the extracted changelog entries
-    console.log(
-      `Found ${changelogEntries.length} changelog ${
-        changelogEntries.length === 1 ? "entry" : "entries"
-      }:`
-    );
+    if (changelogEntries.length === 0) {
+      console.log("No changelog entries found");
+    } else {
+      console.log(
+        `Found ${changelogEntries.length} changelog ${
+          changelogEntries.length === 1 ? "entry" : "entries"
+        }:`
+      );
+    }
     changelogEntries.forEach((entry) => console.log(entry));
 
     return changelogEntries;
