@@ -22,7 +22,7 @@ const run = async () => {
     ? "automatic"
     : "manual";
   let prData, changesetEntriesMap;
-
+  console.log(changesetCreationMode)
   try {
     prData = extractPullRequestData();
     changesetEntriesMap = await handleChangelogEntriesParsing(
