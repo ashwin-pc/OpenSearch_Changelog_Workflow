@@ -340,7 +340,7 @@ export const handleManualChangesetCreation = async (octokit, prData) => {
   console.log(
     "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
   );
-  if (prData.prAction == "opened" || prData.prAction == "reopened") {
+  if (prData.prAction == "opened") {
     const commentInput = new ManualChangesetCreationReminderInfo(
       prData.prNumber
     );
