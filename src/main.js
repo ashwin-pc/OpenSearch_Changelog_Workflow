@@ -24,7 +24,7 @@ const run = async () => {
     ? "manual"
     : "automatic";
   let prData, changesetEntriesMap;
-
+  console.log(changesetCreationMode);
   try {
     prData = extractPullRequestData();
     changesetEntriesMap = await handleChangelogEntriesParsing(
