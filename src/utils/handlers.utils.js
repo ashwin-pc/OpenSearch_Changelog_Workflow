@@ -67,7 +67,6 @@ export const handlePullRequestLabels = async (octokit, prData, operation) => {
         prData.prNumber,
         SKIP_LABEL
       );
-      console.log("Hello")
       break;
     case "remove-all-labels":
       await labelServices.removeLabel(
