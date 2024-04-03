@@ -16,18 +16,15 @@ import {
 
 const run = async () => {
   // Step 1 - Define oc
-  const octokit = authServices.getOctokitClient();
-  const changesetCreationMode = (await isGitHubAppNotInstalledOrSuspended(
-    octokit
-  ))
-    ? "manual"
-    : "automatic";
-  console.log(changesetCreationMode);
-  let prData, changesetEntriesMap;
-
   try {
-    prData = extractPullRequestData();
-    changesetEntriesMap = await handleChangelogEntriesParsing(
+    const octokit = authServices.getOctokitClient();
+    const prData = extractPullRequestData();
+    const changesetCreationMode = (await isGitHubAppNotInstalledOrSuspended(
+      prData
+    ))
+      ? "manual"
+      : "automatic";
+    const changesetEntriesMap = await handleChangelogEntriesParsing(
       octokit,
       prData,
       changesetCreationMode
