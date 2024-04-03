@@ -197,6 +197,7 @@ export const handleSkipEntry = async (
     }
     // For manual changeset creation, add failed label to PR and throw error
     else {
+      console.error("Error processing 'skip' entry option in chnagelog");
       throw new ChangesetFileMustNotExistWithSkipEntryOption(prData.prNumber);
     }
   }
