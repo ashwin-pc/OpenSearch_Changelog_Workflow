@@ -5,6 +5,7 @@ import {
 import {
   extractPullRequestData,
   isGitHubAppNotInstalledOrSuspended,
+  isSkipEntry,
   handleChangelogEntriesParsing,
   handleManualChangesetCreation,
   handleAutomaticChangesetCreation,
@@ -30,6 +31,10 @@ const run = async () => {
       prData,
       changesetCreationMode
     );
+    if (isSkipEntry(changesetEntriesMap)) {
+      await handleSkipEntry(octokit, prData, changesetCreationMode);
+      return;
+    }
     if (changesetCreationMode === "manual")
       await handleManualChangesetCreation(octokit, prData, changesetEntriesMap);
     else {

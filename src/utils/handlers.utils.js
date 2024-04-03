@@ -263,10 +263,7 @@ export const handleChangelogEntriesParsing = async (
       prData.prLink,
       changesetCreationMode
     );
-    if (isSkipEntry(changesetEntriesMap)) {
-      await handleSkipEntry(octokit, prData, changesetCreationMode);
-      return;
-    }
+    
     return changesetEntriesMap;
   } catch (error) {
     const commentInput = error;
