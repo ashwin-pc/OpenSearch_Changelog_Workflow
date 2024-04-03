@@ -107,6 +107,7 @@ export const isGitHubAppNotInstalledOrSuspended = async (prData) => {
       prData.headOwner,
       prData.headRepo
     );
+  console.log(githubAppInstallationInfo);
   if (
     !githubAppInstallationInfo.installed ||
     githubAppInstallationInfo.suspended
