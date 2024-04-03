@@ -51,4 +51,4 @@ const run = async () => {
   }
 };
 
-await run();
+run();
