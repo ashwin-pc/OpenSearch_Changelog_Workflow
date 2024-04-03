@@ -48,6 +48,7 @@ export const isValidChangelogEntry = (
   totalEntries,
   changesetCreationMode
 ) => {
+  console.log(changelogEntry.match(ENTRY_FORMATTING_PATTERN_REGEX));
   const [, marker, prefix, log] = changelogEntry.match(
     ENTRY_FORMATTING_PATTERN_REGEX
   );
