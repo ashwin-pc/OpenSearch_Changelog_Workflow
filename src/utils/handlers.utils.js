@@ -12,7 +12,7 @@ import {
 import {
   getChangesetEntriesMap,
   getChangesetFilePath,
-  getChangesetFileContent
+  getChangesetFileContent,
 } from "./changeset.utils.js";
 import { formatPostComment } from "./formatting.utils.js";
 import {
@@ -301,7 +301,7 @@ export const handleAutomaticChangesetCreation = async (
   changesetEntriesMap
 ) => {
   console.log(
-    "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
+    "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
   );
   try {
     const changesetFileContent = getChangesetFileContent(changesetEntriesMap);
@@ -338,7 +338,7 @@ export const handleAutomaticChangesetCreation = async (
  */
 export const handleManualChangesetCreation = async (octokit, prData) => {
   console.log(
-    "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
+    "GitHub App is not installed or suspended in the forked repository.\nProceding with checks for manual changeset creation."
   );
   if (prData.prAction == "opened" || prData.prAction == "reopened") {
     const commentInput = new ManualChangesetCreationReminderInfo(
