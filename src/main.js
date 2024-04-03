@@ -46,7 +46,7 @@ const run = async () => {
     }
   } catch (error) {
     console.error(`${error.message}`);
-    // throw error;
+    throw error;
   } finally {
     console.log("Changelog parsing process complete.");
   }
