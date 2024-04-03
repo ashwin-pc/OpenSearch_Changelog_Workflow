@@ -1,6 +1,4 @@
-import {
-  authServices,
-} from "./services/index.js";
+import { authServices } from "./services/index.js";
 
 import {
   extractPullRequestData,
@@ -17,14 +15,15 @@ import {
 // ****************************************************************************
 
 const run = async () => {
-
   // Step 1 - Define oc
   const octokit = authServices.getOctokitClient();
-  const changesetCreationMode = await isGitHubAppNotInstalledOrSuspended(octokit)
+  const changesetCreationMode = (await isGitHubAppNotInstalledOrSuspended(
+    octokit
+  ))
     ? "automatic"
     : "manual";
   let prData, changesetEntriesMap;
-  console.log(changesetCreationMode)
+
   try {
     prData = extractPullRequestData();
     changesetEntriesMap = await handleChangelogEntriesParsing(
