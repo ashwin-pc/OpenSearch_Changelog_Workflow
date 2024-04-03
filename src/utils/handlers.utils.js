@@ -275,7 +275,7 @@ export const handleChangelogEntriesParsing = async (
     return changesetEntriesMap;
   } catch (error) {
     console.error(
-      `Error during parsing changelog entries for ${changesetCreationMode} changeset creation.`
+      `Error during parsing process of changelog entries in PR #${prData.prNumber}.`
     );
     const commentInput = error;
     await handlePullRequestComment(
