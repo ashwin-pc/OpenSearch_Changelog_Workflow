@@ -44,11 +44,10 @@ const run = async () => {
         changesetEntriesMap
       );
     }
-  } catch (error) {
-    console.error(`${error.message}`);
-    throw error;
-  } finally {
     console.log("Changelog parsing process complete.");
+  } catch (error) {
+    console.error("An error occur during changelog parsing process:");
+    throw error;
   }
 };
 
