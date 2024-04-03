@@ -21,8 +21,8 @@ const run = async () => {
   const changesetCreationMode = (await isGitHubAppNotInstalledOrSuspended(
     octokit
   ))
-    ? "automatic"
-    : "manual";
+    ? "manual"
+    : "automatic";
   let prData, changesetEntriesMap;
 
   try {
