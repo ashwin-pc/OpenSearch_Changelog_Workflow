@@ -245,6 +245,14 @@ export const handleChangelogPRBridgeResponseErrors = (
   }
 };
 
+/**
+ * Handles the parsing of changelog entries in a PR description and the creation of changeset entries map.
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
+ * @param {Object} prData - An object containing PR data (i.e. baseOwner, baseRepo, baseBranch, prNumber, etc.)
+ * @param {string} changesetCreationMode - The changeset creation mode (i.e. 'automatic' or 'manual').
+ * @returns {Promise<Object>} - A promise that resolves with the changeset entries map.
+ * @throws {Error} - If an error occurs during the changelog entries parsing process.
+ */
 export const handleChangelogEntriesParsing = async (
   octokit,
   prData,
@@ -280,6 +288,13 @@ export const handleChangelogEntriesParsing = async (
   }
 };
 
+/**
+ * Handles the automatic creation of a changeset file in the forked repo.
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
+ * @param {Object} prData - An object containing PR data (i.e. baseOwner, baseRepo, baseBranch, prNumber, etc.)
+ * @param {Object} changesetEntriesMap - A map of changeset entries.
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ */
 export const handleAutomaticChangesetCreation = async (
   octokit,
   prData,
@@ -315,6 +330,12 @@ export const handleAutomaticChangesetCreation = async (
   }
 };
 
+/**
+ * Handles the manual creation of a changeset file in the forked repo.
+ * @param {InstanceType<typeof GitHub>} octokit - An Octokit instance.
+ * @param {Object} prData - An object containing PR data (i.e. baseOwner, baseRepo, baseBranch, prNumber, etc.)
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ */
 export const handleManualChangesetCreation = async (octokit, prData) => {
   console.log(
     "GitHub App is installed and not suspended in the forked repository.\nProceding with checks in changelog PR description and automatic creation of changeset file."
