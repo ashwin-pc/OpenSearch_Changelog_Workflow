@@ -46,7 +46,7 @@ const run = async () => {
     }
     console.log("Changelog parsing process complete.");
   } catch (error) {
-    console.error("An error occur during changelog parsing process:");
+    console.error("Error details:");
     throw error;
   }
 };
