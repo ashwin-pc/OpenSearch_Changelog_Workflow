@@ -85,7 +85,7 @@ export const handlePullRequestLabels = async (octokit, prData, operation) => {
       );
       break;
     default:
-      console.error(`Unknown operation: ${operation}`);
+      console.error(`Unknown operation: ${operation} for updating PR labels`);
   }
 };
 
