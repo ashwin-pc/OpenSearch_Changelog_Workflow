@@ -274,6 +274,9 @@ export const handleChangelogEntriesParsing = async (
 
     return changesetEntriesMap;
   } catch (error) {
+    console.error(
+      `Error during check for ${changesetCreationMode} changeset creation.`
+    );
     const commentInput = error;
     await handlePullRequestComment(
       octokit,
@@ -282,9 +285,6 @@ export const handleChangelogEntriesParsing = async (
       "changeset-check-error"
     );
     await handlePullRequestLabels(octokit, prData, "add-failed-label");
-    console.error(
-      `Error during check for ${changesetCreationMode} changeset creation.`
-    );
     throw error;
   }
 };
