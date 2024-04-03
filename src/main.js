@@ -6,6 +6,7 @@ import {
   extractPullRequestData,
   isGitHubAppNotInstalledOrSuspended,
   isSkipEntry,
+  handleSkipEntry,
   handleChangelogEntriesParsing,
   handleManualChangesetCreation,
   handleAutomaticChangesetCreation,
