@@ -83,6 +83,7 @@ export const handlePullRequestLabels = async (octokit, prData, operation) => {
         prData.prNumber,
         FAILED_CHANGESET_LABEL
       );
+      console.log("Hello")
       break;
     default:
       console.error(`Unknown operation: ${operation} for updating PR labels`);
