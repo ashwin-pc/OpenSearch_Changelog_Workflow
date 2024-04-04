@@ -1,5 +1,8 @@
 import { CHANGELOG_SECTION_REGEX } from "../config/constants.js";
-import { EmptyChangelogSectionError, InvalidChangelogHeadingError } from "../errors/index.js";
+import {
+  EmptyChangelogSectionError,
+  InvalidChangelogHeadingError,
+} from "../errors/index.js";
 
 /**
  * Processes a line from a changelog section, handling comment blocks and trimming non-comment lines.
@@ -45,52 +48,90 @@ export const processChangelogLine = (line, state) => {
  */
 export const extractChangelogEntries = (
   prDescription,
-  processChangelogLine
+  processChangelogLine,
+  changesetCreationMode
 ) => {
   try {
-    // Throw error if PR description is missing
-    if(!prDescription) {
-      throw new InvalidChangelogHeadingError();
-    }
-    // Match the changelog section using the defined regex
-    const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
-    // Output -> Array of length 2:
-    // changelogSection[0]: Full regex match including '## Changelog' and following content.
-    // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
-    // Throw error if '## Changelog' header is missing or malformed
-    if(!changelogSection) {
-      throw new InvalidChangelogHeadingError();
-    }
-
-    // Declare initial accumulator for reduce function: empty array for lines and initial state
-    const initialAcc = { entries: [], state: { inComment: false } };
+    // Extract the changelog section from the PR description
+    const changelogSection = extractChangelogSection(prDescription);
 
     // Process each line and filter out valid changelog entries
-    const changelogEntries = changelogSection[0]
-      .split("\n")
-      .reduce((acc, line) => {
-        const { entries, state } = acc;
-        const processed = processChangelogLine(line, state);
-        if (processed.line) entries.push(processed.line.trim());
-        return { entries, state: processed.state };
-      }, initialAcc).entries;
-    
-    // Throw error if no changelog entries are found
-    if(changelogEntries.length === 0) {
-      throw new EmptyChangelogSectionError();
-    }
-
-    console.log(
-      `Found ${changelogEntries.length} changelog ${
-        changelogEntries.length === 1 ? "entry" : "entries"
-      }:`
+    const changelogEntries = processChangelogEntries(
+      changelogSection,
+      processChangelogLine,
+      changesetCreationMode
     );
-    for (const eachEntry of changelogEntries){
-        console.log(`${eachEntry}`);
+
+    // Log the extracted changelog entries
+    if (changelogEntries.length === 0) {
+      console.log("No changelog entries found");
+    } else {
+      console.log(
+        `Found ${changelogEntries.length} changelog ${
+          changelogEntries.length === 1 ? "entry" : "entries"
+        }:`
+      );
     }
+    changelogEntries.forEach((entry) => console.log(entry));
+
     return changelogEntries;
   } catch (error) {
-    console.error("Error: " + error.message);
+    console.error("Error during extraction of changelog entries");
     throw error;
   }
 };
+
+/**
+ * Extracts the changelog section from a PR description and validates it.
+ *
+ * @param {string} prDescription - The PR description.
+ * @returns {string} - The extracted changelog section.
+ * @throws {InvalidChangelogHeadingError} - If the PR description is missing or the changelog section is invalid.
+ */
+const extractChangelogSection = (prDescription) => {
+  if (!prDescription)
+    throw new InvalidChangelogHeadingError("PR description is missing");
+
+  // Match the changelog section using the defined regex
+  // Output -> Array of length 2:
+  // changelogSection[0]: Full regex match including '## Changelog' and following content.
+  // changelogSection[1]: Captured content after '## Changelog', excluding the heading itself.
+  const changelogSection = prDescription.match(CHANGELOG_SECTION_REGEX);
+
+  if (!changelogSection)
+    throw new InvalidChangelogHeadingError(
+      "Invalid or missing changelog section"
+    );
+  return changelogSection;
+};
+
+/**
+ * Processes the changelog entries from the extracted changelog section.
+ *
+ * @param {string[]} changelogSection - The extracted changelog section.
+ * @param {Function} processChangelogLine - Function to process each line of the changelog section.
+ * @param {string} changesetCreationMode - The mode of changeset creation ("automatic" or "manual").
+ * @returns {string[]} - An array of processed changelog entry strings.
+ * @throws {EmptyChangelogSectionError} - If no changelog entries are found in "automatic" mode.
+ */
+function processChangelogEntries(
+  changelogSection,
+  processChangelogLine,
+  changesetCreationMode
+) {
+  const initialAcc = { entries: [], state: { inComment: false } };
+  const changelogEntries = changelogSection[0]
+    .split("\n")
+    .reduce((acc, line) => {
+      const { entries, state } = acc;
+      const processed = processChangelogLine(line, state);
+      if (processed.line) entries.push(processed.line.trim());
+      return { entries, state: processed.state };
+    }, initialAcc).entries;
+
+  if (changelogEntries.length === 0 && changesetCreationMode === "automatic") {
+    throw new EmptyChangelogSectionError();
+  }
+
+  return changelogEntries;
+}

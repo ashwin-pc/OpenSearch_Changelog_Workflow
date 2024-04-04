@@ -59,7 +59,7 @@ export const CHANGELOG_HEADING = "## Changelog";
  * @type {RegExp}
  */
 export const CHANGELOG_SECTION_REGEX = new RegExp(
-  `${CHANGELOG_HEADING}\\s*([\\s\\S]*?)(?:\\n##|$)`
+  `${CHANGELOG_HEADING}\\s*([\\s\\S]*?)(?=(?:##|###)\\s|$)`
 );
 // Explanation:
 // - 'CHANGELOG_HEADING' matches the '## Changelog' heading in markdown.
@@ -72,7 +72,7 @@ export const CHANGELOG_SECTION_REGEX = new RegExp(
  * @type {RegExp}
  */
 export const ENTRY_FORMATTING_PATTERN_REGEX = new RegExp(
-  `([^a-zA-Z])?\\s*([a-zA-Z0-9]+):?(.*)?`
+  `([^a-zA-Z])?\\s*([^:]*):?(.*)?`
 );
 // Explanation:
 // - '-\\s*' matches a hyphen followed by any number of whitespace characters up until the first capturing group.

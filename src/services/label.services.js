@@ -26,7 +26,7 @@ export const getLabel = async (
     });
 
     console.log(
-      `Label "${label}" retrieved from Issue/PR #${issueOrPullRequestNumber}`
+      `Label "${label}" retrieved succesfully`
     );
     return data;
   } catch (error) {
@@ -63,7 +63,7 @@ export const addLabel = async (
     });
 
     console.log(
-      `Label "${label}" added to Issue/PR #${issueOrPullRequestNumber}`
+      `Label "${label}" added succesfully`
     );
   } catch (error) {
     console.error("Error adding label:", error.message);
@@ -99,7 +99,7 @@ export const removeLabel = async (
     });
 
     console.log(
-      `Label "${label}" removed from Issue/PR #${issueOrPullRequestNumber}`
+      `Label "${label}" removed succesfully`
     );
   } catch (error) {
     if (error.status === 404) {
